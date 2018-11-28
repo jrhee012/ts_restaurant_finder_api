@@ -1,7 +1,7 @@
 import { CronJob } from "cron";
-import mongoose, { Document, MongooseDocument } from "mongoose";
+import { model, Document, MongooseDocument } from "mongoose";
 
-const Data = mongoose.model("Data");
+const Data = model("Data");
 
 console.log("Before job instantiation");
 const job1 = new CronJob("* 10 * * * *", async function () {
