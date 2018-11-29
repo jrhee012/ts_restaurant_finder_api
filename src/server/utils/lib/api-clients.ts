@@ -27,8 +27,7 @@ class ApiClient {
     // httpOptions: OptionsWithUri;
 
     constructor() {
-        // this.httpOptions = options;
-        // this.setHttpOptions(options);
+
     }
 
     // setHttpOptions(options: OptionsWithUri) {

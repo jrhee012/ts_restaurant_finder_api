@@ -58,8 +58,6 @@ var models_1 = require("../../models");
 var ApiClient = /** @class */ (function () {
     // httpOptions: OptionsWithUri;
     function ApiClient() {
-        // this.httpOptions = options;
-        // this.setHttpOptions(options);
     }
     // setHttpOptions(options: OptionsWithUri) {
     //     let validation = false;
@@ -150,42 +148,6 @@ var YelpApiClient = /** @class */ (function (_super) {
         };
         return this.makeCall(options);
     };
-    // saveRestaurantFromData(data: DataModel) {
-    //     let name: string;
-    //     let coords: any = {};
-    //     const rawData = data.raw_data;
-    //     name = rawData.name;
-    //     coords = rawData.location;
-    //     Restaurants.findOneAndUpdate(
-    //         {
-    //             name: name,
-    //             location: coords,
-    //         },
-    //         {
-    //             name: name,
-    //             alias: rawData.name,
-    //             categories: rawData.categories,
-    //             coordinates: rawData.coordinates,
-    //             location: rawData.location,
-    //             display_address: rawData.location.display_address,
-    //             phone_number: rawData.phone,
-    //             reservation: ["yelp"],
-    //             source_data: [rawData._id],
-    //         },
-    //         {
-    //             new: true,
-    //             upsert: true,
-    //             setDefaultsOnInsert: true,
-    //         },
-    //         function (err, doc) {
-    //             if (err) {
-    //                 console.error(err);
-    //             } else {
-    //                 console.log("restaurant data saved!");
-    //             }
-    //         }
-    //     );
-    // }
     YelpApiClient.prototype.saveYelpData = function (data) {
         var self = this;
         models_1.Data.findOneAndUpdate({
@@ -205,15 +167,9 @@ var YelpApiClient = /** @class */ (function (_super) {
             }
             console.log("yelp data saved!", doc == undefined);
             if (doc !== null) {
-                // db.findAndUpdateRestaurant(doc);
-                // const data: DataModel = doc;
                 var name_1;
                 var coords = {};
-                // let source = data.source;
                 var rawData = data;
-                // console.log('rawqwwwwww: ', rawData);
-                // name = rawData.name;
-                // coords = rawData.location;
                 name_1 = rawData.name;
                 coords = rawData.location;
                 models_1.Restaurants.findOneAndUpdate({

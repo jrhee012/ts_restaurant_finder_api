@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha -r ts-node/register src/tests/*.test.ts",
     "start": "node build/app.js",
-    "dev": "tsc && nodemon build/app.js",
+    "dev": "npm run clean-build-ts && npm start",
     "build": "npm run clean-build-ts",
     "build-ts": "tsc",
     "clean-build-ts": "rm -rf build/ && tsc",
