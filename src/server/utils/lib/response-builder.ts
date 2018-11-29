@@ -1,9 +1,9 @@
-import request = require("request");
+// import request = require("request");
 
 interface ErrorResponse {
     code: number;
     message: string;
-    meta: any[];
+    data: any;
 }
 
 class ResponseBuilder {
@@ -17,7 +17,7 @@ class ResponseBuilder {
         const response: ErrorResponse = {
             code: 500,
             message: "Internal Server Error",
-            meta: [],
+            data: {},
         };
         return response;
     }

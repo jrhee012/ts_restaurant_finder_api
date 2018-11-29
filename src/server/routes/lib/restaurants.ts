@@ -1,9 +1,8 @@
 import { Router } from "express";
-import { index as restaurantControllersIndex } from "../../controllers/restaurants-controllers";
+import { index } from "../../controllers/restaurants-controllers";
 
-let router: Router;
-router = Router();
+const router: Router = Router();
 
-router.get("/", restaurantControllersIndex);
+router.get("/", index);
 
 export default router;

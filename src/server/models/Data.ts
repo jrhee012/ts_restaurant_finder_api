@@ -3,8 +3,8 @@ import { Document, Schema, Query, Model, model } from "mongoose";
 
 // const { Schema } = mongoose;
 
-interface DataModel extends Document {
-    raw_data: object;
+export interface DataModel extends Document {
+    raw_data: any;
     source: string;
     ext_id: string;
     created_at?: string;

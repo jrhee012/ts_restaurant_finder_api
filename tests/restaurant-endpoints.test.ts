@@ -1,8 +1,8 @@
-import server from "../server/server";
+import server from "../src/server/server";
 import chai from "chai";
 import chaiHttp = require("chai-http");
 import "mocha";
-import configs from "../server/config";
+import configs from "../src/server/config";
 
 chai.use(chaiHttp);
 const expect = chai.expect;
