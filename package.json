@@ -6,10 +6,12 @@
   "scripts": {
     "test": "mocha -r ts-node/register src/tests/*.test.ts",
     "start": "node build/app.js",
-    "dev": "npm run clean-build-ts && npm start",
+    "dev:start": "node build-dev/app.js",
+    "dev": "npm run clean-build-ts-dev && npm run dev:start",
     "build": "npm run clean-build-ts",
     "build-ts": "tsc",
     "clean-build-ts": "rm -rf build/ && tsc",
+    "clean-build-ts-dev": "rm -rf build-dev/ && tsc --outDir build-dev",
     "watch-ts": "tsc -w"
   },
   "author": "Jaehyuk Rhee",
