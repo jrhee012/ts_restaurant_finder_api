@@ -47,11 +47,11 @@ class ApiClient {
     //     }
     // }
 
-    _validateHttpOptions(options: OptionsWithUri) {
-        // TODO: UPDATE VALIDATIONS
-        if (typeof options !== "object") return false;
-        return true;
-    }
+    // _validateHttpOptions(options: OptionsWithUri) {
+    //     // TODO: UPDATE VALIDATIONS
+    //     if (typeof options !== "object") return false;
+    //     return true;
+    // }
 
     async makeCall(httpOptions: OptionsWithUri) {
         // if (_.isEmpty(httpOptions)

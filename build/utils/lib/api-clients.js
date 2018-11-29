@@ -74,12 +74,11 @@ var ApiClient = /** @class */ (function () {
     //         console.log(`cannot set http options with: ${JSON.stringify(options)}`);
     //     }
     // }
-    ApiClient.prototype._validateHttpOptions = function (options) {
-        // TODO: UPDATE VALIDATIONS
-        if (typeof options !== "object")
-            return false;
-        return true;
-    };
+    // _validateHttpOptions(options: OptionsWithUri) {
+    //     // TODO: UPDATE VALIDATIONS
+    //     if (typeof options !== "object") return false;
+    //     return true;
+    // }
     ApiClient.prototype.makeCall = function (httpOptions) {
         return __awaiter(this, void 0, void 0, function () {
             var isJson, result, e_1;

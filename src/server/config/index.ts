@@ -22,7 +22,7 @@ class Config {
 
         this.MONGODB_URI = process.env.MONGODB_URI ? process.env.MONGODB_URI : "mongodb://localhost:27017/ts_rest_finder_api";
 
-        this.REDIS_URL = process.env.REDIS_URL ? process.env.REDIS_URL : "redis://localhost:6379";
+        this.REDIS_URL = process.env.REDIS_URL ? process.env.REDIS_URL : "localhost:6379";
 
         this.CACHE_TTL = 900;
 
