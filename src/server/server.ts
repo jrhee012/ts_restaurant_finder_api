@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
+import morgan from "morgan";
 import configs from "./config";
 import routes from "./routes";
 
@@ -24,6 +25,7 @@ try {
 
 const server = express();
 
+server.use(morgan("combined"));
 server.use(routes);
 
 export default server;
