@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var mongoose_1 = __importDefault(require("mongoose"));
 var config_1 = __importDefault(require("./config"));
+var routes_1 = __importDefault(require("./routes"));
 mongoose_1.default.Promise = global.Promise;
 try {
     mongoose_1.default.connect(config_1.default.MONGODB_URI, { useNewUrlParser: true });
@@ -21,6 +22,6 @@ catch (e) {
     process.exit(1);
 }
 var server = express_1.default();
-server.get("/", function (req, res) { return res.status(200).send("ok"); });
+server.use(routes_1.default);
 exports.default = server;
 //# sourceMappingURL=server.js.map

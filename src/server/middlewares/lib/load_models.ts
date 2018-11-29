@@ -1,3 +1,2 @@
-export default (): void => {
-    require("../../models/Data");
-};
+import "../../models/Data";
+import "../../models/Restaurants";

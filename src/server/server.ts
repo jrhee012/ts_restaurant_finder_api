@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import configs from "./config";
+import routes from "./routes";
 
 mongoose.Promise = global.Promise;
 
@@ -23,6 +24,6 @@ try {
 
 const server = express();
 
-server.get("/", (req: Request, res: Response) => res.status(200).send("ok"));
+server.use(routes);
 
 export default server;

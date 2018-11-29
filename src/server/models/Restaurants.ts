@@ -1,7 +1,7 @@
 import { Document, Schema, Query, Model, model } from "mongoose";
 
 // const { Schema } = mongoose;
-
+console.log("aaaa!EFD")
 interface Restaurant extends Document {
     name: string;
     alias: string;
