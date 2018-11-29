@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { searchAndCreate } from "../../controllers/data-controllers";
+import { searchAndCreate } from "../../../controllers/api/data-controllers";
 
 const router: Router = Router();
 

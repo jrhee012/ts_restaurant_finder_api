@@ -1,10 +1,10 @@
 import { Document } from "mongoose";
 import { Request, Response } from "express";
 import { isEmpty } from "lodash";
-import configs from "../config";
-import { Data } from "../models";
-import { responseBuilder } from "../utils";
-import { YelpApiClient } from "../utils";
+import configs from "../../config";
+import { Data } from "../../models";
+import { responseBuilder } from "../../utils";
+import { YelpApiClient } from "../../utils";
 
 export const index = async (req: Request, res: Response) => {
     let data: Document[] = [];

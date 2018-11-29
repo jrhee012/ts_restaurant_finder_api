@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { Restaurants } from "../models";
+import { Restaurants } from "../../models";
 import { Document } from "mongoose";
-import { responseBuilder } from "../utils";
+import { responseBuilder } from "../../utils";
 
 export const index = async (req: Request, res: Response) => {
     let result: Document[] = [];

@@ -2,8 +2,8 @@ import rp, { OptionsWithUri } from "request-promise";
 import _ from "lodash";
 import configs from "../../config";
 import { Data, Restaurants } from "../../models";
-import { DataModel } from "../../models/Data";
-import { Restaurant } from "../../models/Restaurants";
+// import { DataModel } from "../../models/Data";
+// import { Restaurant } from "../../models/Restaurants";
 
 // export interface Coords {
 //     lat: number | string;

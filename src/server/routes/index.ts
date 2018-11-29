@@ -1,28 +1,26 @@
-import { Router, Application } from "express";
+import { Router, Application, Request, Response } from "express";
 // import api from "./lib/api";
-import restaurants from "./lib/restaurants";
-import data from "./lib/data";
+import restaurants from "./lib/api/restaurants";
+import data from "./lib/api/data";
 import configs from "../config";
 import { redisClient } from "../utils";
 
-const baseUrl: string = configs.BASE_URL;
+const ApiBaseUrl: string = configs.BASE_URL;
 
 let router: Router;
 router = Router();
 
 // TODO: TEST!!!
-router.get("/", async (req, res) => {
-    console.log(1);
-    const a = await redisClient.get("test");
-    console.log(2);
-    console.log(a);
-    redisClient.set("test22", "test222");
-    const b = await redisClient.get("test22");
-    console.log(b);
-    return res.status(200);
+router.get("/", async (req: Request, res: Response) => {
+    return res.status(200).json({
+        code: 200,
+        message: "hello world!",
+        data: {},
+    });
 });
 
-router.use(`${baseUrl}/restaurants`, restaurants);
-router.use(`${baseUrl}/data`, data);
+// API
+router.use(`${ApiBaseUrl}/restaurants`, restaurants);
+router.use(`${ApiBaseUrl}/data`, data);
 
 export default router;

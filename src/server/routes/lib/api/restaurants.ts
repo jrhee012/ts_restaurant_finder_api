@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { index } from "../../controllers/restaurants-controllers";
+import { index } from "../../../controllers/api/restaurants-controllers";
 
 const router: Router = Router();
 

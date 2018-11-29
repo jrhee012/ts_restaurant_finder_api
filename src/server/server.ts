@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import morgan from "morgan";
+import bodyParser from "body-parser";
 import configs from "./config";
 import routes from "./routes";
 import { tokenValidation } from "./middlewares";
@@ -23,10 +24,14 @@ try {
     process.exit(1);
 }
 
+const viewsPath = "./views";
+const publicPath = "./public";
 
 const server = express();
 
 server.use(morgan("combined"));
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: false }));
 server.use(configs.BASE_URL, tokenValidation);
 server.use(routes);
 
