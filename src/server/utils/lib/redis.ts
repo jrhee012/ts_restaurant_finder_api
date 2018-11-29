@@ -82,6 +82,7 @@ class RedisCache {
         let result: any;
         try {
             result = getAsync(key);
+            console.log(`> Cache retrieved with key: ${key}`);
         } catch (e) {
             console.log("ERROR redis cache get");
             console.error(e);
