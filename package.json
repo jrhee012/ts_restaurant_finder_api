@@ -37,6 +37,7 @@
     "@types/mongoose": "^5.3.1",
     "@types/morgan": "^1.7.35",
     "@types/redis": "^2.8.8",
+    "@types/request-promise": "^4.1.42",
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
     "mocha": "^5.2.0",

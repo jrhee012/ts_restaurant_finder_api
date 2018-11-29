@@ -21,6 +21,15 @@ class ResponseBuilder {
         };
         return response;
     }
+
+    unauthorized_error(): ErrorResponse {
+        const response: ErrorResponse = {
+            code: 401,
+            message: "Unauthorized",
+            data: {},
+        };
+        return response;
+    }
 }
 
 const responseBuilder = new ResponseBuilder();

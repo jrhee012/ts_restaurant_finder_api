@@ -35,9 +35,9 @@ export const show = async (req: Request, res: Response) => {
     return res.status(200).json(data);
 };
 
-export const create = async (req: Request, res: Response) => {
-    const params = req.body;
-};
+// export const create = async (req: Request, res: Response) => {
+//     const params = req.body;
+// };
 
 export const searchAndCreate = async (req: Request, res: Response) => {
     const query: {
@@ -62,6 +62,11 @@ export const searchAndCreate = async (req: Request, res: Response) => {
 
     const data: any[] = result.businesses;
 
+    if (data === undefined || data === null) {
+        return res.status(500)
+            .json(responseBuilder.internal_server_error());
+    }
+
     if (data.length < 1) {
         return res.status(404).json({
             code: 404,
@@ -72,10 +77,7 @@ export const searchAndCreate = async (req: Request, res: Response) => {
         });
     }
 
-    // console.log("data length: ", data.length);
     for (let i = 0; i < data.length; i++) {
-        // console.log(data.length, i);
-        // console.log('data....', data[i])
         yelp_client.saveYelpData(data[i]);
     }
 

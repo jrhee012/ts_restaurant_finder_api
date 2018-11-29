@@ -37,7 +37,7 @@ class RedisCache {
     }
 
     startClient() {
-        const cache = redis.createClient(`redis://${cacheHost}`, {
+        const cache = redis.createClient(cacheHost, {
             enable_offline_queue: false,
             retry_strategy: () => cacheRetrySeconds,
         });

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import configs from "./config";
 import routes from "./routes";
+import { tokenValidation } from "./middlewares";
 
 mongoose.Promise = global.Promise;
 
@@ -26,6 +27,7 @@ try {
 const server = express();
 
 server.use(morgan("combined"));
+server.use(configs.BASE_URL, tokenValidation);
 server.use(routes);
 
 export default server;

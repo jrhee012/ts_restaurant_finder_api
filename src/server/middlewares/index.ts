@@ -1,4 +1,3 @@
-// exports.loadModels = () => {
-//     import "../models/Restaurants";
-//     import "../models/Data";
-// };
+import token_validation from "./lib/token-validation";
+
+export const tokenValidation = token_validation;
