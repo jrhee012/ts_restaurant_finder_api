@@ -128,6 +128,12 @@ export class YelpApiClient extends ApiClient {
                     name = rawData.name;
                     coords = rawData.location;
 
+                    const transactions: string[] = rawData.transactions;
+                    let reservation: string[] = [];
+                    if (_.includes(transactions, "restaurant_reservation")) {
+                        reservation = ["yelp"];
+                    }
+
                     Restaurants.findOneAndUpdate(
                         {
                             name: name,
@@ -141,7 +147,7 @@ export class YelpApiClient extends ApiClient {
                             location: rawData.location,
                             display_address: rawData.location.display_address,
                             phone_number: rawData.phone,
-                            reservation: ["yelp"],
+                            reservation: reservation,
                             source_data: [doc._id],
                         },
                         {

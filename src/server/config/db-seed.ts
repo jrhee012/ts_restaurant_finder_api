@@ -113,35 +113,6 @@ export default class DBSeeder {
         });
     }
 
-    // async seed(modelName: string) {
-    //     console.log("starting seeding for PERMISSIONS");
-    //     if (modelName.toLowerCase() === "permissions") {
-    //         let permissions = [];
-    //         try {
-    //             permissions = await Permissions.create(defaultPermissions);
-    //             console.log("all `PERMISSIONS` saved to db!");
-    //         } catch (e) {
-    //             console.log("`PERMISSIONS` seeding ERROR!");
-    //             console.error(e);
-    //             return process.exit(1);
-    //         }
-    //         return permissions;
-    //     } else if (modelName.toLowerCase() === "roles") {
-    //         let roles = [];
-    //         try {
-    //             roles = await Roles.create(defaultRoles);
-    //             console.log("all `ROLES` saved to db!");
-    //         } catch (e) {
-    //             console.log("`ROLES` seeding ERROR!");
-    //             console.error(e);
-    //             return process.exit(1);
-    //         }
-    //         return roles;
-    //     }
-
-    //     return [];
-    // }
-
     async seedPermissions() {
         let permissions: PermissionsModel[] = [];
         try {
@@ -192,7 +163,6 @@ export default class DBSeeder {
             permissions: permissions,
             roles: roles,
         };
-
 
         if (results.permissions.length !== defaultPermissions.length) {
             try {
@@ -262,9 +232,7 @@ export default class DBSeeder {
      */
     async start() {
         console.log("initializing db seeds...");
-        // let results = await this.findAllAndUpdate();
         await this.findAllAndUpdate();
-        // console.log(`seed results: ${JSON.stringify(results)}`);
         console.log("db seed finished successfully!");
     }
 }
