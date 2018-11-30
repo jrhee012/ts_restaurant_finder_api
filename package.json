@@ -27,6 +27,7 @@
     "express-flash": "0.0.2",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.4.0",
+    "jw-paginate": "^1.0.2",
     "lodash": "^4.17.11",
     "mongoose": "^5.3.13",
     "morgan": "^1.9.1",

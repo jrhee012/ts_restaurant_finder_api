@@ -4,6 +4,7 @@ import restaurants from "./lib/api/restaurants";
 import data from "./lib/api/data";
 import configs from "../config";
 import profileRouter from "./lib/web/profile";
+import restaurantsRouter from "./lib/web/restaurants";
 import { getLogin, getSignUp } from "../controllers/web/login";
 
 const ApiBaseUrl: string = configs.BASE_URL;
@@ -18,6 +19,7 @@ router.get("/", (req: Request, res: Response) => {
 });
 
 router.use("/profile", profileRouter);
+router.use("/restaurants", restaurantsRouter);
 
 // LOGIN ============================================================
 router.get("/login/facebook", (req: Request, res: Response) => res.redirect("/auth/facebook"));
