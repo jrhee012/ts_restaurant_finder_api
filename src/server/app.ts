@@ -1,5 +1,6 @@
 import server from "./server";
 import configs from "./config";
+import "./cronjobs";
 
 const port = configs.PORT;
 

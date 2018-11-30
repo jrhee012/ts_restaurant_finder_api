@@ -4,7 +4,7 @@ import { model, Document, MongooseDocument } from "mongoose";
 const Data = model("Data");
 
 console.log("Before job instantiation");
-const job1 = new CronJob("* 10 * * * *", async function () {
+const job1 = new CronJob("0,30 * * * * *", async function () {
     // const d = new Date();
     // console.log('At Ten Minutes:', d);
     try {

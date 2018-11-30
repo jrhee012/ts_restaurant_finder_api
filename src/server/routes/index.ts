@@ -1,11 +1,9 @@
 import { Router, Request, Response } from "express";
 import passport from "passport";
-// import api from "./lib/api";
 import restaurants from "./lib/api/restaurants";
 import data from "./lib/api/data";
 import configs from "../config";
-// import { redisClient } from "../utils";
-import profileControllers from "./lib/web/profile";
+import profileRouter from "./lib/web/profile";
 import { getLogin, getSignUp } from "../controllers/web/login";
 
 const ApiBaseUrl: string = configs.BASE_URL;
@@ -19,7 +17,7 @@ router.get("/", (req: Request, res: Response) => {
     return res.status(200).render("pages/home", data);
 });
 
-router.use("/profile", profileControllers);
+router.use("/profile", profileRouter);
 
 // LOGIN ============================================================
 router.get("/login/facebook", (req: Request, res: Response) => res.redirect("/auth/facebook"));
