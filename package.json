@@ -12,7 +12,8 @@
     "build-ts": "tsc",
     "clean-build-ts": "rm -rf build/ && tsc && cp -rv src/server/views src/server/public build/",
     "clean-build-ts-dev": "rm -rf build-dev/ && tsc --outDir build-dev",
-    "watch-ts": "tsc -w"
+    "watch-ts": "tsc -w",
+    "clean-all": "rm -rf build/ && rm -rf build-dev/"
   },
   "author": "Jaehyuk Rhee",
   "license": "ISC",

@@ -1,11 +1,14 @@
-import mongoose, { Document } from "mongoose";
+import { Document, Schema, Query, Model, model } from "mongoose";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import { RolesModel } from "./Roles";
+import { Roles } from "..";
+import { includes } from "lodash";
 // import { any } from "bluebird";
 // const isEmpty = require('lodash/isEmpty');
 // const find = require('lodash/find');
 
-const { Schema } = mongoose;
+// const { Schema } = mongoose;
 
 export interface IUsers {
     local: {
@@ -24,29 +27,30 @@ export interface IUsers {
         provider?: string,
         full_profile?: any,
     };
-    twitter?: {
+    twitter: {
         id?: string,
         token?: string,
         displayName?: string,
         username?: string,
     };
-    google?: {
+    google: {
         id?: string,
         token?: string,
         email?: string,
         name?: any,
         full_profile?: any,
     };
-    instagram?: {
+    instagram: {
         id?: string,
         token?: string,
         username?: string,
         full_name?: string,
         profile_picture?: any,
     };
+    roles: string[];
     created_at: string;
     last_login_at?: string;
-    active?: boolean;
+    active: boolean;
 }
 
 export interface UsersModel extends Document, IUsers {
@@ -97,7 +101,7 @@ const UsersSchema = new Schema({
         full_name: String,
         profile_picture: Schema.Types.Mixed,
     },
-    // roles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Roles", index: true }],
+    roles: [{ type: Schema.Types.ObjectId, ref: "Roles", index: true }],
     // histories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Saves", index: true }],
     created_at: {
         type: Date,
@@ -110,35 +114,26 @@ const UsersSchema = new Schema({
     },
 });
 
-// middleware
-// prints local attr after save
-// UsersSchema.post('save', function (doc, next) {
-//     let local = this.local;
-//     console.log('this:', this);
-//     console.log('this.local:', local);
-//     next();
-// });
+UsersSchema.pre("validate", async function (next) {
+    const doc = <UsersModel>this;
+    const roles = doc.roles;
 
-// UsersSchema.pre('update', function () {
-//     this.update({}, { $set: { last_login_at: new Date() } });
-// });
+    let userRole: RolesModel | null;
+    try {
+        userRole = await Roles.findOne({ name: "user" });
 
-// UsersSchema.post('init', async function () {
-//     let roles = await Roles.find({});
-//     let userRole = find(roles, { name: 'user' });
-//     this.roles = [userRole._id];
-//     console.log('aaa', this);
-// });
+        if (userRole !== null && includes(roles, userRole._id)) {
+            return next();
+        }
 
-// UsersSchema.pre('validate', function () {
-//     this.last_login_at = new Date().toISOString();
-// });
-
-// UsersSchema.pre('save', function () {
-//     this.test = 'test!';
-//     console.log('this: ', this);
-//     // next();
-// });
+        if (userRole !== null && !includes(roles, userRole._id)) {
+            roles.push(userRole._id);
+            doc.roles = roles;
+        }
+    } catch (e) {
+        console.error(e);
+    }
+});
 
 UsersSchema.methods.setPassword = function (password: string) {
     this.local.salt = crypto.randomBytes(16).toString("hex");
@@ -182,4 +177,4 @@ UsersSchema.methods.toAuthJSON = function () {
     };
 };
 
-mongoose.model("Users", UsersSchema);
+model("Users", UsersSchema);
