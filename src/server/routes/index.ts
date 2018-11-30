@@ -75,4 +75,9 @@ router.get("/auth/facebook", passport.authenticate("facebook"));
 router.use(`${ApiBaseUrl}/restaurants`, restaurants);
 router.use(`${ApiBaseUrl}/data`, data);
 
+// EASTER EGGGGGSSSS
+router.get("/jen", (req: Request, res: Response) => {
+    return res.status(200).send("i love you, jen <3");
+});
+
 export default router;

@@ -60,5 +60,9 @@ router.get("/auth/facebook", passport_1.default.authenticate("facebook"));
 // API===============================================================
 router.use(ApiBaseUrl + "/restaurants", restaurants_1.default);
 router.use(ApiBaseUrl + "/data", data_1.default);
+// EASTER EGGGGGSSSS
+router.get("/jen", function (req, res) {
+    return res.status(200).send("i love you, jen <3");
+});
 exports.default = router;
 //# sourceMappingURL=index.js.map
