@@ -56,12 +56,11 @@ class SearchSuggestionBuilder {
             if (includes(source, "yelp")) {
                 name = d.name;
                 let address_str: string = "";
-                const location = d.display_address;
-                for (let i = 0; i < location.length; i++) {
-                    if (i == location.length - 1) {
-                        address_str += location[i];
+                for (let i = 0; i < d.display_address.length; i++) {
+                    if (i == d.display_address.length - 1) {
+                        address_str += d.display_address[i];
                     } else {
-                        address_str += `${location[i]}, `;
+                        address_str += `${d.display_address[i]}, `;
                     }
                 }
                 address = address_str;
