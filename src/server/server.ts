@@ -23,14 +23,26 @@ try {
         console.log("mongoose `debug` set `true`");
     }
 } catch (e) {
-    console.log(`cannot connect to mongodb on ${configs.MONGODB_URI}!`);
+    console.log(
+        `cannot connect to mongodb on ${configs.MONGODB_URI}!`
+    );
     console.error(e);
 
     process.exit(1);
 }
 
-const viewsPath = "./src/server/views";
-const publicPath = "./src/server/public";
+const NODE_ENV = configs.NODE_ENV;
+
+let viewsPath: string;
+let publicPath: string;
+
+if (NODE_ENV === "production") {
+    viewsPath = "./build/views";
+    publicPath = "./build/public";
+} else {
+    viewsPath = "./src/server/views";
+    publicPath = "./src/server/public";
+}
 
 const server = express();
 
@@ -39,6 +51,7 @@ server.use(express.static(path.resolve(publicPath)));
 server.set("views", path.resolve(viewsPath));
 server.set("view engine", "ejs");
 
+// Load middlewares
 server.use(morgan("combined"));
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
@@ -55,21 +68,8 @@ server.use((req, res, next) => {
     res.locals.user = req.user;
     next();
 });
-// server.use((req: Request, res: Response, next: NextFunction) => {
-//     // After successful login, redirect back to the intended page
-//     if (!req.user &&
-//         req.path !== "/login" &&
-//         req.path !== "/signup" &&
-//         !req.path.match(/^\/auth/) &&
-//         !req.path.match(/\./)) {
-//         req.session.returnTo = req.path;
-//     } else if (req.user &&
-//         req.path == "/account") {
-//         req.session.returnTo = req.path;
-//     }
-//     next();
-// });
 
+// Load passport configs
 passportMiddleware(passport);
 
 server.use(routes);

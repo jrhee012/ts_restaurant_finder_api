@@ -1,13 +1,16 @@
 import { PassportStatic } from "passport";
 // import request from "request";
 import passportLocal from "passport-local";
+import passportGoogle from "passport-google-oauth2";
 // import passportFacebook from "passport-facebook";
 import _ from "lodash";
 import { Request, Response, NextFunction } from "express";
 import { Users } from "../models";
+import configs from "../config";
 
 const LocalStrategy = passportLocal.Strategy;
 // const FacebookStrategy = passportFacebook.Strategy;
+const GoogleStrategy = passportGoogle.Strategy;
 
 export default (passport: PassportStatic) => {
     passport.serializeUser(function (user: any, done) {
@@ -75,6 +78,46 @@ export default (passport: PassportStatic) => {
             }
         })
     );
+
+    // =========================================================================
+    // GOOGLE LOGIN ============================================================
+    // =========================================================================
+
+    passport.use(new GoogleStrategy(
+        {
+            clientID: configs.GOOGLE_CLIENT_ID,
+            clientSecret: configs.GOOGLE_CLIENT_SECRET,
+            callbackURL: configs.GOOGLE_CALLBACK_URL,
+        },
+        async function (accessToken, refreshToken, profile, done) {
+            try {
+                let user = await Users.findOne({ "google.id": profile.id });
+
+                if (!user) {
+                    const googleResp = {
+                        id: profile.id,
+                        token: accessToken,
+                        email: profile.email,
+                        name: profile.name,
+                        full_profile: profile,
+                    };
+                    user = new Users();
+                    user.google = googleResp;
+                    user.last_login_at = new Date().toISOString();
+
+                    const savedUser = await user.save();
+                    return done(undefined, savedUser);
+                }
+                user.last_login_at = new Date().toISOString();
+                await user.save();
+                done(undefined, user);
+            } catch (e) {
+                console.log("google login error");
+                console.error(e);
+                return done(e);
+            }
+        }
+    ));
 };
 
 /**

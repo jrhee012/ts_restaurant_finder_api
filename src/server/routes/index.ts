@@ -5,6 +5,7 @@ import restaurants from "./lib/api/restaurants";
 import data from "./lib/api/data";
 import configs from "../config";
 import { redisClient } from "../utils";
+import profileControllers from "./lib/web/profile";
 import { getLogin, getSignUp } from "../controllers/web/login";
 
 const ApiBaseUrl: string = configs.BASE_URL;
@@ -17,6 +18,8 @@ router.get("/", (req, res) => {
     // console.log('session', req.session)
     return res.status(200).render("pages/home", data);
 });
+
+router.use("/profile", profileControllers);
 
 // LOGIN ============================================================
 router.get("/login/facebook", (req, res) => res.redirect("/auth/facebook"));
@@ -53,7 +56,9 @@ router.get(
         return res.send(200);
     },
 );
-router.get("/auth/google", passport.authenticate("google", { scope: ["profile"] }));
+router.get("/auth/google", passport.authenticate("google", {
+    scope: ["profile"],
+}));
 
 // facebook
 router.get(
