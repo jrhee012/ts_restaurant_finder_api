@@ -4,10 +4,21 @@ import { RestaurantsModel } from "../../models/lib/Restaurants";
 
 export interface ISearchSuggestionBuilder {
     data: RestaurantsModel[];
+    transformed: {
+        name: string,
+        address: string,
+        category: string[],
+    }[];
 }
 
 export interface ISearchSuggestionBuilderModel extends ISearchSuggestionBuilder, Document {
     updateData: () => Promise<RestaurantsModel[]>;
+    createList: () => void;
+    getLists: () => {
+        name: string;
+        address: string;
+        category: string[];
+    }[];
 }
 
 class SearchSuggestionBuilder {
@@ -46,6 +57,7 @@ class SearchSuggestionBuilder {
             address: string,
             category: string[],
         }[] = [];
+
         data.forEach((d: RestaurantsModel) => {
             const source = d.source_data;
 
@@ -83,6 +95,12 @@ class SearchSuggestionBuilder {
                 list.push(entry);
             }
         });
+
         this.transformed = list;
+    }
+
+    getLists() {
+        this.createList(this.data);
+        return this.transformed;
     }
 }
