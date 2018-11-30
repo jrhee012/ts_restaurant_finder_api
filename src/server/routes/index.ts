@@ -1,10 +1,10 @@
-import { Router, Application, Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import passport from "passport";
 // import api from "./lib/api";
 import restaurants from "./lib/api/restaurants";
 import data from "./lib/api/data";
 import configs from "../config";
-import { redisClient } from "../utils";
+// import { redisClient } from "../utils";
 import profileControllers from "./lib/web/profile";
 import { getLogin, getSignUp } from "../controllers/web/login";
 
@@ -13,7 +13,7 @@ const ApiBaseUrl: string = configs.BASE_URL;
 let router: Router;
 router = Router();
 
-router.get("/", (req, res) => {
+router.get("/", (req: Request, res: Response) => {
     const data = { user: res.locals.user };
     // console.log('session', req.session)
     return res.status(200).render("pages/home", data);
@@ -22,8 +22,8 @@ router.get("/", (req, res) => {
 router.use("/profile", profileControllers);
 
 // LOGIN ============================================================
-router.get("/login/facebook", (req, res) => res.redirect("/auth/facebook"));
-router.get("/login/google", (req, res) => res.redirect("/auth/google"));
+router.get("/login/facebook", (req: Request, res: Response) => res.redirect("/auth/facebook"));
+router.get("/login/google", (req: Request, res: Response) => res.redirect("/auth/google"));
 router.get("/login", getLogin);
 router.post("/login", passport.authenticate("local", {
     successRedirect: "/profile",
@@ -31,7 +31,7 @@ router.post("/login", passport.authenticate("local", {
     failureFlash: true,
 }));
 
-router.get("/logout", (req, res) => {
+router.get("/logout", (req: Request, res: Response) => {
     req.logout();
     res.redirect("/");
 });
@@ -51,7 +51,7 @@ router.get(
         failureRedirect: "/login",
         failureFlash: true,
     }),
-    (req, res) => {
+    (req: Request, res: Response) => {
         // console.log("!!!!!")
         return res.send(200);
     },
@@ -64,7 +64,7 @@ router.get("/auth/google", passport.authenticate("google", {
 router.get(
     "/auth/facebook/callback",
     passport.authenticate("facebook", { failureRedirect: "/login" }),
-    (req, res) => {
+    (req: Request, res: Response) => {
         console.log("!!!!!")
         return res.redirect("/profile");
     },

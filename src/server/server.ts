@@ -64,7 +64,7 @@ server.use(passport.initialize());
 server.use(passport.session());
 server.use(flash());
 server.use(configs.BASE_URL, tokenValidation);
-server.use((req, res, next) => {
+server.use((req: Request, res: Response, next: NextFunction) => {
     res.locals.user = req.user;
     next();
 });
