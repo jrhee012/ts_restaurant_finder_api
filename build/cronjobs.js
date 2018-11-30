@@ -39,7 +39,7 @@ var cron_1 = require("cron");
 var mongoose_1 = require("mongoose");
 var Data = mongoose_1.model("Data");
 console.log("Before job instantiation");
-var job1 = new cron_1.CronJob("0,30 * * * * *", function () {
+var job1 = new cron_1.CronJob("* 0,30 * * * *", function () {
     return __awaiter(this, void 0, void 0, function () {
         var data, e_1;
         return __generator(this, function (_a) {
@@ -52,11 +52,11 @@ var job1 = new cron_1.CronJob("0,30 * * * * *", function () {
                     if (data.length < 1) {
                         data = [];
                     }
-                    console.log("[CRONJOB name=job1 \"* 10 * * * *\"] Number of data entries: " + data.length);
+                    console.log("[CRONJOB name=job1] Number of data entries: " + data.length);
                     return [3 /*break*/, 3];
                 case 2:
                     e_1 = _a.sent();
-                    console.log('[CRONJOB name=job1 "* 10 * * * *"] ERROR');
+                    console.log("[CRONJOB name=job1] ERROR");
                     console.error(e_1);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
