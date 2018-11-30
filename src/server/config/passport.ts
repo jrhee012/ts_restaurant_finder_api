@@ -1,0 +1,101 @@
+import { PassportStatic } from "passport";
+// import request from "request";
+import passportLocal from "passport-local";
+// import passportFacebook from "passport-facebook";
+import _ from "lodash";
+import { Request, Response, NextFunction } from "express";
+import { Users } from "../models";
+
+const LocalStrategy = passportLocal.Strategy;
+// const FacebookStrategy = passportFacebook.Strategy;
+
+export default (passport: PassportStatic) => {
+    passport.serializeUser(function (user: any, done) {
+        done(undefined, user.id);
+    });
+
+    passport.deserializeUser(function (id, done) {
+        Users.findById(id, function (err, user: any) {
+            done(err, user);
+        });
+    });
+
+    /**
+     * Sign in using Email and Password.
+     */
+    passport.use(new LocalStrategy(
+        { passReqToCallback: true },
+        async function (req, email, password, done) {
+            try {
+                const user = await Users.findOne({ "local.email": email });
+
+                if (!user) {
+                    return done(undefined, false, req.flash("error", "Incorrect username."));
+                }
+
+                if (!user.validatePassword(password)) {
+                    return done(undefined, false, req.flash("error", "Incorrect password."));
+                }
+
+                user.last_login_at = new Date().toISOString();
+                await user.save();
+                return done(undefined, user);
+            } catch (e) {
+                console.error(e);
+                return done(e);
+            }
+        }
+    ));
+
+    // =========================================================================
+    // LOCAL SIGNUP ============================================================
+    // =========================================================================
+
+    passport.use("local-signup", new LocalStrategy(
+        { passReqToCallback: true },
+        async function (req, email, password, done) {
+            try {
+                let user = await Users.findOne({ "local.email": email });
+
+                if (user) {
+                    return done(undefined, false, req.flash("signupMessage", "That email is already taken."));
+                }
+
+                user = new Users();
+                user.local.email = email;
+                user.setPassword(password);
+                user.created_at = new Date().toISOString();
+                user.last_login_at = new Date().toISOString();
+                await user.save();
+
+                return done(undefined, user);
+            } catch (e) {
+                console.error(e);
+                return done(e);
+            }
+        })
+    );
+};
+
+/**
+ * Login Required middleware.
+ */
+export let isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
+};
+
+/**
+ * Authorization Required middleware.
+ */
+export let isAuthorized = (req: Request, res: Response, next: NextFunction) => {
+    const provider = req.path.split("/").slice(-1)[0];
+
+    if (_.find(req.user.tokens, { kind: provider })) {
+        next();
+    } else {
+        res.redirect(`/auth/${provider}`);
+    }
+};

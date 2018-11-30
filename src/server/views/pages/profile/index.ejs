@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head><% include ../../partials/head %></head>
+<body class="container">
+    <header><% include ../../partials/header %></header>
+
+    <main>
+        <div class="jumbotron">
+            <div class="page-header text-center">
+                <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+                <p>
+                    <strong>id</strong>:
+                    <%= user._id %><br>
+                    <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+            </div>
+
+            <div class="row">
+
+                <!-- LOCAL INFORMATION -->
+                <% if (user.local.email && user.local.password) { %>
+                <div class="col-sm-6">
+                    <div class="well">
+                        <h3><span class="fa fa-user"></span> Local</h3>
+                        <p>
+                            <strong>email</strong>:
+                            <%= user.local.email %><br>
+                        </p>
+                        <p>
+                            <strong>password</strong>:
+                            <%= user.local.password %>
+                        </p>
+                    </div>
+                </div>
+                <% } %>
+
+                <!-- GOOGLE INFORMATION -->
+                <% if (user.google) { %>
+                <div class="col-sm-6">
+                    <div class="jumbotron user-profile-box">
+                        <h3><i class="fab fa-google"></i> Google</h3>
+                        <p>
+                            <strong>google id</strong>:
+                            <%= user.google.id %><br>
+                        </p>
+                        <% if (user.google.email) { %>
+                        <p>
+                            <strong>google email</strong>:
+                            <%= user.google.email %>
+                        </p>
+                        <% } %>
+                        <% if (user.google.name.givenName || user.google.name.familyName) { %>
+                        <p>
+                            <strong>google name</strong>:
+                            <%= user.google.name.givenName %>
+                            <%= user.google.name.familyName %>
+                        </p>
+                        <% } %>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </main>
+
+    <footer><% include ../../partials/footer %></footer>
+</body>
+
+</html>
