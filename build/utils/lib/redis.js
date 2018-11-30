@@ -97,23 +97,31 @@ var RedisCache = /** @class */ (function () {
     };
     RedisCache.prototype.get = function (key) {
         return __awaiter(this, void 0, void 0, function () {
-            var redis, getAsync, result;
+            var redis, getAsync, result, e_1;
             return __generator(this, function (_a) {
-                redis = this.client;
-                if (!redis || !this.cacheExists) {
-                    this.noCacheMessage();
-                    return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        redis = this.client;
+                        if (!redis || !this.cacheExists) {
+                            this.noCacheMessage();
+                            return [2 /*return*/];
+                        }
+                        getAsync = util_1.promisify(redis.get).bind(redis);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, getAsync(key)];
+                    case 2:
+                        result = _a.sent();
+                        console.log("> Cache retrieved with key: " + key);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_1 = _a.sent();
+                        console.log("ERROR redis cache get");
+                        console.error(e_1);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/, result];
                 }
-                getAsync = util_1.promisify(redis.get).bind(redis);
-                try {
-                    result = getAsync(key);
-                    console.log("> Cache retrieved with key: " + key);
-                }
-                catch (e) {
-                    console.log("ERROR redis cache get");
-                    console.error(e);
-                }
-                return [2 /*return*/, result];
             });
         });
     };
