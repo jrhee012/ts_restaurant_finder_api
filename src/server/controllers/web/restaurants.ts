@@ -40,7 +40,6 @@ export const getAll = async (req: Request, res: Response) => {
         page: paginate(restaurants.length, pageNum, 20, 10),
     };
 
-    // console.log("data", data);
     return res.status(200).render("pages/restaurants/index", data);
 };
 

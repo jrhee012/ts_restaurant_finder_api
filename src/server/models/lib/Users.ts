@@ -1,14 +1,9 @@
-import { Document, Schema, Query, Model, model } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { RolesModel } from "./Roles";
 import { Roles } from "..";
 import { includes } from "lodash";
-// import { any } from "bluebird";
-// const isEmpty = require('lodash/isEmpty');
-// const find = require('lodash/find');
-
-// const { Schema } = mongoose;
 
 export interface IUsers {
     local: {
