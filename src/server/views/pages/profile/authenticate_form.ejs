@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+
+<head>
+    <% include ../../partials/head %>
+</head>
+
+<body class="container">
+    <header>
+        <% include ../../partials/header %>
+    </header>
+
+    <main>
+        <div class="jumbotron">
+            <div class="page-header text-center">
+                <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+                <p>
+                    <strong>id</strong>:
+                    <%= user._id %><br>
+                    <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <% include ../../partials/footer %>
+    </footer>
+</body>
+
+</html>

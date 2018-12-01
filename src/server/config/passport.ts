@@ -1,5 +1,4 @@
 import { PassportStatic } from "passport";
-// import request from "request";
 import passportLocal from "passport-local";
 import passportGoogle from "passport-google-oauth2";
 // import passportFacebook from "passport-facebook";

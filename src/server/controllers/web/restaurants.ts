@@ -59,6 +59,9 @@ export const getOne = async (req: Request, res: Response) => {
             const cache = await redisClient.get(cacheKey);
             info = cache;
             if (cache === null || cache === undefined) {
+                // TODO: CAN USE DB DATA (ALMOST THE SAME AS API DATA)
+                // info = await Data.findOne({ ext_id: rest_id });
+
                 info = await api_client.searchOneBusniness(rest_id);
                 redisClient.set(cacheKey, info);
             }
@@ -75,6 +78,12 @@ export const getOne = async (req: Request, res: Response) => {
         return res.status(404).render("pages/templates/404.ejs");
     }
 
+    const data = {
+        user: res.locals.user,
+        info: info,
+    };
+
+    console.log("info...!", info);
     return res.status(200).send("ok");
 };
 

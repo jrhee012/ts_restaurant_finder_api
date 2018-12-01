@@ -46,6 +46,7 @@ export interface IUsers {
     created_at: string;
     last_login_at?: string;
     active: boolean;
+    authenticated: boolean;
 }
 
 export interface UsersModel extends Document, IUsers {
@@ -106,6 +107,10 @@ const UsersSchema = new Schema({
     active: {
         type: Boolean,
         default: true,
+    },
+    authenticated: {
+        type: Boolean,
+        default: false,
     },
 });
 

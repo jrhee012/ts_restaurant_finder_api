@@ -6,6 +6,7 @@ import configs from "../config";
 import profileRouter from "./lib/web/profile";
 import restaurantsRouter from "./lib/web/restaurants";
 import { getLogin, getSignUp } from "../controllers/web/login";
+import { isAuthenticated } from "../config/passport";
 
 const ApiBaseUrl: string = configs.BASE_URL;
 
@@ -18,7 +19,7 @@ router.get("/", (req: Request, res: Response) => {
     return res.status(200).render("pages/home", data);
 });
 
-router.use("/profile", profileRouter);
+router.use("/profile", isAuthenticated, profileRouter);
 router.use("/restaurants", restaurantsRouter);
 
 // LOGIN ============================================================
