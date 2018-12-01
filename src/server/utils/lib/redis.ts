@@ -65,8 +65,8 @@ class RedisCache {
             attr = JSON.stringify(value);
         }
 
-        redis.set(key, attr);
-        console.log(`> Cache set with key: ${key}`);
+        redis.set(key, attr, "EX", 60 * 60);
+        console.log(`> Cache set with key: ${key} for 60 mins`);
     }
 
     async get(key: string) {
@@ -87,6 +87,11 @@ class RedisCache {
             console.log("ERROR redis cache get");
             console.error(e);
         }
+
+        if (result !== null) {
+            result = JSON.parse(result);
+        }
+
         return result;
     }
 }

@@ -1,9 +1,12 @@
 import { includes } from "lodash";
 import { Restaurants } from "../../models";
 import { RestaurantsModel } from "../../models/lib/Restaurants";
+// import { redisClient } from "./redis";
+
+// const cacheKey: string = "SearchSuggestionBuilder";
 
 export interface ISearchSuggestionBuilder {
-    data: RestaurantsModel[];
+    data?: RestaurantsModel[];
     transformed: {
         name: string,
         address: string,
@@ -11,8 +14,8 @@ export interface ISearchSuggestionBuilder {
     }[];
 }
 
-export interface ISearchSuggestionBuilderModel extends ISearchSuggestionBuilder, Document {
-    updateData: () => Promise<RestaurantsModel[]>;
+interface ISearchSuggestionBuilderModel extends ISearchSuggestionBuilder, Document {
+    getData: () => Promise<RestaurantsModel[]>;
     createList: () => void;
     getLists: () => {
         name: string;
@@ -21,20 +24,20 @@ export interface ISearchSuggestionBuilderModel extends ISearchSuggestionBuilder,
     }[];
 }
 
-export class SearchSuggestionBuilder {
-    data: RestaurantsModel[];
+class SearchSuggestionBuilder {
+    data?: RestaurantsModel[];
     transformed: {
         name: string,
         address: string,
         category: string[],
     }[];
 
-    constructor(data: RestaurantsModel[]) {
-        this.data = data;
+    constructor() {
+        this.data = undefined;
         this.transformed = [];
     }
 
-    async updateData() {
+    private async getData() {
         let new_data: RestaurantsModel[];
         try {
             new_data = await Restaurants.find();
@@ -51,7 +54,7 @@ export class SearchSuggestionBuilder {
         return new_data;
     }
 
-    createList(data: RestaurantsModel[]) {
+    private createList(data: RestaurantsModel[]) {
         const list: {
             name: string,
             address: string,
@@ -99,8 +102,13 @@ export class SearchSuggestionBuilder {
         this.transformed = list;
     }
 
-    getLists() {
-        this.createList(this.data);
+    async getLists() {
+        const data: RestaurantsModel[] = await this.getData();
+        this.createList(data);
         return this.transformed;
     }
 }
+
+const builder = new SearchSuggestionBuilder();
+
+export const suggestionBuilder  = builder;

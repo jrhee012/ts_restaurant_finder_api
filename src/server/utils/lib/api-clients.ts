@@ -1,4 +1,4 @@
-import rp, { OptionsWithUri } from "request-promise";
+import rp, { OptionsWithUri, RequestPromise } from "request-promise";
 import _ from "lodash";
 import configs from "../../config";
 import { Data, Restaurants } from "../../models";
@@ -31,12 +31,6 @@ class ApiClient {
     }
 
     async makeCall(httpOptions: OptionsWithUri) {
-        // if (_.isEmpty(httpOptions)
-        // && !_.isEmpty(this.httpOptions)) {
-        //     // console.log("http")
-        //     httpOptions = this.httpOptions;
-        // }
-
         if (configs.NODE_ENV !== "production") {
             console.log(`Calling: ${JSON.stringify(httpOptions.uri)}`);
             console.log(`Headers: ${JSON.stringify(httpOptions.headers)}`);
@@ -49,22 +43,21 @@ class ApiClient {
             _.assign(httpOptions, { json: true });
         }
 
-        let result = {};
+        let result;
         try {
             result = await rp(httpOptions);
         } catch (e) {
-            console.log("API CALL ERROR:");
-            console.error(e.message);
-            // result = {};
+            console.log("ERROR ApiClient makeCall");
+            if (configs.NODE_ENV !== "production") {
+                console.error(e.message);
+            }
         }
-
         return result;
     }
 }
 
 export class YelpApiClient extends ApiClient {
-    // httpOptions: OptionsWithUri;
-    baseUrl: string;
+    private baseUrl: string;
 
     constructor() {
         super();
@@ -89,6 +82,21 @@ export class YelpApiClient extends ApiClient {
             method: "get",
             headers: headers,
             qs: searchQueries,
+            json: true,
+        };
+
+        return this.makeCall(options);
+    }
+
+    searchOneBusniness(id: string) {
+        const headers = {
+            "Authorization": `Bearer ${configs.YELP_API_KEY}`,
+        };
+
+        const options: OptionsWithUri = {
+            uri: `${this.baseUrl}/businesses/${id}`,
+            method: "get",
+            headers: headers,
             json: true,
         };
 

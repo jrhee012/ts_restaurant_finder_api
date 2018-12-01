@@ -1,7 +1,7 @@
 import server from "./server";
 import configs from "./config";
 import DBSeeder from "./config/db-seed";
-import "./cronjobs";
+// import "./cronjobs";
 
 const port = configs.PORT;
 
