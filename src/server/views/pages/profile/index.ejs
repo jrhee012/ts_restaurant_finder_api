@@ -68,13 +68,15 @@
                 <% } %>
             </div>
 
+            <% if (!user.authenticated) { %>
             <div class="row">
                 <div class="col-sm-12">
                     <div class="jumbotron user-profile-box">
-                        <a href="/profile/authenticate" class="btn btn-default btn-sm"><span class="fa fa-user"></span> <span style="font-size: larger">Authenticate</span></a>
+                        <a href="/profile/authenticate" class="btn btn-default btn-sm"><span class="fa fa-user"></span><span style="font-size: larger"> Authenticate</span></a>
                     </div>
                 </div>
             </div>
+            <% } %>
         </div>
     </main>
 
