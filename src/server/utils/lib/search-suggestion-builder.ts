@@ -21,7 +21,7 @@ export interface ISearchSuggestionBuilderModel extends ISearchSuggestionBuilder,
     }[];
 }
 
-class SearchSuggestionBuilder {
+export class SearchSuggestionBuilder {
     data: RestaurantsModel[];
     transformed: {
         name: string,

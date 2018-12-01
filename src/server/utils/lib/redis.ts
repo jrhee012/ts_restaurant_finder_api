@@ -79,7 +79,7 @@ class RedisCache {
 
         const getAsync = promisify(redis.get).bind(redis);
 
-        let result: any;
+        let result: any = undefined;
         try {
             result = await getAsync(key);
             console.log(`> Cache retrieved with key: ${key}`);

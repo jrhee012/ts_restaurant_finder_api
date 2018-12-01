@@ -15,8 +15,8 @@
 
         <div class="jumbotron text-center">
             <h1><i class="fas fa-sign-in-alt"></i> Login</h1>
-
-            <% for (let i = 0; i < 10; i++) { %>
+            <%= JSON.stringify(page) %>
+            <% for (let i = page.startIndex; i < page.endIndex; i++) { %>
                 <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1"><%= restaurants[i].name %><br></h5>
@@ -26,8 +26,8 @@
                     <small>Donec id elit non mi porta.</small>
                 </a>
             <% } %>
+            <% include ../../partials/pagination %>
         </div>
-
     </div>
 
     <footer>
@@ -36,31 +36,3 @@
 </body>
 
 </html>
-
-
-<div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">List group item heading</h5>
-            <small>3 days ago</small>
-        </div>
-        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-        <small>Donec id elit non mi porta.</small>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">List group item heading</h5>
-            <small class="text-muted">3 days ago</small>
-        </div>
-        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-        <small class="text-muted">Donec id elit non mi porta.</small>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">List group item heading</h5>
-            <small class="text-muted">3 days ago</small>
-        </div>
-        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-        <small class="text-muted">Donec id elit non mi porta.</small>
-    </a>
-</div>

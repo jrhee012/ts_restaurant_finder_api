@@ -4,6 +4,7 @@ import { isAuthenticated } from "../../../config/passport";
 
 const router: Router = Router();
 
-router.get("/", isAuthenticated, getAll);
+router.get("/", getAll);
+// router.get("/", isAuthenticated, getAll);
 
 export default router;

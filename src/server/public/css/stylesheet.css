@@ -53,3 +53,9 @@ body {
 .user-profile-box {
   background-color: #f8f9fa;
 }
+
+/* class */
+.pagination {
+  padding-top: 20px;
+  /* margin: auto; */
+}
