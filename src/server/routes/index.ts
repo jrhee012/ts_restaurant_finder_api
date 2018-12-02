@@ -20,7 +20,7 @@ router.get("/", (req: Request, res: Response) => {
 });
 
 router.use("/profile", isAuthenticated, profileRouter);
-router.use("/restaurants", restaurantsRouter);
+router.use("/restaurants", isAuthenticated, restaurantsRouter);
 
 // LOGIN ============================================================
 router.get("/login/facebook", (req: Request, res: Response) => res.redirect("/auth/facebook"));
