@@ -11,7 +11,7 @@ export interface RestaurantsModel extends Document {
     website: string;
     reservation: any[];
     description: any;
-    source_data: string[];
+    source_data: any[];
     created_at: string;
     last_updated: string;
 }

@@ -11,7 +11,10 @@ export const getAll = async (req: Request, res: Response) => {
     let restaurants: RestaurantsModel[] = [];
     try {
         restaurants = await Restaurants.find();
-        restaurants = await Restaurants.populate(restaurants, { path: "source_data", model: "Data" });
+        restaurants = await Restaurants.populate(restaurants, {
+            path: "source_data",
+            model: "Data"
+        });
     } catch (e) {
         console.log("ERROR restaurants get all controller");
         console.error(e.message);
@@ -45,6 +48,19 @@ export const getOne = async (req: Request, res: Response) => {
     const api_client = new YelpApiClient();
 
     try {
+        const rest: RestaurantsModel | null = await Restaurants.findById(rest_id);
+
+        if (rest === null) {
+            return res.redirect("/restaurants");
+        }
+
+        await Restaurants.populate(rest, {
+            path: "source_data",
+            model: "Data"
+        });
+
+        const ext_id = rest.source_data[0].ext_id;
+
         if (redisClient.cacheExists) {
             const cache = await redisClient.get(cacheKey);
             info = cache;
@@ -52,11 +68,11 @@ export const getOne = async (req: Request, res: Response) => {
                 // TODO: CAN USE DB DATA (ALMOST THE SAME AS API DATA)
                 // info = await Data.findOne({ ext_id: rest_id });
 
-                info = await api_client.searchOneBusniness(rest_id);
+                info = await api_client.searchOneBusniness(ext_id);
                 redisClient.set(cacheKey, info);
             }
         } else {
-            info = await api_client.searchOneBusniness(rest_id);
+            info = await api_client.searchOneBusniness(ext_id);
         }
     } catch (e) {
         console.log("ERROR restaurants get one controller");
