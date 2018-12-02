@@ -4,80 +4,114 @@
 <body class="container">
     <header><% include ../../partials/header %></header>
 
+    <% if (!user.authenticated) { %>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <p id="auth-alert-msg">
+            Your account is not authenticated yet!
+            <a href="/profile/authenticate">Click here</a>
+            to authenticate.
+        </p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <% } %>
+
     <div class="jumbotron">
         <div class="page-header text-center">
             <h1><span class="fa fa-anchor"></span> Profile Page</h1>
             <p>
-                <strong>id</strong>:
-                <%= user._id %><br>
+                <strong>id</strong>: <%= user._id %>
+                <a href="/profile/authenticate">Authenticate</a><br>
                 <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+            </p>
         </div>
 
         <div class="row">
+        <% if (user.local.email) { %>
             <!-- LOCAL INFORMATION -->
-            <% if (user.local.email) { %>
             <% if (user.google.id) { %>
             <div class="col-sm-6">
-                <% } else { %>
-                <div class="col-sm-12">
-                    <% } %>
-                    <div class="jumbotron user-profile-box">
-                        <h3><span class="fa fa-user"></span> Local</h3>
-                        <p>
-                            <strong>email</strong>:
-                            <%= user.local.email %><br>
-                        </p>
-                        <p>
-                            <strong>password</strong>:
-                            <!-- <a href="/profile/update" class="btn btn-default btn-sm">Change Password</a> -->
-                            **********
-                        </p>
-                    </div>
+            <% } else { %>
+            <div class="col-sm-12">
+            <% } %>
+                <div class="jumbotron user-profile-box">
+                    <h3>
+                        <span class="fa fa-user"></span> Local
+                    </h3>
+                    <p>
+                        <strong>email</strong>: <%= user.local.email %>
+                        <br>
+                    </p>
+                    <p>
+                        <strong>password</strong>: **********
+                    </p>
                 </div>
-                <% } %>
-
-                <!-- GOOGLE INFORMATION -->
-                <% if (user.google.id) { %>
-                <% if (user.local.email) { %>
-                <div class="col-sm-6">
-                    <% } else { %>
-                    <div class="col-sm-12">
-                        <% } %>
-                        <div class="jumbotron user-profile-box">
-                            <h3><i class="fab fa-google"></i> Google</h3>
-                            <p>
-                                <strong>google id</strong>:
-                                <%= user.google.id %><br>
-                            </p>
-                            <% if (user.google.email) { %>
-                            <p>
-                                <strong>google email</strong>:
-                                <%= user.google.email %>
-                            </p>
-                            <% } %>
-                            <% if (user.google.name) { %>
-                            <p>
-                                <strong>google name</strong>:
-                                <%= user.google.name.givenName %>
-                                <%= user.google.name.familyName %>
-                            </p>
-                            <% } %>
-                        </div>
-                    </div>
-                    <% } %>
-                </div>
-
-                <% if (!user.authenticated) { %>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="jumbotron user-profile-box">
-                            <a href="/profile/authenticate" class="btn btn-default btn-sm"><span class="fa fa-user"></span><span
-                                    style="font-size: larger"> Authenticate</span></a>
-                        </div>
-                    </div>
-                </div>
-                <% } %>
             </div>
+        <% } %>
+
+        <% if (user.google.id) { %>
+            <!-- GOOGLE INFORMATION -->
+            <% if (user.local.email) { %>
+            <div class="col-sm-6">
+            <% } else { %>
+            <div class="col-sm-12">
+            <% } %>
+                <div class="jumbotron user-profile-box">
+                    <h3><i class="fab fa-google"></i> Google</h3>
+                    <p>
+                        <strong>google id</strong>:
+                        <%= user.google.id %><br>
+                    </p>
+                    <% if (user.google.email) { %>
+                    <p>
+                        <strong>google email</strong>:
+                        <%= user.google.email %>
+                    </p>
+                    <% } %>
+                    <% if (user.google.name) { %>
+                    <p>
+                        <strong>google name</strong>:
+                        <%= user.google.name.givenName %>
+                        <%= user.google.name.familyName %>
+                    </p>
+                    <% } %>
+                </div>
+             </div>
+        <% } %>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="jumbotron user-profile-box">
+                    <div class="d-flex w-100">
+                        <h5 class="mb-1">My Tickets</h5>
+                    </div>
+                    <div class="d-flex w-100">
+                        <small>All tickets</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="jumbotron user-profile-box">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Selling Tickets</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="jumbotron user-profile-box">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Buying Tickets</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <footer><% include ../../partials/footer %></footer>
 </body>

@@ -63,3 +63,8 @@ body {
 #pagination-nav-tag {
   margin: auto;
 }
+
+#auth-alert-msg {
+  margin: 0;
+  top: 50%;
+}

@@ -130,7 +130,8 @@ exports.default = (function (passport) {
         clientID: config_1.default.GOOGLE_CLIENT_ID,
         clientSecret: config_1.default.GOOGLE_CLIENT_SECRET,
         callbackURL: config_1.default.GOOGLE_CALLBACK_URL,
-    }, function (accessToken, refreshToken, profile, done) {
+        passReqToCallback: true,
+    }, function (req, accessToken, refreshToken, profile, done) {
         return __awaiter(this, void 0, void 0, function () {
             var user, googleResp, savedUser, e_3;
             return __generator(this, function (_a) {
@@ -154,19 +155,19 @@ exports.default = (function (passport) {
                         return [4 /*yield*/, user.save()];
                     case 2:
                         savedUser = _a.sent();
-                        return [2 /*return*/, done(undefined, savedUser)];
+                        return [2 /*return*/, done(undefined, savedUser, req.flash("success", "Log in successful!"))];
                     case 3:
                         user.last_login_at = new Date().toISOString();
                         return [4 /*yield*/, user.save()];
                     case 4:
                         _a.sent();
-                        done(undefined, user);
+                        done(undefined, user, req.flash("success", "Log in successful!"));
                         return [3 /*break*/, 6];
                     case 5:
                         e_3 = _a.sent();
                         console.log("google login error");
                         console.error(e_3);
-                        return [2 /*return*/, done(e_3)];
+                        return [2 /*return*/, done(undefined, false, req.flash("error", e_3.message))];
                     case 6: return [2 /*return*/];
                 }
             });

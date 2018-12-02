@@ -23,6 +23,16 @@ router.use("/admin", passport_1.isAuthenticated, passport_1.isAdmin, admin_1.def
 // LOGIN
 router.use("/", login_1.default);
 // WEB
+router.get("/", function (req, res) {
+    var alert = req.flash("error") || [];
+    var success = req.flash("success") || [];
+    var data = {
+        user: res.locals.user,
+        alert: alert,
+        success: success,
+    };
+    return res.status(200).render("pages/home", data);
+});
 router.use("/", passport_1.isAuthenticated, web_1.default);
 // EASTER EGGGGS
 router.get("/jen", function (req, res) {

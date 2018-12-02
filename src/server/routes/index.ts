@@ -28,6 +28,17 @@ router.use("/admin", isAuthenticated, isAdmin, adminRouter);
 router.use("/", loginRouter);
 
 // WEB
+router.get("/", (req: Request, res: Response) => {
+    const alert = req.flash("error") || [];
+    const success = req.flash("success") || [];
+
+    const data = {
+        user: res.locals.user,
+        alert: alert,
+        success: success,
+    };
+    return res.status(200).render("pages/home", data);
+});
 router.use("/", isAuthenticated, webRouter);
 
 // EASTER EGGGGS

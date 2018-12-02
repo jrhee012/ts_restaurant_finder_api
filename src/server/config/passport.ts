@@ -87,8 +87,9 @@ export default (passport: PassportStatic) => {
             clientID: configs.GOOGLE_CLIENT_ID,
             clientSecret: configs.GOOGLE_CLIENT_SECRET,
             callbackURL: configs.GOOGLE_CALLBACK_URL,
+            passReqToCallback: true,
         },
-        async function (accessToken, refreshToken, profile, done) {
+        async function (req, accessToken, refreshToken, profile, done) {
             try {
                 let user = await Users.findOne({ "google.id": profile.id });
 
@@ -105,15 +106,15 @@ export default (passport: PassportStatic) => {
                     user.last_login_at = new Date().toISOString();
 
                     const savedUser = await user.save();
-                    return done(undefined, savedUser);
+                    return done(undefined, savedUser, req.flash("success", "Log in successful!"));
                 }
                 user.last_login_at = new Date().toISOString();
                 await user.save();
-                done(undefined, user);
+                done(undefined, user, req.flash("success", "Log in successful!"));
             } catch (e) {
                 console.log("google login error");
                 console.error(e);
-                return done(e);
+                return done(undefined, false, req.flash("error", e.message));
             }
         }
     ));

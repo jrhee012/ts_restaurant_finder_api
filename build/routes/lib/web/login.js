@@ -21,8 +21,11 @@ router.post("/login", passport_1.default.authenticate("local", {
     return res.redirect(req.originalUrl);
 });
 router.get("/logout", function (req, res) {
-    req.logout();
-    res.redirect("/");
+    // req.logout();
+    // res.redirect("/");
+    var success = ["Log out success!"];
+    var data = { user: undefined, success: success, alert: [] };
+    return res.status(200).render("pages/home", data);
 });
 router.get("/signup", login_1.getSignUp);
 router.post("/signup", passport_1.default.authenticate("local-signup", {
