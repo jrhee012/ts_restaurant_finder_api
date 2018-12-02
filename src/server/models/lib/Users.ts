@@ -2,7 +2,7 @@ import { Document, Schema, model, Error } from "mongoose";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { RolesModel } from "./Roles";
-import { Roles, Admins } from "..";
+import { Roles, Admins, Users } from "..";
 import { includes } from "lodash";
 import * as EmailValidator from "email-validator";
 
@@ -133,25 +133,33 @@ UsersSchema.pre("validate", async function (next) {
     }
 });
 
-UsersSchema.pre("validate", async function (next) {
+UsersSchema.pre("save", async function (next) {
     const doc = <UsersModel>this;
-    const roles = doc.roles;
+    const roles = doc.roles || [];
 
     let userRole: RolesModel | null;
     try {
         userRole = await Roles.findOne({ name: "user" });
+        roles.forEach(async role => {
+            const find_role = await Roles.findById(role);
+            if (find_role !== null && userRole !== null) {
+                if (find_role._id.toString() === userRole._id.toString()) {
+                    return next();
+                } else {
+                    roles.push(userRole._id);
+                    doc.roles = roles;
+                }
+            }
+        });
 
-        if (userRole !== null && includes(roles, userRole._id)) {
-            return next();
-        }
-
-        if (userRole !== null && !includes(roles, userRole._id)) {
+        if (roles.length < 1 && userRole !== null) {
             roles.push(userRole._id);
             doc.roles = roles;
         }
     } catch (e) {
         console.error(e);
     }
+    return next();
 });
 
 UsersSchema.methods.setPassword = function (password: string) {
