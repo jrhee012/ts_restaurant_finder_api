@@ -1,4 +1,4 @@
-import { Document, Schema, Query, Model, model } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 
 export interface IRole {
     name: string;
