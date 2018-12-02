@@ -1,6 +1,8 @@
 import { config } from "dotenv";
 
-config();
+if (process.env.NODE_ENV !== "production") {
+    config();
+}
 
 class Config {
     NODE_ENV: string;
@@ -20,6 +22,7 @@ class Config {
     FACEBOOK_CLIENT_ID: string;
     FACEBOOK_CLIENT_SECRET: string;
     FACEBOOK_CALLBACK_URL: string;
+    SESSION_SECRET: string;
 
     constructor() {
         this.NODE_ENV = process.env.NODE_ENV || "dev";
@@ -50,6 +53,8 @@ class Config {
         this.FACEBOOK_CLIENT_ID = process.env.FACEBOOK_CLIENT_ID || "";
         this.FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_CLIENT_SECRET || "";
         this.FACEBOOK_CALLBACK_URL = process.env.FACEBOOK_CALLBACK_URL || "";
+
+        this.SESSION_SECRET = process.env.SESSION_SECRET || "bambi";
     }
 }
 

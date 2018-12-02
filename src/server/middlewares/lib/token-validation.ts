@@ -9,6 +9,5 @@ export default (req: Request, res: Response, next: NextFunction) => {
             return next();
         }
     }
-    return res.status(401)
-        .json(responseBuilder.unauthorized_error());
+    return res.status(401).json(responseBuilder.unauthorized_error());
 };

@@ -1,4 +1,4 @@
-import { Document, Schema, Query, Model, model } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 
 export interface IPermission {
     name: string;
@@ -10,7 +10,6 @@ export interface PermissionsModel extends Document, IPermission { }
 
 const PermissionsSchema = new Schema({
     name: String,
-    // scopes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category', index: true }],
     created_at: {
         type: Date,
         default: new Date().toISOString(),

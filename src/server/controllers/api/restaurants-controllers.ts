@@ -9,10 +9,8 @@ export const index = async (req: Request, res: Response) => {
         result = await Restaurants.find();
     } catch (e) {
         console.log("ERROR restaurant index controller");
-        console.error(e);
-        return res.status(500)
-            .json(responseBuilder.internal_server_error());
+        console.error(e.message);
+        return res.status(500).json(responseBuilder.internal_server_error());
     }
-    return res.status(200)
-        .json(result);
+    return res.status(200).json(result);
 };

@@ -1,7 +1,5 @@
 import { Document } from "mongoose";
 import { Request, Response } from "express";
-import { isEmpty } from "lodash";
-import configs from "../../config";
 import { Data } from "../../models";
 import { responseBuilder } from "../../utils";
 import { YelpApiClient } from "../../utils";
@@ -12,9 +10,8 @@ export const index = async (req: Request, res: Response) => {
         data = await Data.find();
     } catch (e) {
         console.log("ERROR data index controller");
-        console.error(e);
-        return res.status(500)
-            .json(responseBuilder.internal_server_error());
+        console.error(e.message);
+        return res.status(500).json(responseBuilder.internal_server_error());
     }
     return res.status(200).json(data);
 };
@@ -27,17 +24,12 @@ export const show = async (req: Request, res: Response) => {
         data = await Data.findById(dataId);
     } catch (e) {
         console.log("ERROR data show controller");
-        console.error(e);
-        return res.status(500)
-            .json(responseBuilder.internal_server_error());
+        console.error(e.message);
+        return res.status(500).json(responseBuilder.internal_server_error());
     }
 
     return res.status(200).json(data);
 };
-
-// export const create = async (req: Request, res: Response) => {
-//     const params = req.body;
-// };
 
 export const searchAndCreate = async (req: Request, res: Response) => {
     const query: {
@@ -51,20 +43,17 @@ export const searchAndCreate = async (req: Request, res: Response) => {
     let result: any;
     try {
         result = await yelp_client.searchBusinesses(query);
-        // console.log("results: ", result);
     } catch (e) {
         console.log("ERROR data search and create controller");
-        console.error(e);
+        console.error(e.message);
 
-        return res.status(500)
-            .json(responseBuilder.internal_server_error());
+        return res.status(500).json(responseBuilder.internal_server_error());
     }
 
     const data: any[] = result.businesses;
 
     if (data === undefined || data === null) {
-        return res.status(500)
-            .json(responseBuilder.internal_server_error());
+        return res.status(500).json(responseBuilder.internal_server_error());
     }
 
     if (data.length < 1) {
@@ -86,6 +75,4 @@ export const searchAndCreate = async (req: Request, res: Response) => {
         message: "ok",
         data: {},
     });
-
-    // return res.status(200).json(result);
 };

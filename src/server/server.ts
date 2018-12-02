@@ -58,7 +58,7 @@ server.use(bodyParser.urlencoded({ extended: false }));
 server.use(session({
     resave: true,
     saveUninitialized: true,
-    secret: "bambi",
+    secret: configs.SESSION_SECRET,
 }));
 server.use(passport.initialize());
 server.use(passport.session());

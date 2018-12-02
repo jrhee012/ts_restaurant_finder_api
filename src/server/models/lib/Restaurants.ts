@@ -1,4 +1,4 @@
-import { Document, Schema, Query, Model, model } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 
 export interface RestaurantsModel extends Document {
     name: string;
@@ -48,10 +48,5 @@ RestaurantsSchema.pre("validate", function () {
     const doc = <RestaurantsModel>this;
     doc.last_updated = new Date().toISOString();
 });
-
-// RestaurantsSchema.pre("update", function () {
-//     const doc = <Restaurant>this;
-//     this.last_updated = new Date().toISOString();
-// });
 
 model("Restaurants", RestaurantsSchema);

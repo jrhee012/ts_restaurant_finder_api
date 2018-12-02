@@ -1,5 +1,5 @@
-import { Router, Request, Response } from "express";
-import { isAuthenticated, isAdmin } from "../../../config/passport";
+import { Router } from "express";
+import { isAuthenticated } from "../../../config/passport";
 import profileRouter from "./profile";
 import restaurantsRouter from "./restaurants";
 import ticketsRouter from "./tickets";

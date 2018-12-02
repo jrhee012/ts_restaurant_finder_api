@@ -5,10 +5,6 @@ import DBSeeder from "./config/db-seed";
 
 const port = configs.PORT;
 
-// server.listen(port);
-
-// console.log(`Server started on: ${port}`);
-
 const dbSeeder = new DBSeeder();
 dbSeeder.start()
     .catch(err => {

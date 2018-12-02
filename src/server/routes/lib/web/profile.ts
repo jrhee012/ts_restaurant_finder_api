@@ -4,7 +4,6 @@ import { getProfile, getAuthenticationPage, postAuthenticationPage } from "../..
 const router: Router = Router();
 
 router.get("/", getProfile);
-
 router.get("/authenticate", getAuthenticationPage);
 router.post("/authenticate", postAuthenticationPage);
 

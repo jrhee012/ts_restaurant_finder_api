@@ -10,18 +10,6 @@ export const getAll = async (req: Request, res: Response) => {
     // const cacheKey: string = `${__filename}`;
     let restaurants: RestaurantsModel[] = [];
     try {
-        // if (redisClient.cacheExists) {
-        //     const cache = await redisClient.get(cacheKey);
-        //     restaurants = cache;
-        //     if (cache === null || cache === undefined) {
-        //         restaurants = await Restaurants.find();
-        //         restaurants = await Restaurants.populate(restaurants, { path: "source_data", model: "Data" });
-        //         redisClient.set(cacheKey, restaurants);
-        //     }
-        // } else {
-        //     restaurants = await Restaurants.find();
-        //     restaurants = await Restaurants.populate(restaurants, { path: "source_data", model: "Data" });
-        // }
         restaurants = await Restaurants.find();
         restaurants = await Restaurants.populate(restaurants, { path: "source_data", model: "Data" });
     } catch (e) {
@@ -85,7 +73,6 @@ export const getOne = async (req: Request, res: Response) => {
         info: info,
     };
 
-    // console.log("info...!", info);
     return res.status(200).send("ok");
 };
 
