@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import * as EmailValidator from "email-validator";
 
+const _returnToForm = (res: Response, data: any) => {
+    return res.status(400)
+        .render("pages/profile/authenticate_form", data);
+};
+
 export const getProfile = async (req: Request, res: Response) => {
     const data = { user: res.locals.user };
     return res.status(200).render("pages/profile/index", data);
@@ -22,20 +27,17 @@ export const postAuthenticationPage = async (req: Request, res: Response) => {
 
     if (params.email === undefined || params.email === null) {
         data.alert.push("Email required");
-        return res.status(400)
-            .render("pages/profile/authenticate_form", data);
+        return _returnToForm(res, data);
     }
 
     if (!EmailValidator.validate(params.email)) {
         data.alert.push("Invalid email");
-        return res.status(400)
-            .render("pages/profile/authenticate_form", data);
+        return _returnToForm(res, data);
     }
 
     if (params.password === undefined || params.password === null) {
         data.alert.push("Password required");
-        return res.status(400)
-            .render("pages/profile/authenticate_form", data);
+        return _returnToForm(res, data);
     }
 
     const user = res.locals.user;

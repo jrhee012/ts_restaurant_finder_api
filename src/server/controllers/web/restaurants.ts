@@ -4,7 +4,7 @@ import { Restaurants } from "../../models";
 import { RestaurantsModel } from "../../models/lib/Restaurants";
 import { redisClient, YelpApiClient } from "../../utils";
 
-const redirectToRestaurants = (res: Response) => res.redirect("/restaurants");
+const _redirectToRestaurants = (res: Response) => res.redirect("/restaurants");
 
 export const getAll = async (req: Request, res: Response) => {
     // const cacheKey: string = `${__filename}`;
@@ -40,18 +40,17 @@ export const getOne = async (req: Request, res: Response) => {
     const rest_id: string = req.params.restaurantId;
 
     if (rest_id === undefined) {
-        return redirectToRestaurants(res);
+        return _redirectToRestaurants(res);
     }
 
     let info: any;
-    const cacheKey: string = rest_id;
     const api_client = new YelpApiClient();
 
     try {
         const rest: RestaurantsModel | null = await Restaurants.findById(rest_id);
 
         if (rest === null) {
-            return res.redirect("/restaurants");
+            return _redirectToRestaurants(res);
         }
 
         await Restaurants.populate(rest, {
@@ -59,9 +58,10 @@ export const getOne = async (req: Request, res: Response) => {
             model: "Data"
         });
 
-        const ext_id = rest.source_data[0].ext_id;
+        const ext_id: string = rest.source_data[0].ext_id;
 
         if (redisClient.cacheExists) {
+            const cacheKey: string = rest_id;
             const cache = await redisClient.get(cacheKey);
             info = cache;
             if (cache === null || cache === undefined) {
