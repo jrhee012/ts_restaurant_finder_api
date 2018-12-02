@@ -5,6 +5,7 @@ import data from "./lib/api/data";
 import configs from "../config";
 import profileRouter from "./lib/web/profile";
 import restaurantsRouter from "./lib/web/restaurants";
+import ticketsRouter from "./lib/web/tickets";
 import { getLogin, getSignUp } from "../controllers/web/login";
 import { isAuthenticated } from "../config/passport";
 
@@ -21,16 +22,24 @@ router.get("/", (req: Request, res: Response) => {
 
 router.use("/profile", isAuthenticated, profileRouter);
 router.use("/restaurants", isAuthenticated, restaurantsRouter);
+router.use("/tickets", isAuthenticated, ticketsRouter);
 
 // LOGIN ============================================================
 router.get("/login/facebook", (req: Request, res: Response) => res.redirect("/auth/facebook"));
 router.get("/login/google", (req: Request, res: Response) => res.redirect("/auth/google"));
 router.get("/login", getLogin);
 router.post("/login", passport.authenticate("local", {
-    successRedirect: "/profile",
+    // successRedirect: "/profile",
     failureRedirect: "/login",
     failureFlash: true,
-}));
+}),
+(req, res) => {
+    // console.log("rereee", req.path);
+    if (req.originalUrl === "/login") {
+        return res.redirect("/profile");
+    }
+    return res.redirect(req.originalUrl);
+});
 
 router.get("/logout", (req: Request, res: Response) => {
     req.logout();
@@ -48,13 +57,15 @@ router.post("/signup", passport.authenticate("local-signup", {
 router.get(
     "/auth/google/callback",
     passport.authenticate("google", {
-        successRedirect: "/profile",
+        // successRedirect: "/profile",
         failureRedirect: "/login",
         failureFlash: true,
     }),
     (req: Request, res: Response) => {
-        // console.log("!!!!!")
-        return res.send(200);
+        // console.log("!!!!!");
+        // console.log("rqqqqqq", req);
+
+        return res.redirect("/");
     },
 );
 router.get("/auth/google", passport.authenticate("google", {
@@ -66,7 +77,7 @@ router.get(
     "/auth/facebook/callback",
     passport.authenticate("facebook", { failureRedirect: "/login" }),
     (req: Request, res: Response) => {
-        console.log("!!!!!");
+        // console.log("!!!!!");
         return res.redirect("/profile");
     },
 );
