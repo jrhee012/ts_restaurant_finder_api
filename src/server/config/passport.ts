@@ -1,14 +1,14 @@
 import { PassportStatic } from "passport";
 import passportLocal from "passport-local";
 import passportGoogle from "passport-google-oauth2";
-// import passportFacebook from "passport-facebook";
+import passportFacebook from "passport-facebook";
 import _ from "lodash";
 import { Request, Response, NextFunction } from "express";
 import { Users } from "../models";
 import configs from "../config";
 
 const LocalStrategy = passportLocal.Strategy;
-// const FacebookStrategy = passportFacebook.Strategy;
+const FacebookStrategy = passportFacebook.Strategy;
 const GoogleStrategy = passportGoogle.Strategy;
 
 export default (passport: PassportStatic) => {
@@ -66,6 +66,7 @@ export default (passport: PassportStatic) => {
                 user = new Users();
                 user.local.email = email;
                 user.setPassword(password);
+                user.authenticated = true; // TODO: email validation
                 user.created_at = new Date().toISOString();
                 user.last_login_at = new Date().toISOString();
                 await user.save();
@@ -118,12 +119,58 @@ export default (passport: PassportStatic) => {
             }
         }
     ));
+
+    // =========================================================================
+    // FACEBOOK LOGIN ============================================================
+    // =========================================================================
+
+    passport.use(new FacebookStrategy(
+        {
+            clientID: configs.FACEBOOK_CLIENT_ID,
+            clientSecret: configs.FACEBOOK_CLIENT_SECRET,
+            callbackURL: configs.FACEBOOK_CALLBACK_URL,
+            passReqToCallback: true,
+        },
+        async function (req, accessToken, refreshToken, profile, done) {
+            console.log("rererrrrr", profile);
+            try {
+                let user = await Users.findOne({ "facebook.id": profile.id });
+
+                if (!user) {
+                    const facebookResp = {
+                        id: profile.id,
+                        token: accessToken,
+                        username: profile.username,
+                        displayName: profile.displayName,
+                        name: profile.name,
+                        geneer: profile.gender,
+                        profileUrl: profile.profileUrl,
+                        provider: profile.provider,
+                        full_profile: profile,
+                    };
+                    user = new Users();
+                    user.facebook = facebookResp;
+                    user.last_login_at = new Date().toISOString();
+
+                    const savedUser = await user.save();
+                    return done(undefined, savedUser, req.flash("success", "Log in successful!"));
+                }
+                user.last_login_at = new Date().toISOString();
+                await user.save();
+                done(undefined, user, req.flash("success", "Log in successful!"));
+            } catch (e) {
+                console.log("google login error");
+                console.error(e);
+                return done(undefined, false, req.flash("error", e.message));
+            }
+        }
+    ));
 };
 
 /**
  * Login Required middleware.
  */
-export let isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+export let isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
         return next();
     }

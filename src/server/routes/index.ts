@@ -39,6 +39,7 @@ router.get("/", (req: Request, res: Response) => {
     };
     return res.status(200).render("pages/home", data);
 });
+
 router.use("/", isAuthenticated, webRouter);
 
 // EASTER EGGGGS
