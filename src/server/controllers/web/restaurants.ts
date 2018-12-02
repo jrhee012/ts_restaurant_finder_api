@@ -7,24 +7,26 @@ import { redisClient, YelpApiClient } from "../../utils";
 const redirectToRestaurants = (res: Response) => res.redirect("/restaurants");
 
 export const getAll = async (req: Request, res: Response) => {
-    const cacheKey: string = `${__filename}`;
+    // const cacheKey: string = `${__filename}`;
     let restaurants: RestaurantsModel[] = [];
     try {
-        if (redisClient.cacheExists) {
-            const cache = await redisClient.get(cacheKey);
-            restaurants = cache;
-            if (cache === null || cache === undefined) {
-                restaurants = await Restaurants.find();
-                restaurants = await Restaurants.populate(restaurants, { path: "source_data", model: "Data" });
-                redisClient.set(cacheKey, restaurants);
-            }
-        } else {
-            restaurants = await Restaurants.find();
-            restaurants = await Restaurants.populate(restaurants, { path: "source_data", model: "Data" });
-        }
+        // if (redisClient.cacheExists) {
+        //     const cache = await redisClient.get(cacheKey);
+        //     restaurants = cache;
+        //     if (cache === null || cache === undefined) {
+        //         restaurants = await Restaurants.find();
+        //         restaurants = await Restaurants.populate(restaurants, { path: "source_data", model: "Data" });
+        //         redisClient.set(cacheKey, restaurants);
+        //     }
+        // } else {
+        //     restaurants = await Restaurants.find();
+        //     restaurants = await Restaurants.populate(restaurants, { path: "source_data", model: "Data" });
+        // }
+        restaurants = await Restaurants.find();
+        restaurants = await Restaurants.populate(restaurants, { path: "source_data", model: "Data" });
     } catch (e) {
         console.log("ERROR restaurants get all controller");
-        console.error(e);
+        console.error(e.message);
         return res.redirect("/");
     }
 

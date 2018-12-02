@@ -55,7 +55,11 @@ body {
 }
 
 /* class */
-.pagination {
+.pagination-nav {
   padding-top: 20px;
   /* margin: auto; */
+}
+
+#pagination-nav-tag {
+  margin: auto;
 }
