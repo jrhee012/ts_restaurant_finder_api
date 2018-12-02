@@ -27,59 +27,7 @@
             </p>
         </div>
 
-        <div class="row">
-        <% if (user.local.email) { %>
-            <!-- LOCAL INFORMATION -->
-            <% if (user.google.id) { %>
-            <div class="col-sm-6">
-            <% } else { %>
-            <div class="col-sm-12">
-            <% } %>
-                <div class="jumbotron user-profile-box">
-                    <h3>
-                        <span class="fa fa-user"></span> Local
-                    </h3>
-                    <p>
-                        <strong>email</strong>: <%= user.local.email %>
-                        <br>
-                    </p>
-                    <p>
-                        <strong>password</strong>: **********
-                    </p>
-                </div>
-            </div>
-        <% } %>
-
-        <% if (user.google.id) { %>
-            <!-- GOOGLE INFORMATION -->
-            <% if (user.local.email) { %>
-            <div class="col-sm-6">
-            <% } else { %>
-            <div class="col-sm-12">
-            <% } %>
-                <div class="jumbotron user-profile-box">
-                    <h3><i class="fab fa-google"></i> Google</h3>
-                    <p>
-                        <strong>google id</strong>:
-                        <%= user.google.id %><br>
-                    </p>
-                    <% if (user.google.email) { %>
-                    <p>
-                        <strong>google email</strong>:
-                        <%= user.google.email %>
-                    </p>
-                    <% } %>
-                    <% if (user.google.name) { %>
-                    <p>
-                        <strong>google name</strong>:
-                        <%= user.google.name.givenName %>
-                        <%= user.google.name.familyName %>
-                    </p>
-                    <% } %>
-                </div>
-             </div>
-        <% } %>
-        </div>
+        <div class="row"><% include ./_user_profiles %></div>
 
         <div class="row">
             <div class="col-sm-12">
@@ -89,23 +37,6 @@
                     </div>
                     <div class="d-flex w-100">
                         <small>All tickets</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="jumbotron user-profile-box">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">Selling Tickets</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="jumbotron user-profile-box">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">Buying Tickets</h5>
                     </div>
                 </div>
             </div>

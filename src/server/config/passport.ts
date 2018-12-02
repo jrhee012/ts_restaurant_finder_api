@@ -32,7 +32,7 @@ export default (passport: PassportStatic) => {
                 const user = await Users.findOne({ "local.email": email });
 
                 if (!user) {
-                    return done(undefined, false, req.flash("error", "Incorrect username."));
+                    return done(undefined, false, req.flash("error", "Incorrect email."));
                 }
 
                 if (!user.validatePassword(password)) {
