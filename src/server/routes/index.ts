@@ -8,6 +8,7 @@ import restaurantsRouter from "./lib/web/restaurants";
 import ticketsRouter from "./lib/web/tickets";
 import { getLogin, getSignUp } from "../controllers/web/login";
 import { isAuthenticated } from "../config/passport";
+// import { merge } from "lodash";
 
 const ApiBaseUrl: string = configs.BASE_URL;
 
@@ -16,7 +17,6 @@ router = Router();
 
 router.get("/", (req: Request, res: Response) => {
     const data = { user: res.locals.user };
-    // console.log('session', req.session)
     return res.status(200).render("pages/home", data);
 });
 
