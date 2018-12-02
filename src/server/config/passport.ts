@@ -43,8 +43,8 @@ export default (passport: PassportStatic) => {
                 await user.save();
                 return done(undefined, user);
             } catch (e) {
-                console.error(e);
-                return done(e);
+                console.error(e.message);
+                return done(undefined, false, req.flash("error", e.message));
             }
         }
     ));
@@ -60,7 +60,7 @@ export default (passport: PassportStatic) => {
                 let user = await Users.findOne({ "local.email": email });
 
                 if (user) {
-                    return done(undefined, false, req.flash("signupMessage", "That email is already taken."));
+                    return done(undefined, false, req.flash("error", "That email is already taken."));
                 }
 
                 user = new Users();
@@ -72,8 +72,8 @@ export default (passport: PassportStatic) => {
 
                 return done(undefined, user);
             } catch (e) {
-                console.error(e);
-                return done(e);
+                console.error(e.message);
+                return done(undefined, false, req.flash("error", e.message));
             }
         })
     );

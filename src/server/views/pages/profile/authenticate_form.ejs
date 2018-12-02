@@ -10,25 +10,23 @@
         <% include ../../partials/header %>
     </header>
 
-    <main>
-        <div class="jumbotron">
-            <div class="page-header text-center">
-                <h1><span class="fa fa-anchor"></span>Authenticate</h1>
-                <p>
-            </div>
-            <form action="/profile/authenticate" method="post">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" class="form-control" name="email" placeholder="email@example.com">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="Password">
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+    <div class="jumbotron">
+        <div class="page-header text-center">
+            <h1><span class="fa fa-anchor"></span>Authenticate</h1>
+            <p>
         </div>
-    </main>
+        <form action="/profile/authenticate" method="post">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" name="email" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
 
     <footer>
         <% include ../../partials/footer %>

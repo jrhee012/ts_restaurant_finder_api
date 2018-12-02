@@ -1,9 +1,10 @@
-import { Document, Schema, model } from "mongoose";
+import { Document, Schema, model, Error } from "mongoose";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { RolesModel } from "./Roles";
 import { Roles } from "..";
 import { includes } from "lodash";
+import * as EmailValidator from "email-validator";
 
 export interface IUsers {
     local: {
@@ -112,6 +113,24 @@ const UsersSchema = new Schema({
         type: Boolean,
         default: false,
     },
+});
+
+UsersSchema.pre("validate", async function (next) {
+    const doc = <UsersModel>this;
+    if (doc.local === undefined || doc.local === null) {
+        next();
+    }
+    if (doc.local.email === undefined || doc.local.email === null) {
+        next();
+    } else {
+        const email: string = doc.local.email;
+        const check: boolean = EmailValidator.validate(email);
+
+        if (!check) {
+            throw new Error("Invalid Email!");
+        }
+        next();
+    }
 });
 
 UsersSchema.pre("validate", async function (next) {
