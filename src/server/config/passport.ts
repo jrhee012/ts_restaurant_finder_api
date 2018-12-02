@@ -141,3 +141,15 @@ export let isAuthorized = (req: Request, res: Response, next: NextFunction) => {
         res.redirect(`/auth/${provider}`);
     }
 };
+
+/**
+ * Admin Required middleware
+ */
+export let isAdmin = (req: Request, res: Response, next: NextFunction) => {
+    const user = res.locals.user;
+    const check = user.isAdmin();
+    if (!check) {
+        res.redirect("/");
+    }
+    next();
+};

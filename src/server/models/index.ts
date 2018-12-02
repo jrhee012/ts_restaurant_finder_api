@@ -8,6 +8,7 @@ import "./lib/Roles";
 import "./lib/Permissions";
 import "./lib/TicketTransactions";
 import "./lib/Tickets";
+import "./lib/Admins";
 
 // Import model interface
 import { RolesModel } from "./lib/Roles";
@@ -17,6 +18,7 @@ import { RestaurantsModel } from "./lib/Restaurants";
 import { PermissionsModel } from "./lib/Permissions";
 import { TicketsModel } from "./lib/Tickets";
 import { TicketTransactionsModel } from "./lib/TicketTransactions";
+import { AdminsModel } from "./lib/Admins";
 
 export const Data = model<DataModel>("Data");
 export const Restaurants = model<RestaurantsModel>("Restaurants");
@@ -25,4 +27,4 @@ export const Roles = model<RolesModel>("Roles");
 export const Permissions = model<PermissionsModel>("Permissions");
 export const Tickets = model<TicketsModel>("Tickets");
 export const TicketTransactions = model<TicketTransactionsModel>("TicketTransactions");
-
+export const Admins = model<AdminsModel>("Admins");

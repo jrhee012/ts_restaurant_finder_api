@@ -2,7 +2,7 @@ import { Document, Schema, model, Error } from "mongoose";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { RolesModel } from "./Roles";
-import { Roles } from "..";
+import { Roles, Admins } from "..";
 import { includes } from "lodash";
 import * as EmailValidator from "email-validator";
 
@@ -59,6 +59,7 @@ export interface UsersModel extends Document, IUsers {
         username: any,
         token: any,
     };
+    isAdmin: () => boolean;
 }
 
 const UsersSchema = new Schema({
@@ -194,6 +195,15 @@ UsersSchema.methods.toAuthJSON = function () {
         email: this.local.email,
         token: this.generateJWT(),
     };
+};
+
+UsersSchema.methods.isAdmin = async function () {
+    const admin = await Admins.findOne({ user_id: this._id });
+    if (admin === null) {
+        return false;
+    } else {
+        return true;
+    }
 };
 
 model("Users", UsersSchema);
