@@ -16,7 +16,7 @@ const job1 = new CronJob("* 0,30 * * * *", async function () {
         // console.log(`Number of data entries: ${data.length}`);
     } catch (e) {
         console.log("[CRONJOB name=job1] ERROR");
-        console.error(e);
+        console.error(e.message);
     }
 });
 console.log("After job instantiation");

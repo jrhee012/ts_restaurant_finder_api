@@ -48,7 +48,7 @@ class SearchSuggestionBuilder {
             new_data = await Restaurants.find();
         } catch (e) {
             console.log("ERROR search suggestion builder update data method");
-            console.error(e);
+            console.error(e.message);
             new_data = [];
         }
 

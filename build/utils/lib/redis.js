@@ -119,7 +119,7 @@ var RedisCache = /** @class */ (function () {
                     case 3:
                         e_1 = _a.sent();
                         console.log("ERROR redis cache get");
-                        console.error(e_1);
+                        console.error(e_1.message);
                         return [3 /*break*/, 4];
                     case 4:
                         if (result !== null) {

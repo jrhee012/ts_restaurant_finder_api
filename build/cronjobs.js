@@ -57,7 +57,7 @@ var job1 = new cron_1.CronJob("* 0,30 * * * *", function () {
                 case 2:
                     e_1 = _a.sent();
                     console.log("[CRONJOB name=job1] ERROR");
-                    console.error(e_1);
+                    console.error(e_1.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

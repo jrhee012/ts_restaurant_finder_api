@@ -202,7 +202,7 @@ export class OpenTableClient extends ApiClient {
 
     setQuery(queries: OpenTableClientQuery) {
         let result: string = "?";
-        for (let key in queries) {
+        for (const key in queries) {
             result += `${key}=${queries[key]}&`;
         }
         this.query = result;

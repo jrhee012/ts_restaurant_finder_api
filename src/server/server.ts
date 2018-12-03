@@ -25,11 +25,8 @@ try {
         console.log("mongoose `debug` set `true`");
     }
 } catch (e) {
-    console.log(
-        `cannot connect to mongodb on ${configs.MONGODB_URI}!`
-    );
-    console.error(e);
-
+    console.log(`cannot connect to mongodb on ${configs.MONGODB_URI}!`);
+    console.error(e.message);
     process.exit(1);
 }
 

@@ -114,7 +114,7 @@ export default (passport: PassportStatic) => {
                 done(undefined, user, req.flash("success", "Log in successful!"));
             } catch (e) {
                 console.log("google login error");
-                console.error(e);
+                console.error(e.message);
                 return done(undefined, false, req.flash("error", e.message));
             }
         }
@@ -132,7 +132,6 @@ export default (passport: PassportStatic) => {
             passReqToCallback: true,
         },
         async function (req, accessToken, refreshToken, profile, done) {
-            console.log("rererrrrr", profile);
             try {
                 let user = await Users.findOne({ "facebook.id": profile.id });
 
@@ -159,8 +158,8 @@ export default (passport: PassportStatic) => {
                 await user.save();
                 done(undefined, user, req.flash("success", "Log in successful!"));
             } catch (e) {
-                console.log("google login error");
-                console.error(e);
+                console.log("facebook login error");
+                console.error(e.message);
                 return done(undefined, false, req.flash("error", e.message));
             }
         }

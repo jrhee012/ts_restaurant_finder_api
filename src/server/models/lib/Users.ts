@@ -157,7 +157,7 @@ UsersSchema.pre("save", async function (next) {
             doc.roles = roles;
         }
     } catch (e) {
-        console.error(e);
+        console.error(e.message);
     }
     return next();
 });

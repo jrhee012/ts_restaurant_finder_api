@@ -81,7 +81,7 @@ export default class DBSeeder {
                 console.log("remove all finished successfully");
             } catch (e) {
                 console.log("error remove all!");
-                console.error(e);
+                console.error(e.message);
             }
 
             return;
@@ -119,7 +119,7 @@ export default class DBSeeder {
             console.log("all `PERMISSIONS` saved to db!");
         } catch (e) {
             console.log("`PERMISSIONS` seeding ERROR!");
-            console.error(e);
+            console.error(e.message);
             return process.exit(1);
         }
         return permissions;
@@ -132,7 +132,7 @@ export default class DBSeeder {
             console.log("all `ROLES` saved to db!");
         } catch (e) {
             console.log("`ROLES` seeding ERROR!");
-            console.error(e);
+            console.error(e.message);
             return process.exit(1);
         }
         return roles;
@@ -151,7 +151,7 @@ export default class DBSeeder {
             roles = await Roles.find({});
         } catch (e) {
             console.log("FINDALL ERROR!");
-            console.error(e);
+            console.error(e.message);
             return process.exit(1);
         }
 
@@ -167,7 +167,7 @@ export default class DBSeeder {
             try {
                 await this.removeAll("permissions");
             } catch (e) {
-                console.error(e);
+                console.error(e.message);
                 return process.exit(1);
             }
 
@@ -178,7 +178,7 @@ export default class DBSeeder {
             try {
                 await this.removeAll("roles");
             } catch (e) {
-                console.error(e);
+                console.error(e.message);
                 return process.exit(1);
             }
 

@@ -167,7 +167,7 @@ UsersSchema.pre("save", function (next) {
                     return [3 /*break*/, 4];
                 case 3:
                     e_1 = _a.sent();
-                    console.error(e_1);
+                    console.error(e_1.message);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/, next()];
             }

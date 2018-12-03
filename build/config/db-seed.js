@@ -106,7 +106,7 @@ var DBSeeder = /** @class */ (function () {
                     case 3:
                         e_1 = _a.sent();
                         console.log("error remove all!");
-                        console.error(e_1);
+                        console.error(e_1.message);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/];
                     case 5: return [2 /*return*/, new Promise(function (resolve, reject) {
@@ -153,7 +153,7 @@ var DBSeeder = /** @class */ (function () {
                     case 3:
                         e_2 = _a.sent();
                         console.log("`PERMISSIONS` seeding ERROR!");
-                        console.error(e_2);
+                        console.error(e_2.message);
                         return [2 /*return*/, process.exit(1)];
                     case 4: return [2 /*return*/, permissions];
                 }
@@ -178,7 +178,7 @@ var DBSeeder = /** @class */ (function () {
                     case 3:
                         e_3 = _a.sent();
                         console.log("`ROLES` seeding ERROR!");
-                        console.error(e_3);
+                        console.error(e_3.message);
                         return [2 /*return*/, process.exit(1)];
                     case 4: return [2 /*return*/, roles];
                 }
@@ -206,7 +206,7 @@ var DBSeeder = /** @class */ (function () {
                     case 3:
                         e_4 = _c.sent();
                         console.log("FINDALL ERROR!");
-                        console.error(e_4);
+                        console.error(e_4.message);
                         return [2 /*return*/, process.exit(1)];
                     case 4:
                         results = {
@@ -223,7 +223,7 @@ var DBSeeder = /** @class */ (function () {
                         return [3 /*break*/, 8];
                     case 7:
                         e_5 = _c.sent();
-                        console.error(e_5);
+                        console.error(e_5.message);
                         return [2 /*return*/, process.exit(1)];
                     case 8:
                         _a = results;
@@ -242,7 +242,7 @@ var DBSeeder = /** @class */ (function () {
                         return [3 /*break*/, 14];
                     case 13:
                         e_6 = _c.sent();
-                        console.error(e_6);
+                        console.error(e_6.message);
                         return [2 /*return*/, process.exit(1)];
                     case 14:
                         _b = results;

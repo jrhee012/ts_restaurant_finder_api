@@ -85,7 +85,7 @@ class RedisCache {
             console.log(`> Cache retrieved with key: ${key}`);
         } catch (e) {
             console.log("ERROR redis cache get");
-            console.error(e);
+            console.error(e.message);
         }
 
         if (result !== null) {

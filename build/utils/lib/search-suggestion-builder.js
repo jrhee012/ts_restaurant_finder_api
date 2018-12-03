@@ -62,7 +62,7 @@ var SearchSuggestionBuilder = /** @class */ (function () {
                     case 2:
                         e_1 = _a.sent();
                         console.log("ERROR search suggestion builder update data method");
-                        console.error(e_1);
+                        console.error(e_1.message);
                         new_data = [];
                         return [3 /*break*/, 3];
                     case 3:

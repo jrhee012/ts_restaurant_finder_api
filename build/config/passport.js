@@ -168,7 +168,7 @@ exports.default = (function (passport) {
                     case 5:
                         e_3 = _a.sent();
                         console.log("google login error");
-                        console.error(e_3);
+                        console.error(e_3.message);
                         return [2 /*return*/, done(undefined, false, req.flash("error", e_3.message))];
                     case 6: return [2 /*return*/];
                 }
@@ -189,14 +189,11 @@ exports.default = (function (passport) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log("rererrrrr", profile);
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 6, , 7]);
+                        _a.trys.push([0, 5, , 6]);
                         return [4 /*yield*/, models_1.Users.findOne({ "facebook.id": profile.id })];
-                    case 2:
+                    case 1:
                         user = _a.sent();
-                        if (!!user) return [3 /*break*/, 4];
+                        if (!!user) return [3 /*break*/, 3];
                         facebookResp = {
                             id: profile.id,
                             token: accessToken,
@@ -212,22 +209,22 @@ exports.default = (function (passport) {
                         user.facebook = facebookResp;
                         user.last_login_at = new Date().toISOString();
                         return [4 /*yield*/, user.save()];
-                    case 3:
+                    case 2:
                         savedUser = _a.sent();
                         return [2 /*return*/, done(undefined, savedUser, req.flash("success", "Log in successful!"))];
-                    case 4:
+                    case 3:
                         user.last_login_at = new Date().toISOString();
                         return [4 /*yield*/, user.save()];
-                    case 5:
+                    case 4:
                         _a.sent();
                         done(undefined, user, req.flash("success", "Log in successful!"));
-                        return [3 /*break*/, 7];
-                    case 6:
+                        return [3 /*break*/, 6];
+                    case 5:
                         e_4 = _a.sent();
-                        console.log("google login error");
-                        console.error(e_4);
+                        console.log("facebook login error");
+                        console.error(e_4.message);
                         return [2 /*return*/, done(undefined, false, req.flash("error", e_4.message))];
-                    case 7: return [2 /*return*/];
+                    case 6: return [2 /*return*/];
                 }
             });
         });

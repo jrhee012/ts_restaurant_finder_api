@@ -27,7 +27,7 @@ try {
 }
 catch (e) {
     console.log("cannot connect to mongodb on " + config_1.default.MONGODB_URI + "!");
-    console.error(e);
+    console.error(e.message);
     process.exit(1);
 }
 var NODE_ENV = config_1.default.NODE_ENV;
