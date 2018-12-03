@@ -1,14 +1,30 @@
-import rp, { OptionsWithUri, RequestPromise } from "request-promise";
+import rp, { OptionsWithUri } from "request-promise";
 import _ from "lodash";
+import puppeteer from "puppeteer";
+import $ from "cheerio";
 import configs from "../../config";
 import { Data, Restaurants } from "../../models";
-// import { DataModel } from "../../models/Data";
-// import { Restaurant } from "../../models/Restaurants";
 
-// export interface Coords {
-//     lat: number | string;
-//     long: number | string;
-// }
+enum OpentableQueryKey {
+    dataTime = "dataTime",
+    latitude = "latitude",
+    longitude = "longitude",
+    metroId = "metroId",
+    term = "term",
+    includeTicketedAvailability = "includeTicketedAvailability",
+    pageType = "pageType",
+}
+
+export interface OpenTableClientQuery {
+    dataTime?: string;
+    latitude?: number | string;
+    longitude?: number | string;
+    metroId?: string | number;
+    term: string;
+    includeTicketedAvailability?: boolean | string;
+    pageType?: number | string;
+    [key: string]: string | boolean | number | undefined;
+}
 
 export interface ApiClientQuery {
     term: string;
@@ -26,9 +42,7 @@ export interface YelpSearchQuery {
 class ApiClient {
     // httpOptions: OptionsWithUri;
 
-    constructor() {
-
-    }
+    constructor() { }
 
     async makeCall(httpOptions: OptionsWithUri) {
         if (configs.NODE_ENV !== "production") {
@@ -173,5 +187,39 @@ export class YelpApiClient extends ApiClient {
                 }
             }
         );
+    }
+}
+
+export class OpenTableClient extends ApiClient {
+    baseUrl: string;
+    query: string | undefined;
+
+    constructor() {
+        super();
+        this.baseUrl = "https://www.opentable.com";
+        this.query = undefined;
+    }
+
+    setQuery(queries: OpenTableClientQuery) {
+        let result: string = "?";
+        for (let key in queries) {
+            result += `${key}=${queries[key]}&`;
+        }
+        this.query = result;
+    }
+
+    updateQuery(key: OpentableQueryKey, value: string) {
+        const queries: string = this.query || "";
+        const startIndex: number = queries.indexOf(key);
+        const endIndex: number = queries.substring(startIndex).indexOf("&") + queries.substring(0, startIndex).length;
+
+        const oldQuery: string = queries.substring(startIndex, endIndex);
+
+        const queryArr: string[] = oldQuery.split("=");
+        queryArr[1] = value;
+
+        const newQuery: string = _.join(queryArr, "=");
+
+        this.query = queries.substring(0, startIndex) + newQuery + queries.substring(endIndex);
     }
 }
