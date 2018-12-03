@@ -1,6 +1,10 @@
 import { includes } from "lodash";
-import { Restaurants } from "../../models";
+import { readdirSync, writeFileSync } from "fs";
+import configs from "../../config";
+import path from "path";
+import { Restaurants, Data } from "../../models";
 import { RestaurantsModel } from "../../models/lib/Restaurants";
+import { __ROOT__ } from "../../app";
 // import { redisClient } from "./redis";
 
 // const cacheKey: string = "SearchSuggestionBuilder";
@@ -17,11 +21,12 @@ export interface ISearchSuggestionBuilder {
 interface ISearchSuggestionBuilderModel extends ISearchSuggestionBuilder, Document {
     getData: () => Promise<RestaurantsModel[]>;
     createList: () => void;
-    getLists: () => {
+    getList: () => {
         name: string;
         address: string;
         category: string[];
     }[];
+    saveList: () => Promise<void>;
 }
 
 class SearchSuggestionBuilder {
@@ -102,13 +107,37 @@ class SearchSuggestionBuilder {
         this.transformed = list;
     }
 
-    async getLists() {
+    async getList() {
         const data: RestaurantsModel[] = await this.getData();
         this.createList(data);
         return this.transformed;
     }
+
+    async saveList() {
+        let data: ISearchSuggestionBuilder["transformed"] = this.transformed;
+
+        if (data.length < 1) {
+            data = await this.getList();
+        }
+
+        let buildDir: string;
+        if (configs.NODE_ENV === "production") {
+            buildDir = "build";
+        } else {
+            buildDir = "build-dev";
+        }
+
+        const fileDir: string = path.resolve(`./${buildDir}/data/search-suggestions`);
+        writeFileSync(
+            `${fileDir}/data.json`,
+            JSON.stringify(data),
+            { flag: "w+" }
+        );
+        console.log("File created!");
+    }
 }
 
 const builder = new SearchSuggestionBuilder();
+builder.saveList();
 
 export const suggestionBuilder  = builder;

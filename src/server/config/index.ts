@@ -1,4 +1,5 @@
 import { config } from "dotenv";
+// import { __ROOT__ } from "../server";
 
 if (process.env.NODE_ENV !== "production") {
     config();
@@ -6,6 +7,7 @@ if (process.env.NODE_ENV !== "production") {
 
 class Config {
     NODE_ENV: string;
+    // __ROOT__: string;
     PORT: number;
     MONGODB_URI: string;
     REDIS_URL: string;
@@ -26,6 +28,7 @@ class Config {
 
     constructor() {
         this.NODE_ENV = process.env.NODE_ENV || "dev";
+        // this.__ROOT__ = __ROOT__;
         this.PORT = process.env.PORT ? parseInt(process.env.PORT) : 1337;
 
         // MongoDB config

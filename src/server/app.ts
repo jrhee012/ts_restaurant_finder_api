@@ -3,6 +3,7 @@ import configs from "./config";
 import DBSeeder from "./config/db-seed";
 // import "./cronjobs";
 
+export const __ROOT__: string = __dirname;
 const port = configs.PORT;
 
 const dbSeeder = new DBSeeder();

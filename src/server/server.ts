@@ -11,6 +11,8 @@ import routes from "./routes";
 import { tokenValidation } from "./middlewares";
 import passportMiddleware from "./config/passport";
 
+export const __ROOT__: string = __dirname;
+
 mongoose.Promise = global.Promise;
 
 try {
