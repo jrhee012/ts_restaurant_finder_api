@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+
+<head>
+    <% include ../../partials/head %>
+</head>
+
+<body class="container">
+
+    <header>
+        <% include ../../partials/header %>
+    </header>
+
+    <div class="jumbotron">
+        <div class="text-center">
+            <h1><i class="fas fa-sign-in-alt"></i> Restaurants</h1>
+        </div>
+
+        <% include ./_all_restaurants %>
+
+        <% include ../../partials/pagination %>
+    </div>
+
+    <footer>
+        <% include ../../partials/footer %>
+    </footer>
+
+    <script>
+        console.log("hello!");
+    </script>
+</body>
+
+</html>
