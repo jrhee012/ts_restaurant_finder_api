@@ -1,7 +1,13 @@
-import { Schema, model, Document, HookNextFunction } from "mongoose";
+import {
+    Schema,
+    model,
+    Document,
+    HookNextFunction
+} from "mongoose";
 
 export interface IValidations {
     user_id: string;
+    validated: true;
     url: string;
     expires_at?: string;
     created_at: string;
@@ -10,6 +16,7 @@ export interface IValidations {
 
 export interface ValidationsModel extends Document, IValidations {
     setExpireDate: () => void;
+    completeValidation: () => void;
 }
 
 const ValidationsSchema = new Schema({
@@ -18,6 +25,11 @@ const ValidationsSchema = new Schema({
         ref: "Users",
         index: true,
         required: true,
+    },
+    validated: {
+        type: Boolean,
+        required: true,
+        default: false,
     },
     url: {
         type: String,
@@ -45,13 +57,29 @@ ValidationsSchema.pre("validate", function(next: HookNextFunction) {
     next();
 });
 
-ValidationsSchema.methods.setExpireDate = function () {
+ValidationsSchema.methods.setExpireDate = function() {
     this.last_updated = new Date().toISOString();
     if (this.expires_at === undefined) {
         const createdDate = new Date(this.created_at);
         const expireDate = createdDate.setDate(createdDate.getDate() + 7);
         this.expires_at = new Date(expireDate).toISOString();
     }
+};
+
+ValidationsSchema.methods.completeValidation = async function() {
+    const vChcek = this.validated;
+    if (!vChcek) {
+        this.validated = true;
+        try {
+            await this.save();
+        } catch (e) {
+            console.log("ERROR validation model complete validation method");
+            console.log(`VALIDATION ENTRY: ${this}`);
+            console.error(e.message);
+            throw new Error(e.message);
+        }
+    }
+    return;
 };
 
 model("Validations", ValidationsSchema);

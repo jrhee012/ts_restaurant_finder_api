@@ -1,9 +1,15 @@
-import { Document, Schema, model, Error } from "mongoose";
+import {
+    Document,
+    Schema,
+    model,
+    Error,
+    HookNextFunction
+} from "mongoose";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { RolesModel } from "./Roles";
-import { Roles, Admins, Users } from "..";
-import { includes } from "lodash";
+import { Roles, Admins, Validations } from "..";
+// import { includes } from "lodash";
 import * as EmailValidator from "email-validator";
 
 export interface IUsers {
@@ -133,7 +139,7 @@ UsersSchema.pre("validate", async function (next) {
     }
 });
 
-UsersSchema.pre("save", async function (next) {
+UsersSchema.pre("save", async function (next: HookNextFunction) {
     const doc = <UsersModel>this;
     const roles = doc.roles || [];
 
@@ -158,6 +164,23 @@ UsersSchema.pre("save", async function (next) {
         }
     } catch (e) {
         console.error(e.message);
+        // return next(e);
+        throw new Error(e.message);
+    }
+    return next();
+});
+
+UsersSchema.pre("save", async function (next: HookNextFunction) {
+    const doc = <UsersModel>this;
+    try {
+        const userProfileValidation = new Validations();
+        userProfileValidation.user_id = doc._id;
+        userProfileValidation.setExpireDate();
+        await userProfileValidation.save();
+    } catch (e) {
+        console.log("ERROR create new validation for user");
+        console.error(e.message);
+        throw new Error(e.message);
     }
     return next();
 });
