@@ -10,6 +10,7 @@ var search_suggestion_builder_1 = require("./lib/search-suggestion-builder");
 var authentication_1 = require("./lib/authentication");
 var user_helper_1 = require("./lib/user-helper");
 var restaurant_data_fetcher_1 = __importDefault(require("./lib/restaurant-data-fetcher"));
+var alert_1 = __importDefault(require("./lib/alert"));
 // api client utils
 exports.responseBuilder = response_builder_1.default;
 exports.YelpApiClient = api_clients_1.YelpApiClient;
@@ -23,4 +24,5 @@ exports.checkAuthenticated = authentication_1.checkAuthenticated;
 exports.UserHelper = user_helper_1.UserHelper;
 // restaurants utils
 exports.RestaurantDataFetcher = restaurant_data_fetcher_1.default;
+exports.setAlerts = alert_1.default;
 //# sourceMappingURL=index.js.map

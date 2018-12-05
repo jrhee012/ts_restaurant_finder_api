@@ -44,7 +44,7 @@ var models_1 = require("../../models");
 var utils_1 = require("../../utils");
 var _redirectToRestaurants = function (res) { return res.redirect("/restaurants"); };
 exports.getAll = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var restaurants, e_1, pageNum, data;
+    var restaurants, e_1, pageNum, alerts, data;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -69,10 +69,13 @@ exports.getAll = function (req, res) { return __awaiter(_this, void 0, void 0, f
                 return [2 /*return*/, res.redirect("/")];
             case 5:
                 pageNum = req.query.page || 1;
+                alerts = utils_1.setAlerts(req);
                 data = {
                     user: res.locals.user,
                     restaurants: restaurants,
                     page: jw_paginate_1.default(restaurants.length, pageNum, 20, 10),
+                    alert: alerts.error,
+                    success: alerts.success,
                 };
                 return [2 /*return*/, res.status(200).render("pages/restaurants/index", data)];
         }
@@ -131,7 +134,8 @@ exports.getOne = function (req, res) { return __awaiter(_this, void 0, void 0, f
                 return [2 /*return*/, res.redirect("/")];
             case 11:
                 if (info === undefined) {
-                    return [2 /*return*/, res.status(404).render("pages/templates/404.ejs")];
+                    req.flash("error", "Restaurant not found.");
+                    return [2 /*return*/, res.redirect("/restaurants")];
                 }
                 data = {
                     user: res.locals.user,
