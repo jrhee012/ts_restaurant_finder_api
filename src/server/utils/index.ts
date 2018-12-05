@@ -1,13 +1,11 @@
 import respBuilder from "./lib/response-builder";
-import {
-    YelpApiClient as yelp,
-    OpenTableClient as opentable,
-} from "./lib/api-clients";
+import { YelpApiClient as yelp, OpenTableClient as opentable } from "./lib/api-clients";
 import { redisClient as redis } from "./lib/redis";
 import { suggestionBuilder as search } from "./lib/search-suggestion-builder";
 import { checkAuthenticated as checkauth } from "./lib/authentication";
 import { UserHelper as userhelper } from "./lib/user-helper";
 import restdatafectch from "./lib/restaurant-data-fetcher";
+import setalerts from "./lib/alert";
 
 // api client utils
 export const responseBuilder = respBuilder;
@@ -26,3 +24,5 @@ export const UserHelper = userhelper;
 
 // restaurants utils
 export const RestaurantDataFetcher = restdatafectch;
+
+export const setAlerts = setalerts;

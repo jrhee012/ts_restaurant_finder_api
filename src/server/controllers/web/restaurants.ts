@@ -2,12 +2,11 @@ import { Request, Response } from "express";
 import paginate from "jw-paginate";
 import { Restaurants } from "../../models";
 import { RestaurantsModel } from "../../models/lib/Restaurants";
-import { redisClient, YelpApiClient } from "../../utils";
+import { redisClient, YelpApiClient, setAlerts } from "../../utils";
 
 const _redirectToRestaurants = (res: Response) => res.redirect("/restaurants");
 
 export const getAll = async (req: Request, res: Response) => {
-    // const cacheKey: string = `${__filename}`;
     let restaurants: RestaurantsModel[] = [];
     try {
         restaurants = await Restaurants.find();
@@ -22,15 +21,14 @@ export const getAll = async (req: Request, res: Response) => {
     }
 
     const pageNum: number = req.query.page || 1;
+    const alerts = setAlerts(req);
 
-    const data: {
-        user: any,
-        restaurants: RestaurantsModel[],
-        page: any,
-    } = {
+    const data = {
         user: res.locals.user,
         restaurants: restaurants,
         page: paginate(restaurants.length, pageNum, 20, 10),
+        alert: alerts.error,
+        success: alerts.success,
     };
 
     return res.status(200).render("pages/restaurants/index", data);
@@ -81,7 +79,8 @@ export const getOne = async (req: Request, res: Response) => {
     }
 
     if (info === undefined) {
-        return res.status(404).render("pages/templates/404.ejs");
+        req.flash("error", "Restaurant not found.");
+        return res.redirect("/restaurants");
     }
 
     const data = {
