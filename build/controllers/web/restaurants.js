@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var jw_paginate_1 = __importDefault(require("jw-paginate"));
+var sortBy_1 = __importDefault(require("lodash/sortBy"));
 var models_1 = require("../../models");
 var utils_1 = require("../../utils");
 var _redirectToRestaurants = function (res) { return res.redirect("/restaurants"); };
@@ -61,6 +62,7 @@ exports.getAll = function (req, res) { return __awaiter(_this, void 0, void 0, f
                     })];
             case 3:
                 restaurants = _a.sent();
+                restaurants = sortBy_1.default(restaurants, ["name", "alias"]);
                 return [3 /*break*/, 5];
             case 4:
                 e_1 = _a.sent();

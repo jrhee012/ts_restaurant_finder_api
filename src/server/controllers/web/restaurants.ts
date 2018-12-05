@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import paginate from "jw-paginate";
+import sortBy from "lodash/sortBy";
 import { Restaurants } from "../../models";
 import { RestaurantsModel } from "../../models/lib/Restaurants";
 import { redisClient, YelpApiClient, setAlerts } from "../../utils";
@@ -14,6 +15,7 @@ export const getAll = async (req: Request, res: Response) => {
             path: "source_data",
             model: "Data"
         });
+        restaurants = sortBy(restaurants, ["name", "alias"]);
     } catch (e) {
         console.log("ERROR restaurants get all controller");
         console.error(e.message);
