@@ -111,7 +111,7 @@ export default (passport: PassportStatic) => {
                 }
                 user.last_login_at = new Date().toISOString();
                 await user.save();
-                done(undefined, user, req.flash("success", "Log in successful!"));
+                return done(undefined, user, req.flash("success", "Log in successful!"));
             } catch (e) {
                 console.log("google login error");
                 console.error(e.message);
@@ -156,7 +156,7 @@ export default (passport: PassportStatic) => {
                 }
                 user.last_login_at = new Date().toISOString();
                 await user.save();
-                done(undefined, user, req.flash("success", "Log in successful!"));
+                return done(undefined, user, req.flash("success", "Log in successful!"));
             } catch (e) {
                 console.log("facebook login error");
                 console.error(e.message);
