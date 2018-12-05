@@ -70,6 +70,7 @@ export interface UsersModel extends Document, IUsers {
     isAdmin: () => boolean;
     completeValidation: () => void;
     checkValidation: () => Promise<boolean>;
+    getRoles: () => Promise<RolesModel[]>;
 }
 
 const UsersSchema = new Schema({
@@ -274,6 +275,23 @@ UsersSchema.methods.checkValidation = async function() {
         return validation.validated;
     } catch (e) {
         console.log("ERROR UsersSchema.checkValidation");
+        console.error(e.message);
+        throw new Error(e.message);
+    }
+};
+
+UsersSchema.methods.getRoles = async function() {
+    try {
+        const roles: RolesModel[] = [];
+        const role_ids = this.roles;
+        role_ids.forEach(async (id: string) => {
+            const role: RolesModel | null = await Roles.findById(id);
+            if (role !== null) {
+                roles.push(role);
+            }
+        });
+        return roles;
+    } catch (e) {
         console.error(e.message);
         throw new Error(e.message);
     }
