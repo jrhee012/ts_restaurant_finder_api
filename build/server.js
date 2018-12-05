@@ -60,6 +60,7 @@ server.use(passport_1.default.session());
 server.use(express_flash_1.default());
 server.use(config_1.default.BASE_URL, middlewares_1.tokenValidation);
 server.use(function (req, res, next) {
+    // const user: UsersModel = req.user;
     res.locals.user = req.user;
     next();
 });

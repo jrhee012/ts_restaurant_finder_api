@@ -44,6 +44,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var EmailValidator = __importStar(require("email-validator"));
+var models_1 = require("../../models");
 var _returnToForm = function (res, data) {
     return res.status(400)
         .render("pages/profile/authenticate_form", data);
@@ -55,11 +56,18 @@ exports.getProfile = function (req, res) { return __awaiter(_this, void 0, void 
         return [2 /*return*/, res.status(200).render("pages/profile/index", data)];
     });
 }); };
-exports.getAuthenticationPage = function (req, res) {
-    var data = { user: res.locals.user, alert: [] };
-    return res.status(200)
-        .render("pages/profile/authenticate_form", data);
-};
+exports.getAuthenticationPage = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var user, data;
+    return __generator(this, function (_a) {
+        user = res.locals.user;
+        data = {
+            user: user,
+            // validation_url: url,
+            alert: []
+        };
+        return [2 /*return*/, res.status(200).render("pages/profile/authenticate_form", data)];
+    });
+}); };
 exports.postAuthenticationPage = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
     var data, params, user, e_1;
     return __generator(this, function (_a) {
@@ -85,16 +93,46 @@ exports.postAuthenticationPage = function (req, res) { return __awaiter(_this, v
                 _a.trys.push([1, 3, , 4]);
                 user.local.email = params.email;
                 user.setPassword(params.password);
-                user.authenticated = true;
+                // user.completeValidation();
                 return [4 /*yield*/, user.save()];
             case 2:
+                // user.completeValidation();
                 _a.sent();
                 return [3 /*break*/, 4];
             case 3:
                 e_1 = _a.sent();
-                console.log("ERROR post authenticate user controller");
+                console.log("ERROR post authenticate user profile controller");
                 console.error(e_1.message);
                 return [3 /*break*/, 4];
+            case 4: return [2 /*return*/, res.redirect("/profile")];
+        }
+    });
+}); };
+exports.finishValidation = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var url, validation, e_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                url = req.url;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, models_1.Validations.findOne({
+                        url: url,
+                        user_id: res.locals.user._id,
+                    })];
+            case 2:
+                validation = _a.sent();
+                if (validation === null || validation === undefined) {
+                    return [2 /*return*/, res.redirect("/")];
+                }
+                validation.completeValidation();
+                return [3 /*break*/, 4];
+            case 3:
+                e_2 = _a.sent();
+                console.log("ERROR finish validation profile controller");
+                console.error(e_2.message);
+                return [2 /*return*/, res.redirect("/")];
             case 4: return [2 /*return*/, res.redirect("/profile")];
         }
     });

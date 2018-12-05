@@ -109,7 +109,7 @@ exports.default = (function (passport) {
                         user = new models_1.Users();
                         user.local.email = email;
                         user.setPassword(password);
-                        user.authenticated = true; // TODO: email validation
+                        // user.authenticated = true; // TODO: email validation
                         user.created_at = new Date().toISOString();
                         user.last_login_at = new Date().toISOString();
                         return [4 /*yield*/, user.save()];

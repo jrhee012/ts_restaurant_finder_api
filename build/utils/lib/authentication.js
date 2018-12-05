@@ -5,7 +5,7 @@ exports.checkAuthenticated = function (req, res, next) {
     if (user === undefined || user === null) {
         return res.redirect("/");
     }
-    if (!user.authenticated) {
+    if (!user.checkValidation()) {
         return res.redirect("/");
     }
     next();

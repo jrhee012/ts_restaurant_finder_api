@@ -48,9 +48,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
 var crypto_1 = __importDefault(require("crypto"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var __1 = require("..");
-// import { includes } from "lodash";
 var EmailValidator = __importStar(require("email-validator"));
+var __1 = require("..");
 var UsersSchema = new mongoose_1.Schema({
     local: {
         email: String,
@@ -178,27 +177,29 @@ UsersSchema.pre("save", function (next) {
 });
 UsersSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function () {
-        var doc, userProfileValidation, e_2;
+        var doc, existing, userProfileValidation, e_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     doc = this;
-                    _a.label = 1;
+                    return [4 /*yield*/, __1.Validations.findOne({ user_id: doc._id })];
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    userProfileValidation = new __1.Validations();
-                    userProfileValidation.user_id = doc._id;
-                    userProfileValidation.setExpireDate();
-                    return [4 /*yield*/, userProfileValidation.save()];
+                    existing = _a.sent();
+                    if (!(existing === null || existing === undefined)) return [3 /*break*/, 5];
+                    _a.label = 2;
                 case 2:
-                    _a.sent();
-                    return [3 /*break*/, 4];
+                    _a.trys.push([2, 4, , 5]);
+                    userProfileValidation = new __1.Validations();
+                    return [4 /*yield*/, userProfileValidation.createNew(doc._id)];
                 case 3:
+                    _a.sent();
+                    return [3 /*break*/, 5];
+                case 4:
                     e_2 = _a.sent();
                     console.log("ERROR create new validation for user");
                     console.error(e_2.message);
                     throw new mongoose_1.Error(e_2.message);
-                case 4: return [2 /*return*/, next()];
+                case 5: return [2 /*return*/, next()];
             }
         });
     });
@@ -243,6 +244,64 @@ UsersSchema.methods.isAdmin = function () {
                         return [2 /*return*/, true];
                     }
                     return [2 /*return*/];
+            }
+        });
+    });
+};
+UsersSchema.methods.completeValidation = function () {
+    return __awaiter(this, void 0, void 0, function () {
+        var validation, vChcek, e_3;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, __1.Validations.findOne({ user_id: this._id })];
+                case 1:
+                    validation = _a.sent();
+                    if (!(validation !== null)) return [3 /*break*/, 6];
+                    vChcek = validation.validated;
+                    if (!!vChcek) return [3 /*break*/, 5];
+                    this.validated = true;
+                    _a.label = 2;
+                case 2:
+                    _a.trys.push([2, 4, , 5]);
+                    return [4 /*yield*/, this.save()];
+                case 3:
+                    _a.sent();
+                    return [3 /*break*/, 5];
+                case 4:
+                    e_3 = _a.sent();
+                    console.log("ERROR validation model complete validation method");
+                    console.log("VALIDATION ENTRY: " + this);
+                    console.error(e_3.message);
+                    throw new mongoose_1.Error(e_3.message);
+                case 5: return [3 /*break*/, 7];
+                case 6:
+                    console.log("ERROR no validtion for user id: " + this._id);
+                    throw new mongoose_1.Error("Internal Server Error: UsersSchema.completeValidation");
+                case 7: return [2 /*return*/];
+            }
+        });
+    });
+};
+UsersSchema.methods.checkValidation = function () {
+    return __awaiter(this, void 0, void 0, function () {
+        var validation, e_4;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, __1.Validations.findOne({ user_id: this._id })];
+                case 1:
+                    validation = _a.sent();
+                    if (validation === null || validation === undefined) {
+                        throw new mongoose_1.Error("Internal Server Error: UsersSchema.checkValidation");
+                    }
+                    return [2 /*return*/, validation.validated];
+                case 2:
+                    e_4 = _a.sent();
+                    console.log("ERROR UsersSchema.checkValidation");
+                    console.error(e_4.message);
+                    throw new mongoose_1.Error(e_4.message);
+                case 3: return [2 /*return*/];
             }
         });
     });
