@@ -1,10 +1,15 @@
 <!doctype html>
 <html>
-<head><% include ../../partials/head %></head>
-<body class="container">
-    <header><% include ../../partials/header %></header>
+<head>
+    <% include ../../partials/head %>
+</head>
 
-    <% if (!user.authenticated) { %>
+<body class="container">
+    <header>
+        <% include ../../partials/header %>
+    </header>
+
+    <% if (!validation.validated) { %>
     <div class="alert alert-info alert-dismissible fade show" role="alert">
         <p id="auth-alert-msg">
             Your account is not authenticated yet!
@@ -17,12 +22,15 @@
     </div>
     <% } %>
 
+    <% include ../partials/message_alert %>
+    <% include ../partials/success_alert %>
+
     <div class="jumbotron">
         <div class="page-header text-center">
             <h1><span class="fa fa-anchor"></span> Profile Page</h1>
             <p>
                 <strong>id</strong>: <%= user._id %>
-                <% if (!user.authenticated) { %>
+                <% if (!validation.validated) { %>
                 <a href="/profile/authenticate">Authenticate</a>
                 <% } %><br>
                 <a href="/logout" class="btn btn-default btn-sm">Logout</a>

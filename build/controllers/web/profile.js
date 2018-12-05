@@ -50,10 +50,41 @@ var _returnToForm = function (res, data) {
         .render("pages/profile/authenticate_form", data);
 };
 exports.getProfile = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var data;
+    var user, userId, validation, e_1, alert, success, data;
     return __generator(this, function (_a) {
-        data = { user: res.locals.user };
-        return [2 /*return*/, res.status(200).render("pages/profile/index", data)];
+        switch (_a.label) {
+            case 0:
+                user = res.locals.user;
+                userId = user._id;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 5, , 6]);
+                return [4 /*yield*/, models_1.Validations.findOne({ user_id: userId })];
+            case 2:
+                validation = _a.sent();
+                if (!(validation === null)) return [3 /*break*/, 4];
+                validation = new models_1.Validations();
+                return [4 /*yield*/, validation.createNew(userId)];
+            case 3:
+                _a.sent();
+                _a.label = 4;
+            case 4: return [3 /*break*/, 6];
+            case 5:
+                e_1 = _a.sent();
+                console.error(e_1.message);
+                req.flash("error", e_1.message);
+                return [2 /*return*/, res.redirect("/profile")];
+            case 6:
+                alert = req.flash("error") || [];
+                success = req.flash("success") || [];
+                data = {
+                    user: user,
+                    validation: validation,
+                    alert: alert,
+                    success: success,
+                };
+                return [2 /*return*/, res.status(200).render("pages/profile/index", data)];
+        }
     });
 }); };
 exports.getAuthenticationPage = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
@@ -62,14 +93,14 @@ exports.getAuthenticationPage = function (req, res) { return __awaiter(_this, vo
         user = res.locals.user;
         data = {
             user: user,
-            // validation_url: url,
+            // validation: validation,
             alert: []
         };
         return [2 /*return*/, res.status(200).render("pages/profile/authenticate_form", data)];
     });
 }); };
 exports.postAuthenticationPage = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var data, params, user, e_1;
+    var data, params, user, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -100,20 +131,20 @@ exports.postAuthenticationPage = function (req, res) { return __awaiter(_this, v
                 _a.sent();
                 return [3 /*break*/, 4];
             case 3:
-                e_1 = _a.sent();
+                e_2 = _a.sent();
                 console.log("ERROR post authenticate user profile controller");
-                console.error(e_1.message);
+                console.error(e_2.message);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/, res.redirect("/profile")];
         }
     });
 }); };
 exports.finishValidation = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var url, validation, e_2;
+    var url, validation, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                url = req.url;
+                url = "/profile" + req.url;
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
@@ -129,11 +160,13 @@ exports.finishValidation = function (req, res) { return __awaiter(_this, void 0,
                 validation.completeValidation();
                 return [3 /*break*/, 4];
             case 3:
-                e_2 = _a.sent();
+                e_3 = _a.sent();
                 console.log("ERROR finish validation profile controller");
-                console.error(e_2.message);
+                console.error(e_3.message);
                 return [2 /*return*/, res.redirect("/")];
-            case 4: return [2 /*return*/, res.redirect("/profile")];
+            case 4:
+                req.flash("success", "Account validated!");
+                return [2 /*return*/, res.redirect("/profile")];
         }
     });
 }); };

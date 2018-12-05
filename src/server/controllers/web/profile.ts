@@ -10,7 +10,36 @@ const _returnToForm = (res: Response, data: any) => {
 };
 
 export const getProfile = async (req: Request, res: Response) => {
-    const data = { user: res.locals.user };
+    const user: UsersModel = res.locals.user;
+    const userId: string = user._id;
+
+    // let url: string;
+    let validation: ValidationsModel | null;
+    try {
+        validation = await Validations.findOne({ user_id: userId });
+
+        if (validation === null) {
+            validation = new Validations();
+            await validation.createNew(userId);
+            // return res.redirect("/profile");
+        }
+        // url = validation.url;
+    } catch (e) {
+        console.error(e.message);
+        req.flash("error", e.message);
+        return res.redirect("/profile");
+    }
+
+    const alert = req.flash("error") || [];
+    const success = req.flash("success") || [];
+
+    const data = {
+        user: user,
+        validation: validation,
+        alert: alert,
+        success: success,
+    };
+
     return res.status(200).render("pages/profile/index", data);
 };
 
@@ -18,15 +47,17 @@ export const getAuthenticationPage = async (req: Request, res: Response) => {
     const user: UsersModel = res.locals.user;
     // const userId: string = user._id;
 
-    // let url: string;
+    // // let url: string;
+    // let validation: ValidationsModel | null;
     // try {
-    //     const validation = await Validations.findOne({ user_id: userId });
+    //     validation = await Validations.findOne({ user_id: userId });
+
     //     if (validation === null) {
-    //         const newValidation = new Validations();
-    //         await newValidation.createNew(userId);
-    //         return res.redirect("/profile");
+    //         validation = new Validations();
+    //         await validation.createNew(userId);
+    //         // return res.redirect("/profile");
     //     }
-    //     url = validation.url;
+    //     // url = validation.url;
     // } catch (e) {
     //     console.error(e.message);
     //     return res.redirect("/profile");
@@ -34,7 +65,7 @@ export const getAuthenticationPage = async (req: Request, res: Response) => {
 
     const data = {
         user: user,
-        // validation_url: url,
+        // validation: validation,
         alert: []
     };
     return res.status(200).render("pages/profile/authenticate_form", data);
@@ -77,7 +108,7 @@ export const postAuthenticationPage = async (req: Request, res: Response) => {
 };
 
 export const finishValidation = async (req: Request, res: Response) => {
-    const url: string = req.url;
+    const url: string = `/profile${req.url}`;
     try {
         const validation: ValidationsModel | null = await Validations.findOne({
             url: url,
@@ -95,6 +126,7 @@ export const finishValidation = async (req: Request, res: Response) => {
         return res.redirect("/");
     }
 
+    req.flash("success", "Account validated!");
     return res.redirect("/profile");
 };
 
