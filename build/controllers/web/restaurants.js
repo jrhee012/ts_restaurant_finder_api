@@ -131,7 +131,9 @@ exports.getOne = function (req, res) { return __awaiter(_this, void 0, void 0, f
                 e_2 = _a.sent();
                 console.log("ERROR restaurants get one controller");
                 console.error(e_2.message);
-                return [2 /*return*/, res.redirect("/")];
+                // TODO: REDIRECT TO 404 PAGE?
+                req.flash("error", "Restaurant not found.");
+                return [2 /*return*/, res.redirect("/restaurants")];
             case 11:
                 if (info === undefined) {
                     req.flash("error", "Restaurant not found.");
@@ -141,6 +143,7 @@ exports.getOne = function (req, res) { return __awaiter(_this, void 0, void 0, f
                     user: res.locals.user,
                     info: info,
                 };
+                console.log("info", info);
                 return [2 /*return*/, res.status(200).send("ok")];
         }
     });

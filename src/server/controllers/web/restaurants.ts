@@ -75,7 +75,9 @@ export const getOne = async (req: Request, res: Response) => {
     } catch (e) {
         console.log("ERROR restaurants get one controller");
         console.error(e.message);
-        return res.redirect("/");
+        // TODO: REDIRECT TO 404 PAGE?
+        req.flash("error", "Restaurant not found.");
+        return res.redirect("/restaurants");
     }
 
     if (info === undefined) {
@@ -87,6 +89,8 @@ export const getOne = async (req: Request, res: Response) => {
         user: res.locals.user,
         info: info,
     };
+
+    console.log("info", info);
 
     return res.status(200).send("ok");
 };

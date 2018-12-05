@@ -15,9 +15,10 @@ var config_1 = __importDefault(require("./config"));
 var routes_1 = __importDefault(require("./routes"));
 var middlewares_1 = require("./middlewares");
 var passport_2 = __importDefault(require("./config/passport"));
+// import { UsersModel } from "./models/lib/Users";
 exports.__ROOT__ = __dirname;
-mongoose_1.default.Promise = global.Promise;
 try {
+    mongoose_1.default.Promise = global.Promise;
     mongoose_1.default.connect(config_1.default.MONGODB_URI, { useNewUrlParser: true });
     console.log("mongodb connected on: " + config_1.default.MONGODB_URI);
     if (process.env.NODE_ENV !== "production") {
@@ -60,7 +61,6 @@ server.use(passport_1.default.session());
 server.use(express_flash_1.default());
 server.use(config_1.default.BASE_URL, middlewares_1.tokenValidation);
 server.use(function (req, res, next) {
-    // const user: UsersModel = req.user;
     res.locals.user = req.user;
     next();
 });
