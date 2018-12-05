@@ -92,7 +92,7 @@ export const getOne = async (req: Request, res: Response) => {
         info: info,
     };
 
-    console.log("info", info);
+    // console.log("info", info);
 
     return res.status(200).send("ok");
 };
