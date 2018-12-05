@@ -163,8 +163,7 @@ exports.default = (function (passport) {
                         return [4 /*yield*/, user.save()];
                     case 4:
                         _a.sent();
-                        done(undefined, user, req.flash("success", "Log in successful!"));
-                        return [3 /*break*/, 6];
+                        return [2 /*return*/, done(undefined, user, req.flash("success", "Log in successful!"))];
                     case 5:
                         e_3 = _a.sent();
                         console.log("google login error");
@@ -217,8 +216,7 @@ exports.default = (function (passport) {
                         return [4 /*yield*/, user.save()];
                     case 4:
                         _a.sent();
-                        done(undefined, user, req.flash("success", "Log in successful!"));
-                        return [3 /*break*/, 6];
+                        return [2 /*return*/, done(undefined, user, req.flash("success", "Log in successful!"))];
                     case 5:
                         e_4 = _a.sent();
                         console.log("facebook login error");

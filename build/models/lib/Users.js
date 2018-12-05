@@ -49,6 +49,7 @@ var mongoose_1 = require("mongoose");
 var crypto_1 = __importDefault(require("crypto"));
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var __1 = require("..");
+// import { includes } from "lodash";
 var EmailValidator = __importStar(require("email-validator"));
 var UsersSchema = new mongoose_1.Schema({
     local: {
@@ -168,7 +169,35 @@ UsersSchema.pre("save", function (next) {
                 case 3:
                     e_1 = _a.sent();
                     console.error(e_1.message);
+                    // return next(e);
+                    throw new mongoose_1.Error(e_1.message);
+                case 4: return [2 /*return*/, next()];
+            }
+        });
+    });
+});
+UsersSchema.pre("save", function (next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var doc, userProfileValidation, e_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    doc = this;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    userProfileValidation = new __1.Validations();
+                    userProfileValidation.user_id = doc._id;
+                    userProfileValidation.setExpireDate();
+                    return [4 /*yield*/, userProfileValidation.save()];
+                case 2:
+                    _a.sent();
                     return [3 /*break*/, 4];
+                case 3:
+                    e_2 = _a.sent();
+                    console.log("ERROR create new validation for user");
+                    console.error(e_2.message);
+                    throw new mongoose_1.Error(e_2.message);
                 case 4: return [2 /*return*/, next()];
             }
         });

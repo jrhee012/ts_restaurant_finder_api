@@ -10,6 +10,7 @@ require("./lib/Permissions");
 require("./lib/TicketTransactions");
 require("./lib/Tickets");
 require("./lib/Admins");
+require("./lib/Validations");
 exports.Data = mongoose_1.model("Data");
 exports.Restaurants = mongoose_1.model("Restaurants");
 exports.Users = mongoose_1.model("Users");
@@ -18,4 +19,5 @@ exports.Permissions = mongoose_1.model("Permissions");
 exports.Tickets = mongoose_1.model("Tickets");
 exports.TicketTransactions = mongoose_1.model("TicketTransactions");
 exports.Admins = mongoose_1.model("Admins");
+exports.Validations = mongoose_1.model("Validations");
 //# sourceMappingURL=index.js.map
