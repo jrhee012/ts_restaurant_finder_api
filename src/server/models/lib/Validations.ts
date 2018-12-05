@@ -4,12 +4,13 @@ import {
     Document,
     HookNextFunction
 } from "mongoose";
+import uuidv4 from "uuid/v4";
 
 export interface IValidations {
     user_id: string;
     validated: true;
     url: string;
-    expires_at?: string;
+    expires_at: string;
     created_at: string;
     last_updated: string;
 }
@@ -17,6 +18,7 @@ export interface IValidations {
 export interface ValidationsModel extends Document, IValidations {
     setExpireDate: () => void;
     completeValidation: () => void;
+    createNew: (userId: string) => Promise<void>;
 }
 
 const ValidationsSchema = new Schema({
@@ -35,16 +37,16 @@ const ValidationsSchema = new Schema({
         type: String,
         required: true,
     },
-    expires_at: String,
+    expires_at: Date,
     created_at: {
         type: Date,
         required: true,
-        default: new Date(),
+        default: new Date().toISOString(),
     },
     last_updated: {
         type: Date,
         required: true,
-        default: new Date(),
+        default: new Date().toISOString(),
     },
 });
 
@@ -80,6 +82,13 @@ ValidationsSchema.methods.completeValidation = async function() {
         }
     }
     return;
+};
+
+ValidationsSchema.methods.createNew = async function(userId: string) {
+    this.user_id = userId;
+    this.url = `/profile/validate/${uuidv4()}`;
+    this.setExpireDate();
+    this.save();
 };
 
 model("Validations", ValidationsSchema);

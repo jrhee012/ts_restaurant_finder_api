@@ -10,6 +10,7 @@ import configs from "./config";
 import routes from "./routes";
 import { tokenValidation } from "./middlewares";
 import passportMiddleware from "./config/passport";
+import { UsersModel } from "./models/lib/Users";
 
 export const __ROOT__: string = __dirname;
 
@@ -64,6 +65,7 @@ server.use(passport.session());
 server.use(flash());
 server.use(configs.BASE_URL, tokenValidation);
 server.use((req: Request, res: Response, next: NextFunction) => {
+    // const user: UsersModel = req.user;
     res.locals.user = req.user;
     next();
 });

@@ -66,7 +66,7 @@ export default (passport: PassportStatic) => {
                 user = new Users();
                 user.local.email = email;
                 user.setPassword(password);
-                user.authenticated = true; // TODO: email validation
+                // user.authenticated = true; // TODO: email validation
                 user.created_at = new Date().toISOString();
                 user.last_login_at = new Date().toISOString();
                 await user.save();

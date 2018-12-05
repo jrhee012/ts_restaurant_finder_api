@@ -7,10 +7,12 @@ import {
 } from "mongoose";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import * as EmailValidator from "email-validator";
+// import uuidv4 from "uuid/v4";
 import { RolesModel } from "./Roles";
 import { Roles, Admins, Validations } from "..";
+import { ValidationsModel } from "./Validations";
 // import { includes } from "lodash";
-import * as EmailValidator from "email-validator";
 
 export interface IUsers {
     local: {
@@ -66,6 +68,8 @@ export interface UsersModel extends Document, IUsers {
         token: any,
     };
     isAdmin: () => boolean;
+    completeValidation: () => void;
+    checkValidation: () => Promise<boolean>;
 }
 
 const UsersSchema = new Schema({
@@ -121,7 +125,7 @@ const UsersSchema = new Schema({
     },
 });
 
-UsersSchema.pre("validate", async function (next) {
+UsersSchema.pre("validate", async function(next) {
     const doc = <UsersModel>this;
     if (doc.local === undefined || doc.local === null) {
         next();
@@ -139,7 +143,7 @@ UsersSchema.pre("validate", async function (next) {
     }
 });
 
-UsersSchema.pre("save", async function (next: HookNextFunction) {
+UsersSchema.pre("save", async function(next: HookNextFunction) {
     const doc = <UsersModel>this;
     const roles = doc.roles || [];
 
@@ -170,22 +174,23 @@ UsersSchema.pre("save", async function (next: HookNextFunction) {
     return next();
 });
 
-UsersSchema.pre("save", async function (next: HookNextFunction) {
+UsersSchema.pre("save", async function(next: HookNextFunction) {
     const doc = <UsersModel>this;
-    try {
-        const userProfileValidation = new Validations();
-        userProfileValidation.user_id = doc._id;
-        userProfileValidation.setExpireDate();
-        await userProfileValidation.save();
-    } catch (e) {
-        console.log("ERROR create new validation for user");
-        console.error(e.message);
-        throw new Error(e.message);
+    const existing: ValidationsModel | null = await Validations.findOne({ user_id: doc._id });
+    if (existing === null || existing === undefined) {
+        try {
+            const userProfileValidation = new Validations();
+            await userProfileValidation.createNew(doc._id);
+        } catch (e) {
+            console.log("ERROR create new validation for user");
+            console.error(e.message);
+            throw new Error(e.message);
+        }
     }
     return next();
 });
 
-UsersSchema.methods.setPassword = function (password: string) {
+UsersSchema.methods.setPassword = function(password: string) {
     this.local.salt = crypto.randomBytes(16).toString("hex");
     this.local.hash = crypto.pbkdf2Sync(
         password,
@@ -196,7 +201,7 @@ UsersSchema.methods.setPassword = function (password: string) {
     ).toString("hex");
 };
 
-UsersSchema.methods.validatePassword = function (password: string) {
+UsersSchema.methods.validatePassword = function(password: string) {
     const hash = crypto.pbkdf2Sync(
         password,
         this.local.salt,
@@ -207,7 +212,7 @@ UsersSchema.methods.validatePassword = function (password: string) {
     return this.local.hash === hash;
 };
 
-UsersSchema.methods.generateJWT = function () {
+UsersSchema.methods.generateJWT = function() {
     const today = new Date();
     const expirationDate = new Date(today);
     expirationDate.setDate(today.getDate() + 60);
@@ -219,7 +224,7 @@ UsersSchema.methods.generateJWT = function () {
     }, "secret");
 };
 
-UsersSchema.methods.toAuthJSON = function () {
+UsersSchema.methods.toAuthJSON = function() {
     return {
         _id: this._id,
         email: this.local.email,
@@ -227,12 +232,50 @@ UsersSchema.methods.toAuthJSON = function () {
     };
 };
 
-UsersSchema.methods.isAdmin = async function () {
+UsersSchema.methods.isAdmin = async function() {
     const admin = await Admins.findOne({ user_id: this._id });
     if (admin === null) {
         return false;
     } else {
         return true;
+    }
+};
+
+UsersSchema.methods.completeValidation = async function() {
+    const validation: ValidationsModel | null = await Validations.findOne({ user_id: this._id });
+
+    if (validation !== null) {
+        const vChcek = validation.validated;
+        if (!vChcek) {
+            this.validated = true;
+            try {
+                await this.save();
+            } catch (e) {
+                console.log("ERROR validation model complete validation method");
+                console.log(`VALIDATION ENTRY: ${this}`);
+                console.error(e.message);
+                throw new Error(e.message);
+            }
+        }
+    } else {
+        console.log(`ERROR no validtion for user id: ${this._id}`);
+        throw new Error("Internal Server Error: UsersSchema.completeValidation");
+    }
+
+    return;
+};
+
+UsersSchema.methods.checkValidation = async function() {
+    try {
+        const validation: ValidationsModel | null = await Validations.findOne({ user_id: this._id });
+        if (validation === null || validation === undefined) {
+            throw new Error("Internal Server Error: UsersSchema.checkValidation");
+        }
+        return validation.validated;
+    } catch (e) {
+        console.log("ERROR UsersSchema.checkValidation");
+        console.error(e.message);
+        throw new Error(e.message);
     }
 };
 

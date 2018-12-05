@@ -41,7 +41,8 @@
     "puppeteer": "^1.11.0",
     "redis": "^2.8.0",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@types/chai-http": "^3.0.5",
@@ -65,6 +66,7 @@
     "@types/puppeteer": "^1.10.2",
     "@types/redis": "^2.8.8",
     "@types/request-promise": "^4.1.42",
+    "@types/uuid": "^3.4.4",
     "chai": "^4.2.0",
     "chai-http": "^4.2.0",
     "mocha": "^5.2.0",
