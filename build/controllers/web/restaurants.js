@@ -145,7 +145,7 @@ exports.getOne = function (req, res) { return __awaiter(_this, void 0, void 0, f
                     user: res.locals.user,
                     info: info,
                 };
-                console.log("info", info);
+                // console.log("info", info);
                 return [2 /*return*/, res.status(200).send("ok")];
         }
     });
