@@ -78,7 +78,7 @@ var SearchSuggestionBuilder = /** @class */ (function () {
     };
     SearchSuggestionBuilder.prototype.createList = function (data) {
         return __awaiter(this, void 0, void 0, function () {
-            var list, i, d, source, name_1, address, category, promiseAllArr, i_1, query, promiseAll, rawData, check, i_2, address_str, i_3, j, name_2, entry;
+            var list, i, d, source, id, name_1, address, category, promiseAllArr, i_1, query, promiseAll, rawData, check, i_2, address_str, i_3, j, name_2, entry;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -89,6 +89,7 @@ var SearchSuggestionBuilder = /** @class */ (function () {
                         if (!(i < data.length)) return [3 /*break*/, 4];
                         d = data[i];
                         source = d.source_data;
+                        id = d._id.toString();
                         name_1 = undefined;
                         address = undefined;
                         category = [];
@@ -128,6 +129,7 @@ var SearchSuggestionBuilder = /** @class */ (function () {
                         }
                         if (name_1 !== undefined && address !== undefined) {
                             entry = {
+                                id: id,
                                 name: name_1,
                                 address: address,
                                 category: category,
@@ -175,14 +177,15 @@ var SearchSuggestionBuilder = /** @class */ (function () {
                         _a.label = 2;
                     case 2:
                         if (config_1.default.NODE_ENV === "production") {
-                            buildDir = "build";
+                            buildDir = "build/public";
                         }
                         else {
-                            buildDir = "src/server";
+                            buildDir = "src/server/public";
                         }
                         fileDir = path_1.default.resolve("./" + buildDir + "/data/search-suggestions");
                         // TODO: save multiple files?
                         this.file_location = fileDir + "/data.json";
+                        console.log(data);
                         try {
                             if (!fs_1.existsSync(fileDir)) {
                                 fs_1.mkdirSync(fileDir, { recursive: true });
