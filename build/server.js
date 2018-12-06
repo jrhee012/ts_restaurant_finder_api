@@ -22,7 +22,7 @@ try {
     mongoose_1.default.connect(config_1.default.MONGODB_URI, { useNewUrlParser: true });
     console.log("mongodb connected on: " + config_1.default.MONGODB_URI);
     if (process.env.NODE_ENV !== "production") {
-        mongoose_1.default.set("debug", true);
+        // mongoose.set("debug", true);
         console.log("mongoose `debug` set `true`");
     }
 }

@@ -30,6 +30,15 @@ class ResponseBuilder {
         };
         return response;
     }
+
+    not_found_error(): ErrorResponse {
+        const response: ErrorResponse = {
+            code: 404,
+            message: "Not Found",
+            data: {},
+        };
+        return response;
+    }
 }
 
 const responseBuilder = new ResponseBuilder();

@@ -1,15 +1,10 @@
-import { includes } from "lodash";
+// import { includes } from "lodash";
 import { mkdirSync, writeFileSync, existsSync } from "fs";
 import configs from "../../config";
 import path from "path";
 import { Restaurants, Data } from "../../models";
 import { RestaurantsModel } from "../../models/lib/Restaurants";
-import { DataModel } from "../../models/lib/Data";
 import { __ROOT__ } from "../../app";
-import { DocumentQuery } from "mongoose";
-// import { redisClient } from "./redis";
-
-// const cacheKey: string = "SearchSuggestionBuilder";
 
 export interface ISearchSuggestionBuilder {
     data?: RestaurantsModel[];
@@ -18,6 +13,7 @@ export interface ISearchSuggestionBuilder {
         address: string,
         category: string[],
     }[];
+    file_location?: string;
 }
 
 interface ISearchSuggestionBuilderModel extends ISearchSuggestionBuilder, Document {
@@ -38,9 +34,11 @@ class SearchSuggestionBuilder {
         address: string,
         category: string[],
     }[];
+    file_location?: string;
 
     constructor() {
         this.data = undefined;
+        this.file_location = undefined;
         this.transformed = [];
     }
 
@@ -94,8 +92,6 @@ class SearchSuggestionBuilder {
                 }
             }
 
-            console.log("check...", check);
-
             if (check) {
                 name = d.name;
                 let address_str: string = "";
@@ -148,22 +144,36 @@ class SearchSuggestionBuilder {
         } else {
             buildDir = "src/server";
         }
-
         const fileDir: string = path.resolve(`./${buildDir}/data/search-suggestions`);
 
-        if (!existsSync(fileDir)) {
-            mkdirSync(fileDir, { recursive: true });
-        }
+        // TODO: save multiple files?
+        this.file_location = `${fileDir}/data.json`;
 
-        writeFileSync(
-            `${fileDir}/data.json`,
-            JSON.stringify(data),
-            { flag: "w", encoding: "utf-8" }
-        );
-        console.log("File created!");
+        try {
+            if (!existsSync(fileDir)) {
+                mkdirSync(fileDir, { recursive: true });
+            }
+            writeFileSync(
+                this.file_location,
+                JSON.stringify(data),
+                { flag: "w", encoding: "utf8" }
+            );
+            console.log("File created!", data.length);
+        } catch (e) {
+            console.log("ERROR - CANNOT CREATE FILE!");
+            console.error(e);
+        }
     }
 }
 
 const builder = new SearchSuggestionBuilder();
-(async () => builder.saveList())();
+
+console.log("> STARTING SUGGESTION BUILDER SAVE LIST");
+(async () => await builder.saveList())();
+setInterval(async () => {
+    console.log("> STARTING SUGGESTION BUILDER SAVE LIST");
+    await builder.saveList();
+    console.log("> COMPLETED SUGGESTION BUILDER SAVE LIST");
+}, 30 * 60 * 1000);
+
 export const suggestionBuilder  = builder;

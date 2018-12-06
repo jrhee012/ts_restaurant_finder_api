@@ -45,12 +45,13 @@ var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var EmailValidator = __importStar(require("email-validator"));
 var models_1 = require("../../models");
+var utils_1 = require("../../utils");
 var _returnToForm = function (res, data) {
     return res.status(400)
         .render("pages/profile/authenticate_form", data);
 };
 exports.getProfile = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var user, userId, validation, e_1, alert, success, data;
+    var user, userId, validation, e_1, alerts, data;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -75,26 +76,27 @@ exports.getProfile = function (req, res) { return __awaiter(_this, void 0, void 
                 req.flash("error", e_1.message);
                 return [2 /*return*/, res.redirect("/profile")];
             case 6:
-                alert = req.flash("error") || [];
-                success = req.flash("success") || [];
+                alerts = utils_1.setAlerts(req);
                 data = {
                     user: user,
                     validation: validation,
-                    alert: alert,
-                    success: success,
+                    alert: alerts.error,
+                    success: alerts.success,
                 };
                 return [2 /*return*/, res.status(200).render("pages/profile/index", data)];
         }
     });
 }); };
 exports.getAuthenticationPage = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var user, data;
+    var user, alerts, data;
     return __generator(this, function (_a) {
         user = res.locals.user;
+        alerts = utils_1.setAlerts(req);
         data = {
             user: user,
             // validation: validation,
-            alert: []
+            alert: alerts.error,
+            success: alerts.success,
         };
         return [2 /*return*/, res.status(200).render("pages/profile/authenticate_form", data)];
     });

@@ -37,8 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var lodash_1 = require("lodash");
+// import { includes } from "lodash";
 var fs_1 = require("fs");
 var config_1 = __importDefault(require("../../config"));
 var path_1 = __importDefault(require("path"));
@@ -46,6 +47,7 @@ var models_1 = require("../../models");
 var SearchSuggestionBuilder = /** @class */ (function () {
     function SearchSuggestionBuilder() {
         this.data = undefined;
+        this.file_location = undefined;
         this.transformed = [];
     }
     SearchSuggestionBuilder.prototype.getData = function () {
@@ -75,39 +77,73 @@ var SearchSuggestionBuilder = /** @class */ (function () {
         });
     };
     SearchSuggestionBuilder.prototype.createList = function (data) {
-        var list = [];
-        data.forEach(function (d) {
-            var source = d.source_data;
-            var name = undefined;
-            var address = undefined;
-            var category = [];
-            if (lodash_1.includes(source, "yelp")) {
-                name = d.name;
-                var address_str = "";
-                for (var i = 0; i < d.display_address.length; i++) {
-                    if (i == d.display_address.length - 1) {
-                        address_str += d.display_address[i];
-                    }
-                    else {
-                        address_str += d.display_address[i] + ", ";
-                    }
+        return __awaiter(this, void 0, void 0, function () {
+            var list, i, d, source, name_1, address, category, promiseAllArr, i_1, query, promiseAll, rawData, check, i_2, address_str, i_3, j, name_2, entry;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        list = [];
+                        i = 0;
+                        _a.label = 1;
+                    case 1:
+                        if (!(i < data.length)) return [3 /*break*/, 4];
+                        d = data[i];
+                        source = d.source_data;
+                        name_1 = undefined;
+                        address = undefined;
+                        category = [];
+                        promiseAllArr = [];
+                        for (i_1 = 0; i_1 < source.length; i_1++) {
+                            query = models_1.Data.findById(source[i_1]);
+                            promiseAllArr.push(query);
+                        }
+                        promiseAll = new Set(promiseAllArr);
+                        return [4 /*yield*/, Promise.all(promiseAll)];
+                    case 2:
+                        rawData = _a.sent();
+                        check = false;
+                        // TODO: better logic for multiple sources
+                        for (i_2 = 0; i_2 < rawData.length; i_2++) {
+                            if (rawData[i_2].source === "yelp") {
+                                check = true;
+                                break;
+                            }
+                        }
+                        if (check) {
+                            name_1 = d.name;
+                            address_str = "";
+                            for (i_3 = 0; i_3 < d.display_address.length; i_3++) {
+                                if (i_3 == d.display_address.length - 1) {
+                                    address_str += d.display_address[i_3];
+                                }
+                                else {
+                                    address_str += d.display_address[i_3] + ", ";
+                                }
+                            }
+                            address = address_str;
+                            for (j = 0; j < d.categories.length; j++) {
+                                name_2 = d.categories[j].title;
+                                category.push(name_2);
+                            }
+                        }
+                        if (name_1 !== undefined && address !== undefined) {
+                            entry = {
+                                name: name_1,
+                                address: address,
+                                category: category,
+                            };
+                            list.push(entry);
+                        }
+                        _a.label = 3;
+                    case 3:
+                        i++;
+                        return [3 /*break*/, 1];
+                    case 4:
+                        this.transformed = list;
+                        return [2 /*return*/];
                 }
-                address = address_str;
-                for (var j = 0; j < d.categories.length; j++) {
-                    var name_1 = d.categories[j].title;
-                    category.push(name_1);
-                }
-            }
-            if (name !== undefined && address !== undefined) {
-                var entry = {
-                    name: name,
-                    address: address,
-                    category: category,
-                };
-                list.push(entry);
-            }
+            });
         });
-        this.transformed = list;
     };
     SearchSuggestionBuilder.prototype.getList = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -117,7 +153,9 @@ var SearchSuggestionBuilder = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.getData()];
                     case 1:
                         data = _a.sent();
-                        this.createList(data);
+                        return [4 /*yield*/, this.createList(data)];
+                    case 2:
+                        _a.sent();
                         return [2 /*return*/, this.transformed];
                 }
             });
@@ -140,11 +178,22 @@ var SearchSuggestionBuilder = /** @class */ (function () {
                             buildDir = "build";
                         }
                         else {
-                            buildDir = "build-dev";
+                            buildDir = "src/server";
                         }
                         fileDir = path_1.default.resolve("./" + buildDir + "/data/search-suggestions");
-                        fs_1.writeFileSync(fileDir + "/data.json", JSON.stringify(data), { flag: "w+" });
-                        console.log("File created!");
+                        // TODO: save multiple files?
+                        this.file_location = fileDir + "/data.json";
+                        try {
+                            if (!fs_1.existsSync(fileDir)) {
+                                fs_1.mkdirSync(fileDir, { recursive: true });
+                            }
+                            fs_1.writeFileSync(this.file_location, JSON.stringify(data), { flag: "w", encoding: "utf8" });
+                            console.log("File created!", data.length);
+                        }
+                        catch (e) {
+                            console.log("ERROR - CANNOT CREATE FILE!");
+                            console.error(e);
+                        }
                         return [2 /*return*/];
                 }
             });
@@ -153,6 +202,25 @@ var SearchSuggestionBuilder = /** @class */ (function () {
     return SearchSuggestionBuilder;
 }());
 var builder = new SearchSuggestionBuilder();
-builder.saveList();
+console.log("> STARTING SUGGESTION BUILDER SAVE LIST");
+(function () { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+    switch (_a.label) {
+        case 0: return [4 /*yield*/, builder.saveList()];
+        case 1: return [2 /*return*/, _a.sent()];
+    }
+}); }); })();
+setInterval(function () { return __awaiter(_this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                console.log("> STARTING SUGGESTION BUILDER SAVE LIST");
+                return [4 /*yield*/, builder.saveList()];
+            case 1:
+                _a.sent();
+                console.log("> COMPLETED SUGGESTION BUILDER SAVE LIST");
+                return [2 /*return*/];
+        }
+    });
+}); }, 30 * 60 * 1000);
 exports.suggestionBuilder = builder;
 //# sourceMappingURL=search-suggestion-builder.js.map
