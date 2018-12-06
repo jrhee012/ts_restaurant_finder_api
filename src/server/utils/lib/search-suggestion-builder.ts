@@ -1,10 +1,12 @@
 import { includes } from "lodash";
-import { readdirSync, writeFileSync } from "fs";
+import { mkdirSync, writeFileSync, existsSync } from "fs";
 import configs from "../../config";
 import path from "path";
 import { Restaurants, Data } from "../../models";
 import { RestaurantsModel } from "../../models/lib/Restaurants";
+import { DataModel } from "../../models/lib/Data";
 import { __ROOT__ } from "../../app";
+import { DocumentQuery } from "mongoose";
 // import { redisClient } from "./redis";
 
 // const cacheKey: string = "SearchSuggestionBuilder";
@@ -59,21 +61,42 @@ class SearchSuggestionBuilder {
         return new_data;
     }
 
-    private createList(data: RestaurantsModel[]) {
+    private async createList(data: RestaurantsModel[]) {
         const list: {
             name: string,
             address: string,
             category: string[],
         }[] = [];
 
-        data.forEach((d: RestaurantsModel) => {
+        for (let i = 0; i < data.length; i++) {
+        // data.forEach(async (d: RestaurantsModel) => {
+            const d = data[i];
             const source = d.source_data;
 
             let name: string | undefined = undefined;
             let address: string | undefined = undefined;
             const category: string[] = [];
 
-            if (includes(source, "yelp")) {
+            const promiseAllArr: any[] = [];
+            for (let i = 0; i < source.length; i++) {
+                const query = Data.findById(source[i]);
+                promiseAllArr.push(query);
+            }
+            const promiseAll = new Set(promiseAllArr);
+            const rawData = await Promise.all(promiseAll);
+            let check: boolean = false;
+
+            // TODO: better logic for multiple sources
+            for (let i = 0; i < rawData.length; i++) {
+                if (rawData[i].source === "yelp") {
+                    check = true;
+                    break;
+                }
+            }
+
+            console.log("check...", check);
+
+            if (check) {
                 name = d.name;
                 let address_str: string = "";
                 for (let i = 0; i < d.display_address.length; i++) {
@@ -102,14 +125,13 @@ class SearchSuggestionBuilder {
                 };
                 list.push(entry);
             }
-        });
-
+        }
         this.transformed = list;
     }
 
     async getList() {
         const data: RestaurantsModel[] = await this.getData();
-        this.createList(data);
+        await this.createList(data);
         return this.transformed;
     }
 
@@ -124,20 +146,24 @@ class SearchSuggestionBuilder {
         if (configs.NODE_ENV === "production") {
             buildDir = "build";
         } else {
-            buildDir = "build-dev";
+            buildDir = "src/server";
         }
 
         const fileDir: string = path.resolve(`./${buildDir}/data/search-suggestions`);
+
+        if (!existsSync(fileDir)) {
+            mkdirSync(fileDir, { recursive: true });
+        }
+
         writeFileSync(
             `${fileDir}/data.json`,
             JSON.stringify(data),
-            { flag: "w+" }
+            { flag: "w", encoding: "utf-8" }
         );
         console.log("File created!");
     }
 }
 
 const builder = new SearchSuggestionBuilder();
-builder.saveList();
-
+(async () => builder.saveList())();
 export const suggestionBuilder  = builder;
