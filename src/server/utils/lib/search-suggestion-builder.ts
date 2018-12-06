@@ -147,7 +147,7 @@ class SearchSuggestionBuilder {
         // TODO: save multiple files?
         this.file_location = `${fileDir}/data.json`;
 
-        console.log(data);
+        // console.log(data);
         try {
             if (!existsSync(fileDir)) {
                 mkdirSync(fileDir, { recursive: true });

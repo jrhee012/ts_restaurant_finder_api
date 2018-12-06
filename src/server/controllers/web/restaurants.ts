@@ -25,10 +25,12 @@ export const getAll = async (req: Request, res: Response) => {
     const pageNum: number = req.query.page || 1;
     const alerts = setAlerts(req);
 
+    console.log("page num: ", pageNum);
+
     const data = {
         user: res.locals.user,
         restaurants: restaurants,
-        page: paginate(restaurants.length, pageNum, 20, 10),
+        page: paginate(restaurants.length, pageNum, 5),
         alert: alerts.error,
         success: alerts.success,
     };
