@@ -21,7 +21,7 @@ try {
     console.log(`mongodb connected on: ${configs.MONGODB_URI}`);
 
     if (process.env.NODE_ENV !== "production") {
-        mongoose.set("debug", true);
+        // mongoose.set("debug", true);
         console.log("mongoose `debug` set `true`");
     }
 } catch (e) {
