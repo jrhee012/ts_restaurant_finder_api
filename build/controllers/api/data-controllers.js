@@ -79,7 +79,11 @@ exports.show = function (req, res) { return __awaiter(_this, void 0, void 0, fun
                 console.log("ERROR data show controller");
                 console.error(e_2.message);
                 return [2 /*return*/, res.status(500).json(utils_1.responseBuilder.internal_server_error())];
-            case 4: return [2 /*return*/, res.status(200).json(data)];
+            case 4:
+                if (data === null) {
+                    return [2 /*return*/, res.status(404).json(utils_1.responseBuilder.not_found_error())];
+                }
+                return [2 /*return*/, res.status(200).json(utils_1.responseBuilder.api_success(data))];
         }
     });
 }); };
@@ -109,22 +113,12 @@ exports.searchAndCreate = function (req, res) { return __awaiter(_this, void 0, 
                     return [2 /*return*/, res.status(500).json(utils_1.responseBuilder.internal_server_error())];
                 }
                 if (data.length < 1) {
-                    return [2 /*return*/, res.status(404).json({
-                            code: 404,
-                            message: "Not Found",
-                            data: {
-                                query_location: query.location,
-                            },
-                        })];
+                    return [2 /*return*/, res.status(404).json(utils_1.responseBuilder.not_found_error())];
                 }
                 for (i = 0; i < data.length; i++) {
                     yelp_client.saveYelpData(data[i]);
                 }
-                return [2 /*return*/, res.status(200).json({
-                        code: res.statusCode,
-                        message: "ok",
-                        data: {},
-                    })];
+                return [2 /*return*/, res.status(200).json(utils_1.responseBuilder.api_success(data))];
         }
     });
 }); };

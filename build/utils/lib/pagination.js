@@ -15,26 +15,15 @@ var Pagination = /** @class */ (function () {
         };
     };
     Pagination.prototype.getPage = function (totalNumber, currentPage, entryPerPage, range) {
-        if (currentPage === undefined || currentPage === null) {
-            currentPage = 1;
-        }
-        if (entryPerPage === undefined || entryPerPage === null) {
-            entryPerPage = 10;
-        }
-        if (range === undefined || range === null) {
-            range = 7;
-        }
+        var required = Math.floor(totalNumber / entryPerPage);
         var startIndex;
         var endIndex;
-        var required = Math.floor(totalNumber / entryPerPage);
         startIndex = (currentPage - 1) * entryPerPage;
         endIndex = currentPage * entryPerPage - 1;
-        if (startIndex < 0) {
+        if (startIndex < 0)
             startIndex = 0;
-        }
-        if (endIndex > totalNumber - 1) {
+        if (endIndex > totalNumber - 1)
             endIndex = totalNumber - 1;
-        }
         if (range >= required) {
             return this.buildPagination(totalNumber, currentPage, 1, required, startIndex, endIndex, required);
         }

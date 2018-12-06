@@ -162,7 +162,7 @@ var YelpApiClient = /** @class */ (function (_super) {
             if (err) {
                 console.error(err);
             }
-            console.log("yelp data saved!", doc == undefined);
+            // console.log("yelp data saved!", doc == undefined);
             if (doc !== null) {
                 var name_1;
                 var coords = {};
@@ -195,7 +195,7 @@ var YelpApiClient = /** @class */ (function (_super) {
                     if (err) {
                         console.error(err);
                     }
-                    console.log("restaurant data saved!");
+                    // console.log("restaurant data saved!");
                 });
             }
         });

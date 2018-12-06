@@ -29,7 +29,11 @@ export const show = async (req: Request, res: Response) => {
         return res.status(500).json(responseBuilder.internal_server_error());
     }
 
-    return res.status(200).json(data);
+    if (data === null) {
+        return res.status(404).json(responseBuilder.not_found_error());
+    }
+
+    return res.status(200).json(responseBuilder.api_success(data));
 };
 
 export const searchAndCreate = async (req: Request, res: Response) => {
@@ -58,22 +62,12 @@ export const searchAndCreate = async (req: Request, res: Response) => {
     }
 
     if (data.length < 1) {
-        return res.status(404).json({
-            code: 404,
-            message: "Not Found",
-            data: {
-                query_location: query.location,
-            },
-        });
+        return res.status(404).json(responseBuilder.not_found_error());
     }
 
     for (let i = 0; i < data.length; i++) {
         yelp_client.saveYelpData(data[i]);
     }
 
-    return res.status(200).json({
-        code: res.statusCode,
-        message: "ok",
-        data: {},
-    });
+    return res.status(200).json(responseBuilder.api_success(data));
 };

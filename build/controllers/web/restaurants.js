@@ -133,12 +133,12 @@ exports.getOne = function (req, res) { return __awaiter(_this, void 0, void 0, f
                 console.log("ERROR restaurants get one controller");
                 console.error(e_2.message);
                 // TODO: REDIRECT TO 404 PAGE?
-                req.flash("error", "Restaurant not found.");
+                req.flash("error", "Internal server error.");
                 return [2 /*return*/, res.redirect("/restaurants")];
             case 11:
                 if (info === undefined) {
                     req.flash("error", "Restaurant not found.");
-                    return [2 /*return*/, res.redirect("/restaurants")];
+                    return [2 /*return*/, _redirectToRestaurants(res)];
                 }
                 data = {
                     user: res.locals.user,

@@ -140,7 +140,7 @@ export class YelpApiClient extends ApiClient {
                     console.error(err);
                 }
 
-                console.log("yelp data saved!", doc == undefined);
+                // console.log("yelp data saved!", doc == undefined);
                 if (doc !== null) {
                     let name: string;
                     let coords = {};
@@ -181,7 +181,7 @@ export class YelpApiClient extends ApiClient {
                             if (err) {
                                 console.error(err);
                             }
-                            console.log("restaurant data saved!");
+                            // console.log("restaurant data saved!");
                         }
                     );
                 }

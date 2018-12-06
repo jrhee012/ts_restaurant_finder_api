@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import configs from "../config";
 import { isAuthenticated, isAdmin } from "../config/passport";
+import { setAlerts, tokenValidation } from "../middlewares";
 
 // ADMIN ROUTERS
 import adminRouter from "./lib/admin";
@@ -13,34 +14,33 @@ import loginRouter from "./lib/web/login";
 
 // WEB ROUTERS
 import webRouter from "./lib/web";
+import { IAlerts } from "../utils/lib/alert";
 
-const ApiBaseUrl: string = configs.BASE_URL;
+const ApiBaseUrl: string = configs.API_BASE_URL;
 
 const router: Router = Router();
 
 // API
-router.use(`${ApiBaseUrl}`, apiRouter);
+router.use(`${ApiBaseUrl}`, tokenValidation, apiRouter);
 
 // ADMIN
 router.use("/admin", isAuthenticated, isAdmin, adminRouter);
 
 // LOGIN
-router.use("/", loginRouter);
+router.use("/", setAlerts, loginRouter);
 
 // WEB
-router.get("/", (req: Request, res: Response) => {
-    const alert = req.flash("error") || [];
-    const success = req.flash("success") || [];
-
+router.get("/", setAlerts, (req: Request, res: Response) => {
+    const alerts: IAlerts = res.locals.alerts;
     const data = {
         user: res.locals.user,
-        alert: alert,
-        success: success,
+        alert: alerts.error,
+        success: alerts.success,
     };
     return res.status(200).render("pages/home", data);
 });
 
-router.use("/", isAuthenticated, webRouter);
+router.use("/", isAuthenticated, setAlerts, webRouter);
 
 // EASTER EGGGGS
 router.get("/jen", (req: Request, res: Response) => {

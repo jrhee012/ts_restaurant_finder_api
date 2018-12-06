@@ -10,8 +10,9 @@ import jwt from "jsonwebtoken";
 import * as EmailValidator from "email-validator";
 // import uuidv4 from "uuid/v4";
 import { RolesModel } from "./Roles";
-import { Roles, Admins, Validations } from "..";
-import { ValidationsModel } from "./Validations";
+import { Roles, Admins, Validations, Likes } from "..";
+import { LikesModel } from "./Likes";
+// import { ValidationsModel } from "./Validations";
 // import { includes } from "lodash";
 
 export interface IUsers {
@@ -71,6 +72,7 @@ export interface UsersModel extends Document, IUsers {
     completeValidation: () => void;
     checkValidation: () => Promise<boolean>;
     getRoles: () => Promise<RolesModel[]>;
+    getAllLikes: () => Promise<LikesModel[]>;
 }
 
 const UsersSchema = new Schema({
@@ -177,7 +179,7 @@ UsersSchema.pre("save", async function(next: HookNextFunction) {
 
 UsersSchema.pre("save", async function(next: HookNextFunction) {
     const doc = <UsersModel>this;
-    const existing: ValidationsModel | null = await Validations.findOne({ user_id: doc._id });
+    const existing = await Validations.findOne({ user_id: doc._id });
     if (existing === null || existing === undefined) {
         try {
             const userProfileValidation = new Validations();
@@ -243,7 +245,7 @@ UsersSchema.methods.isAdmin = async function() {
 };
 
 UsersSchema.methods.completeValidation = async function() {
-    const validation: ValidationsModel | null = await Validations.findOne({ user_id: this._id });
+    const validation = await Validations.findOne({ user_id: this._id });
 
     if (validation !== null) {
         const vChcek = validation.validated;
@@ -268,7 +270,7 @@ UsersSchema.methods.completeValidation = async function() {
 
 UsersSchema.methods.checkValidation = async function() {
     try {
-        const validation: ValidationsModel | null = await Validations.findOne({ user_id: this._id });
+        const validation = await Validations.findOne({ user_id: this._id });
         if (validation === null || validation === undefined) {
             throw new Error("Internal Server Error: UsersSchema.checkValidation");
         }
@@ -291,6 +293,16 @@ UsersSchema.methods.getRoles = async function() {
             }
         });
         return roles;
+    } catch (e) {
+        console.error(e.message);
+        throw new Error(e.message);
+    }
+};
+
+UsersSchema.methods.getAllLikes = async function () {
+    try {
+        const likes = await Likes.find({ user_id: this._id });
+        return likes;
     } catch (e) {
         console.error(e.message);
         throw new Error(e.message);

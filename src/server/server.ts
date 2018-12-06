@@ -8,7 +8,7 @@ import flash from "express-flash";
 import session from "express-session";
 import configs from "./config";
 import routes from "./routes";
-import { tokenValidation } from "./middlewares";
+// import { tokenValidation } from "./middlewares";
 import passportMiddleware from "./config/passport";
 // import { UsersModel } from "./models/lib/Users";
 
@@ -51,7 +51,7 @@ server.set("views", path.resolve(viewsPath));
 server.set("view engine", "ejs");
 
 // Load middlewares
-server.use(morgan("combined"));
+server.use(morgan("dev"));
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(session({
@@ -62,7 +62,7 @@ server.use(session({
 server.use(passport.initialize());
 server.use(passport.session());
 server.use(flash());
-server.use(configs.BASE_URL, tokenValidation);
+// server.use(configs.API_BASE_URL, tokenValidation);
 server.use((req: Request, res: Response, next: NextFunction) => {
     res.locals.user = req.user;
     next();

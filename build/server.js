@@ -13,7 +13,7 @@ var express_flash_1 = __importDefault(require("express-flash"));
 var express_session_1 = __importDefault(require("express-session"));
 var config_1 = __importDefault(require("./config"));
 var routes_1 = __importDefault(require("./routes"));
-var middlewares_1 = require("./middlewares");
+// import { tokenValidation } from "./middlewares";
 var passport_2 = __importDefault(require("./config/passport"));
 // import { UsersModel } from "./models/lib/Users";
 exports.__ROOT__ = __dirname;
@@ -48,7 +48,7 @@ server.use(express_1.default.static(path_1.default.resolve(publicPath)));
 server.set("views", path_1.default.resolve(viewsPath));
 server.set("view engine", "ejs");
 // Load middlewares
-server.use(morgan_1.default("combined"));
+server.use(morgan_1.default("dev"));
 server.use(body_parser_1.default.json());
 server.use(body_parser_1.default.urlencoded({ extended: false }));
 server.use(express_session_1.default({
@@ -59,7 +59,7 @@ server.use(express_session_1.default({
 server.use(passport_1.default.initialize());
 server.use(passport_1.default.session());
 server.use(express_flash_1.default());
-server.use(config_1.default.BASE_URL, middlewares_1.tokenValidation);
+// server.use(configs.API_BASE_URL, tokenValidation);
 server.use(function (req, res, next) {
     res.locals.user = req.user;
     next();

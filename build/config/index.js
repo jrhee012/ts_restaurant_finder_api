@@ -16,7 +16,7 @@ var Config = /** @class */ (function () {
         this.REDIS_URL = process.env.REDIS_URL || "localhost:6379";
         this.CACHE_TTL = 900;
         // API config
-        this.BASE_URL = "/api/v1";
+        this.API_BASE_URL = "/api/v1";
         this.TOKEN = process.env.TOKEN || "";
         // Yelp Fusion API config
         this.YELP_BASE_URL = process.env.YELP_BASE_URL || "https://api.yelp.com/v3";

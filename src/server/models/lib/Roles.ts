@@ -22,4 +22,9 @@ const RolesSchema = new Schema({
     },
 });
 
+RolesSchema.pre("validate", function () {
+    const doc = <RolesModel>this;
+    doc.last_updated = new Date().toISOString();
+});
+
 model("Roles", RolesSchema);
