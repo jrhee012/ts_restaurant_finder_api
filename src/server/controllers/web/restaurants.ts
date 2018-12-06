@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import paginate from "jw-paginate";
 import sortBy from "lodash/sortBy";
 import { Restaurants } from "../../models";
 import { RestaurantsModel } from "../../models/lib/Restaurants";
-import { redisClient, YelpApiClient, setAlerts } from "../../utils";
+import { redisClient, YelpApiClient, setAlerts, pagination } from "../../utils";
 
 const _redirectToRestaurants = (res: Response) => res.redirect("/restaurants");
 
@@ -22,15 +21,13 @@ export const getAll = async (req: Request, res: Response) => {
         return res.redirect("/");
     }
 
-    const pageNum: number = req.query.page || 1;
+    const pageNum: number = parseInt(req.query.page) || 1;
     const alerts = setAlerts(req);
-
-    console.log("page num: ", pageNum);
 
     const data = {
         user: res.locals.user,
         restaurants: restaurants,
-        page: paginate(restaurants.length, pageNum, 5),
+        page: pagination.getPage(restaurants.length, pageNum, 20, 10),
         alert: alerts.error,
         success: alerts.success,
     };
@@ -99,14 +96,10 @@ export const getOne = async (req: Request, res: Response) => {
     return res.status(200).send("ok");
 };
 
-// {
-//     totalItems: 150,
-//     currentPage: 1,
-//     pageSize: 10,
-//     totalPages: 15,
-//     startPage: 1,
-//     endPage: 10,
-//     startIndex: 0,
-//     endIndex: 9,
-//     pages: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
-// }
+// { totalItems: 200,
+//   currentPage: 2,
+//   startPage: 1,
+//   endPage: 11,
+//   startIndex: 10,
+//   endIndex: 19,
+//   lastPage: 20 }

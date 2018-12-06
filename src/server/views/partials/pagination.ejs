@@ -1,8 +1,7 @@
 <!-- views/partials/pagination.ejs -->
-<% if (page && page.endPage && page.endPage > 0) { %>
+<% if (page) { %>
 <nav class="pagination-nav" id="pagination-nav-tag">
     <ul class="pagination">
-        <% console.log(page) %>
         <% if (page.currentPage == 1) { %>
         <li class="page-item disabled">
             <a class="page-link" href="#" tabindex="-1">First</a>
@@ -12,21 +11,7 @@
             <a class="page-link" href="?page=1">First</a>
         </li>
         <% } %>
-        <% function startPage(c, s) { %>
-        <%     if (c - 4 >= s) { %>
-        <%         return c - 4 %>
-        <%     } else { %>
-        <%         return s %>
-        <%     } %>
-        <% } %>
-        <% function endPage(c, e) { %>
-        <%     if (c + 4 <= e) { %>
-        <%         return c + 4 %>
-        <%     } else { %>
-        <%         return e %>
-        <%     } %>
-        <% } %>
-        <% for (let i = startPage(page.currentPage,page.startPage); i <= endPage(page.currentPage,page.endPage); i++) { %>
+        <% for (let i = page.startPage; i <= page.endPage; i++) { %>
         <% if (i == page.currentPage) { %>
         <li class="page-item active">
             <a class="page-link" href="?page=<%= i %>"><%= i %></a>
@@ -37,13 +22,13 @@
         </li>
         <% } %>
         <% } %>
-        <% if (page.currentPage == page.endPage) { %>
+        <% if (page.currentPage == page.lastPage) { %>
         <li class="page-item disabled">
             <a class="page-link">Last</a>
         </li>
         <% } else { %>
         <li class="page-item">
-            <a class="page-link" href="?page=<%= page.totalPages %>">Last</a>
+            <a class="page-link" href="?page=<%= page.lastPage %>">Last</a>
         </li>
         <% } %>
     </ul>
