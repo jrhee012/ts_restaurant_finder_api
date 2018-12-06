@@ -71,6 +71,7 @@ class SearchSuggestionBuilder {
             const d = data[i];
             const source = d.source_data;
 
+            const id: string = d._id.toString();
             let name: string | undefined = undefined;
             let address: string | undefined = undefined;
             const category: string[] = [];
@@ -110,11 +111,8 @@ class SearchSuggestionBuilder {
             }
 
             if (name !== undefined && address !== undefined) {
-                const entry: {
-                    name: string,
-                    address: string,
-                    category: string[],
-                } = {
+                const entry = {
+                    id: id,
                     name: name,
                     address: address,
                     category: category,
@@ -140,15 +138,16 @@ class SearchSuggestionBuilder {
 
         let buildDir: string;
         if (configs.NODE_ENV === "production") {
-            buildDir = "build";
+            buildDir = "build/public";
         } else {
-            buildDir = "src/server";
+            buildDir = "src/server/public";
         }
         const fileDir: string = path.resolve(`./${buildDir}/data/search-suggestions`);
 
         // TODO: save multiple files?
         this.file_location = `${fileDir}/data.json`;
 
+        console.log(data);
         try {
             if (!existsSync(fileDir)) {
                 mkdirSync(fileDir, { recursive: true });
