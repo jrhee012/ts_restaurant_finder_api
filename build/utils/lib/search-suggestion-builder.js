@@ -185,7 +185,7 @@ var SearchSuggestionBuilder = /** @class */ (function () {
                         fileDir = path_1.default.resolve("./" + buildDir + "/data/search-suggestions");
                         // TODO: save multiple files?
                         this.file_location = fileDir + "/data.json";
-                        console.log(data);
+                        // console.log(data);
                         try {
                             if (!fs_1.existsSync(fileDir)) {
                                 fs_1.mkdirSync(fileDir, { recursive: true });
