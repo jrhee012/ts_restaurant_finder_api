@@ -40,8 +40,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var concat_1 = __importDefault(require("lodash/concat"));
-var jw_paginate_1 = __importDefault(require("jw-paginate"));
 var models_1 = require("../../models");
+var utils_1 = require("../../utils");
 exports.getAll = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
     var user, sellTickets, buyTickets, tickets, pageNum, data, e_1;
     return __generator(this, function (_a) {
@@ -64,7 +64,7 @@ exports.getAll = function (req, res) { return __awaiter(_this, void 0, void 0, f
                 data = {
                     user: user,
                     tickets: tickets,
-                    page: jw_paginate_1.default(tickets.length, pageNum, 20, 10),
+                    page: utils_1.pagination.getPage(tickets.length, pageNum, 20, 10),
                 };
                 return [2 /*return*/, res.status(200).render("pages/tickets/index", data)];
             case 3:

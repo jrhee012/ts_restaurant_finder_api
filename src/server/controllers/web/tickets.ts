@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import _concat from "lodash/concat";
-import paginate from "jw-paginate";
 import { Tickets } from "../../models";
 import { TicketsModel } from "../../models/lib/Tickets";
+import { pagination } from "../../utils";
 
 export const getAll = async (req: Request, res: Response) => {
     try {
@@ -21,7 +21,7 @@ export const getAll = async (req: Request, res: Response) => {
         const data = {
             user: user,
             tickets: tickets,
-            page: paginate(tickets.length, pageNum, 20, 10),
+            page: pagination.getPage(tickets.length, pageNum, 20, 10),
         };
         return res.status(200).render("pages/tickets/index", data);
     } catch (e) {

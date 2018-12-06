@@ -11,6 +11,7 @@ var authentication_1 = require("./lib/authentication");
 var user_helper_1 = require("./lib/user-helper");
 var restaurant_data_fetcher_1 = __importDefault(require("./lib/restaurant-data-fetcher"));
 var alert_1 = __importDefault(require("./lib/alert"));
+var pagination_1 = require("./lib/pagination");
 // api client utils
 exports.responseBuilder = response_builder_1.default;
 exports.YelpApiClient = api_clients_1.YelpApiClient;
@@ -24,5 +25,8 @@ exports.checkAuthenticated = authentication_1.checkAuthenticated;
 exports.UserHelper = user_helper_1.UserHelper;
 // restaurants utils
 exports.RestaurantDataFetcher = restaurant_data_fetcher_1.default;
+// set alerts for views for controllers
 exports.setAlerts = alert_1.default;
+// create pagination object
+exports.pagination = pagination_1.pagination;
 //# sourceMappingURL=index.js.map

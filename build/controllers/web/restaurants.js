@@ -39,7 +39,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var jw_paginate_1 = __importDefault(require("jw-paginate"));
 var sortBy_1 = __importDefault(require("lodash/sortBy"));
 var models_1 = require("../../models");
 var utils_1 = require("../../utils");
@@ -70,12 +69,12 @@ exports.getAll = function (req, res) { return __awaiter(_this, void 0, void 0, f
                 console.error(e_1.message);
                 return [2 /*return*/, res.redirect("/")];
             case 5:
-                pageNum = req.query.page || 1;
+                pageNum = parseInt(req.query.page) || 1;
                 alerts = utils_1.setAlerts(req);
                 data = {
                     user: res.locals.user,
                     restaurants: restaurants,
-                    page: jw_paginate_1.default(restaurants.length, pageNum, 20, 10),
+                    page: utils_1.pagination.getPage(restaurants.length, pageNum, 20, 10),
                     alert: alerts.error,
                     success: alerts.success,
                 };
@@ -150,15 +149,11 @@ exports.getOne = function (req, res) { return __awaiter(_this, void 0, void 0, f
         }
     });
 }); };
-// {
-//     totalItems: 150,
-//     currentPage: 1,
-//     pageSize: 10,
-//     totalPages: 15,
-//     startPage: 1,
-//     endPage: 10,
-//     startIndex: 0,
-//     endIndex: 9,
-//     pages: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
-// }
+// { totalItems: 200,
+//   currentPage: 2,
+//   startPage: 1,
+//   endPage: 11,
+//   startIndex: 10,
+//   endIndex: 19,
+//   lastPage: 20 }
 //# sourceMappingURL=restaurants.js.map
