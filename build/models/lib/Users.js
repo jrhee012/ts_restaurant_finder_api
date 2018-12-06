@@ -306,5 +306,37 @@ UsersSchema.methods.checkValidation = function () {
         });
     });
 };
+UsersSchema.methods.getRoles = function () {
+    return __awaiter(this, void 0, void 0, function () {
+        var roles_1, role_ids;
+        var _this = this;
+        return __generator(this, function (_a) {
+            try {
+                roles_1 = [];
+                role_ids = this.roles;
+                role_ids.forEach(function (id) { return __awaiter(_this, void 0, void 0, function () {
+                    var role;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, __1.Roles.findById(id)];
+                            case 1:
+                                role = _a.sent();
+                                if (role !== null) {
+                                    roles_1.push(role);
+                                }
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [2 /*return*/, roles_1];
+            }
+            catch (e) {
+                console.error(e.message);
+                throw new mongoose_1.Error(e.message);
+            }
+            return [2 /*return*/];
+        });
+    });
+};
 mongoose_1.model("Users", UsersSchema);
 //# sourceMappingURL=Users.js.map

@@ -21,6 +21,14 @@ var ResponseBuilder = /** @class */ (function () {
         };
         return response;
     };
+    ResponseBuilder.prototype.not_found_error = function () {
+        var response = {
+            code: 404,
+            message: "Not Found",
+            data: {},
+        };
+        return response;
+    };
     return ResponseBuilder;
 }());
 var responseBuilder = new ResponseBuilder();

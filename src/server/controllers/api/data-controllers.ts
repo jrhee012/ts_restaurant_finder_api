@@ -1,11 +1,12 @@
-import { Document } from "mongoose";
+// import { Document } from "mongoose";
 import { Request, Response } from "express";
 import { Data } from "../../models";
+import { DataModel } from "../../models/lib/Data";
 import { responseBuilder } from "../../utils";
 import { YelpApiClient } from "../../utils";
 
 export const index = async (req: Request, res: Response) => {
-    let data: Document[] = [];
+    let data: DataModel[] = [];
     try {
         data = await Data.find();
     } catch (e) {
@@ -19,7 +20,7 @@ export const index = async (req: Request, res: Response) => {
 export const show = async (req: Request, res: Response) => {
     const dataId: string = req.params.data_id;
 
-    let data: Document | null;
+    let data: DataModel | null;
     try {
         data = await Data.findById(dataId);
     } catch (e) {

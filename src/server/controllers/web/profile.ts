@@ -3,6 +3,7 @@ import * as EmailValidator from "email-validator";
 import { ValidationsModel } from "../../models/lib/Validations";
 import { Validations } from "../../models";
 import { UsersModel } from "../../models/lib/Users";
+import { setAlerts } from "../../utils";
 
 const _returnToForm = (res: Response, data: any) => {
     return res.status(400)
@@ -30,14 +31,13 @@ export const getProfile = async (req: Request, res: Response) => {
         return res.redirect("/profile");
     }
 
-    const alert = req.flash("error") || [];
-    const success = req.flash("success") || [];
+    const alerts = setAlerts(req);
 
     const data = {
         user: user,
         validation: validation,
-        alert: alert,
-        success: success,
+        alert: alerts.error,
+        success: alerts.success,
     };
 
     return res.status(200).render("pages/profile/index", data);
@@ -62,12 +62,15 @@ export const getAuthenticationPage = async (req: Request, res: Response) => {
     //     console.error(e.message);
     //     return res.redirect("/profile");
     // }
+    const alerts = setAlerts(req);
 
     const data = {
         user: user,
         // validation: validation,
-        alert: []
+        alert: alerts.error,
+        success: alerts.success,
     };
+
     return res.status(200).render("pages/profile/authenticate_form", data);
 };
 

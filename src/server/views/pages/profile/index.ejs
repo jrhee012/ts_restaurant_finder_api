@@ -13,7 +13,7 @@
     <div class="alert alert-info alert-dismissible fade show" role="alert">
         <p id="auth-alert-msg">
             Your account is not authenticated yet!
-            <a href="/profile/authenticate">Click here</a>
+            <a href="<%= validation.url %>">Click here</a>
             to authenticate.
         </p>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -30,7 +30,7 @@
             <p>
                 <strong>id</strong>: <%= user._id %>
                 <% if (!validation.validated) { %>
-                <a href="/profile/authenticate">Authenticate</a>
+                <a href="<%= validation.url %>">Authenticate</a>
                 <% } %><br>
                 <a href="/logout" class="btn btn-default btn-sm">Logout</a>
             </p>
