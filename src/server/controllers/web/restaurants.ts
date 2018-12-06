@@ -77,13 +77,13 @@ export const getOne = async (req: Request, res: Response) => {
         console.log("ERROR restaurants get one controller");
         console.error(e.message);
         // TODO: REDIRECT TO 404 PAGE?
-        req.flash("error", "Restaurant not found.");
+        req.flash("error", "Internal server error.");
         return res.redirect("/restaurants");
     }
 
     if (info === undefined) {
         req.flash("error", "Restaurant not found.");
-        return res.redirect("/restaurants");
+        return _redirectToRestaurants(res);
     }
 
     const data = {

@@ -13,5 +13,9 @@ var RolesSchema = new mongoose_1.Schema({
         default: new Date().toISOString(),
     },
 });
+RolesSchema.pre("validate", function () {
+    var doc = this;
+    doc.last_updated = new Date().toISOString();
+});
 mongoose_1.model("Roles", RolesSchema);
 //# sourceMappingURL=Roles.js.map

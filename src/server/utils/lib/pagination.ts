@@ -9,15 +9,7 @@ export interface IPagination {
 }
 
 class Pagination {
-    private buildPagination(
-        totalItems: number,
-        currentPage: number,
-        startPage: number,
-        endPage: number,
-        startIndex: number,
-        endIndex: number,
-        lastPage: number,
-    ): IPagination {
+    private buildPagination(totalItems: number, currentPage: number, startPage: number, endPage: number, startIndex: number, endIndex: number, lastPage: number): IPagination {
         return {
             totalItems: totalItems,
             currentPage: currentPage,
@@ -30,44 +22,19 @@ class Pagination {
     }
 
     getPage(totalNumber: number, currentPage: number, entryPerPage: number, range: number): IPagination {
-        if (currentPage === undefined || currentPage === null) {
-            currentPage = 1;
-        }
-
-        if (entryPerPage === undefined || entryPerPage === null) {
-            entryPerPage = 10;
-        }
-
-        if (range === undefined || range === null) {
-            range = 7;
-        }
+        const required = Math.floor(totalNumber / entryPerPage);
 
         let startIndex: number;
         let endIndex: number;
 
-        const required = Math.floor(totalNumber / entryPerPage);
-
         startIndex = (currentPage - 1) * entryPerPage;
         endIndex = currentPage * entryPerPage - 1;
 
-        if (startIndex < 0) {
-            startIndex = 0;
-        }
-
-        if (endIndex > totalNumber - 1) {
-            endIndex = totalNumber - 1;
-        }
+        if (startIndex < 0) startIndex = 0;
+        if (endIndex > totalNumber - 1) endIndex = totalNumber - 1;
 
         if (range >= required) {
-            return this.buildPagination(
-                totalNumber,
-                currentPage,
-                1,
-                required,
-                startIndex,
-                endIndex,
-                required,
-            );
+            return this.buildPagination(totalNumber, currentPage, 1, required, startIndex, endIndex, required);
         }
 
         let startPage: number;
@@ -90,15 +57,7 @@ class Pagination {
             endPage = required;
         }
 
-        return this.buildPagination(
-            totalNumber,
-            currentPage,
-            startPage,
-            endPage,
-            startIndex,
-            endIndex,
-            required,
-        );
+        return this.buildPagination(totalNumber, currentPage, startPage, endPage, startIndex, endIndex, required);
     }
 }
 

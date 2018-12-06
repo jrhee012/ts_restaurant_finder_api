@@ -13,7 +13,7 @@ class Config {
     REDIS_URL: string;
     // CACHE_KEY: string;
     CACHE_TTL: number;
-    BASE_URL: string;
+    API_BASE_URL: string;
     TOKEN: string;
     YELP_BASE_URL: string;
     YELP_API_KEY: string;
@@ -39,7 +39,7 @@ class Config {
         this.CACHE_TTL = 900;
 
         // API config
-        this.BASE_URL = "/api/v1";
+        this.API_BASE_URL = "/api/v1";
         this.TOKEN = process.env.TOKEN || "";
 
         // Yelp Fusion API config
