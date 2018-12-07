@@ -94,6 +94,7 @@ export const getOne = async (req: Request, res: Response) => {
         restaurant: info,
         alert: alerts.error,
         success: alerts.success,
+        like_link: `/likes/add?id=${rest_id}`,
     };
 
     // console.log("info", info);
