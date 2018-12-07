@@ -33,7 +33,7 @@ export const show = async (req: Request, res: Response) => {
         return res.status(404).json(responseBuilder.not_found_error());
     }
 
-    return res.status(200).json(responseBuilder.api_success(data));
+    return res.status(200).json(responseBuilder.api_response(data));
 };
 
 export const searchAndCreate = async (req: Request, res: Response) => {
@@ -69,5 +69,5 @@ export const searchAndCreate = async (req: Request, res: Response) => {
         yelp_client.saveYelpData(data[i]);
     }
 
-    return res.status(200).json(responseBuilder.api_success(data));
+    return res.status(200).json(responseBuilder.api_response(data));
 };

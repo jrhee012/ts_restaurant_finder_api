@@ -24,5 +24,5 @@ export const downloadSuggestions = (req: Request, res: Response) => {
     if (suggestions.length < 1) {
         return res.status(500).json(responseBuilder.not_found_error());
     }
-    return res.status(200).json(suggestions);
+    return res.status(200).json(responseBuilder.api_response(suggestions));
 };

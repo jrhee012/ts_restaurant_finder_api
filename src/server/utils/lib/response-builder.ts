@@ -40,9 +40,9 @@ class ResponseBuilder {
         return response;
     }
 
-    api_success(data?: any) {
+    api_response(data?: any, statusCode?: number) {
         const response: IErrorResponse = {
-            code: 200,
+            code: statusCode ? statusCode : 200,
             message: "ok",
             data: data ? data : {},
         };
