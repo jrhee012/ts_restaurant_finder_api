@@ -36,90 +36,52 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var models_1 = require("../../models");
 var utils_1 = require("../../utils");
-var utils_2 = require("../../utils");
-exports.index = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var data, e_1;
+var models_1 = require("../../models");
+exports.getAll = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var users, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                data = [];
+                users = [];
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, models_1.Data.find()];
+                return [4 /*yield*/, models_1.Users.find()];
             case 2:
-                data = _a.sent();
+                users = _a.sent();
                 return [3 /*break*/, 4];
             case 3:
                 e_1 = _a.sent();
-                console.log("ERROR data index controller");
-                console.error(e_1.message);
+                console.error(e_1);
                 return [2 /*return*/, res.status(500).json(utils_1.responseBuilder.internal_server_error())];
-            case 4: return [2 /*return*/, res.status(200).json(data)];
+            case 4:
+                if (users.length < 1) {
+                    return [2 /*return*/, res.status(404).json(utils_1.responseBuilder.not_found_error())];
+                }
+                return [2 /*return*/, res.status(200).json(utils_1.responseBuilder.api_response(users))];
         }
     });
 }); };
-exports.show = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var dataId, data, e_2;
+exports.getOne = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var user, e_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                dataId = req.params.data_id;
-                _a.label = 1;
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, models_1.Users.findById(req.params.userId)];
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, models_1.Data.findById(dataId)];
+                user = _a.sent();
+                if (user === null) {
+                    return [2 /*return*/, res.status(404).json(utils_1.responseBuilder.not_found_error())];
+                }
+                return [2 /*return*/, res.status(200).json(utils_1.responseBuilder.api_response(user))];
             case 2:
-                data = _a.sent();
-                return [3 /*break*/, 4];
-            case 3:
                 e_2 = _a.sent();
-                console.log("ERROR data show controller");
                 console.error(e_2.message);
                 return [2 /*return*/, res.status(500).json(utils_1.responseBuilder.internal_server_error())];
-            case 4:
-                if (data === null) {
-                    return [2 /*return*/, res.status(404).json(utils_1.responseBuilder.not_found_error())];
-                }
-                return [2 /*return*/, res.status(200).json(utils_1.responseBuilder.api_response(data))];
+            case 3: return [2 /*return*/];
         }
     });
 }); };
-exports.searchAndCreate = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var query, yelp_client, result, e_3, data, i;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                query = req.query;
-                console.log("query", query);
-                yelp_client = new utils_2.YelpApiClient();
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, yelp_client.searchBusinesses(query)];
-            case 2:
-                result = _a.sent();
-                return [3 /*break*/, 4];
-            case 3:
-                e_3 = _a.sent();
-                console.log("ERROR data search and create controller");
-                console.error(e_3.message);
-                return [2 /*return*/, res.status(500).json(utils_1.responseBuilder.internal_server_error())];
-            case 4:
-                data = result.businesses;
-                if (data === undefined || data === null) {
-                    return [2 /*return*/, res.status(500).json(utils_1.responseBuilder.internal_server_error())];
-                }
-                if (data.length < 1) {
-                    return [2 /*return*/, res.status(404).json(utils_1.responseBuilder.not_found_error())];
-                }
-                for (i = 0; i < data.length; i++) {
-                    yelp_client.saveYelpData(data[i]);
-                }
-                return [2 /*return*/, res.status(200).json(utils_1.responseBuilder.api_response(data))];
-        }
-    });
-}); };
-//# sourceMappingURL=data-controllers.js.map
+//# sourceMappingURL=users.js.map

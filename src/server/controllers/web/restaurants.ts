@@ -49,6 +49,7 @@ export const getOne = async (req: Request, res: Response) => {
         const rest: RestaurantsModel | null = await Restaurants.findById(rest_id);
 
         if (rest === null) {
+            req.flash("error", "Restaurant not found.");
             return _redirectToRestaurants(res);
         }
 
@@ -86,14 +87,18 @@ export const getOne = async (req: Request, res: Response) => {
         return _redirectToRestaurants(res);
     }
 
+    const alerts = setAlerts(req);
+
     const data = {
         user: res.locals.user,
-        info: info,
+        restaurant: info,
+        alert: alerts.error,
+        success: alerts.success,
     };
 
     // console.log("info", info);
 
-    return res.status(200).send("ok");
+    return res.status(200).render("pages/restaurants/show", data);
 };
 
 // { totalItems: 200,

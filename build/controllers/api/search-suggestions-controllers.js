@@ -19,6 +19,6 @@ exports.downloadSuggestions = function (req, res) {
     if (suggestions.length < 1) {
         return res.status(500).json(utils_1.responseBuilder.not_found_error());
     }
-    return res.status(200).json(suggestions);
+    return res.status(200).json(utils_1.responseBuilder.api_response(suggestions));
 };
 //# sourceMappingURL=search-suggestions-controllers.js.map

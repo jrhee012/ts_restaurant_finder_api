@@ -83,7 +83,7 @@ exports.getAll = function (req, res) { return __awaiter(_this, void 0, void 0, f
     });
 }); };
 exports.getOne = function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var rest_id, info, api_client, rest, ext_id, cacheKey, cache, e_2, data;
+    var rest_id, info, api_client, rest, ext_id, cacheKey, cache, e_2, alerts, data;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -99,6 +99,7 @@ exports.getOne = function (req, res) { return __awaiter(_this, void 0, void 0, f
             case 2:
                 rest = _a.sent();
                 if (rest === null) {
+                    req.flash("error", "Restaurant not found.");
                     return [2 /*return*/, _redirectToRestaurants(res)];
                 }
                 return [4 /*yield*/, models_1.Restaurants.populate(rest, {
@@ -140,12 +141,15 @@ exports.getOne = function (req, res) { return __awaiter(_this, void 0, void 0, f
                     req.flash("error", "Restaurant not found.");
                     return [2 /*return*/, _redirectToRestaurants(res)];
                 }
+                alerts = utils_1.setAlerts(req);
                 data = {
                     user: res.locals.user,
-                    info: info,
+                    restaurant: info,
+                    alert: alerts.error,
+                    success: alerts.success,
                 };
                 // console.log("info", info);
-                return [2 /*return*/, res.status(200).send("ok")];
+                return [2 /*return*/, res.status(200).render("pages/restaurants/show", data)];
         }
     });
 }); };
