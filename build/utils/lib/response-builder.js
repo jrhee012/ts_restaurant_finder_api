@@ -30,9 +30,9 @@ var ResponseBuilder = /** @class */ (function () {
         };
         return response;
     };
-    ResponseBuilder.prototype.api_success = function (data) {
+    ResponseBuilder.prototype.api_response = function (data, statusCode) {
         var response = {
-            code: 200,
+            code: statusCode ? statusCode : 200,
             message: "ok",
             data: data ? data : {},
         };
