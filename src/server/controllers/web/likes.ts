@@ -41,3 +41,7 @@ export const getAll = async (req: Request, res: Response) => {
 
     return res.status(200).render("pages/likes/index", data);
 };
+
+export const addLike = async (req: Request, res: Response) => {
+    console.log("Req path: ", req.originalUrl);
+};
