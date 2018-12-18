@@ -3,6 +3,7 @@ import _concat from "lodash/concat";
 import { Tickets } from "../../models";
 import { TicketsModel } from "../../models/lib/Tickets";
 import { pagination } from "../../utils";
+import logger from "../../config/logger";
 
 export const getAll = async (req: Request, res: Response) => {
     try {
@@ -25,8 +26,8 @@ export const getAll = async (req: Request, res: Response) => {
         };
         return res.status(200).render("pages/tickets/index", data);
     } catch (e) {
-        console.log("ERROR tickets get all controller");
-        console.error(e.message);
+        logger.error("ERROR tickets get all controller");
+        logger.error(e.message);
         return res.redirect(req.originalUrl);
     }
 };

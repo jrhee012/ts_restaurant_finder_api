@@ -169,6 +169,8 @@ const builder = new SearchSuggestionBuilder();
 
 console.log("> STARTING SUGGESTION BUILDER SAVE LIST");
 (async () => await builder.saveList())();
+console.log("> COMPLETED SUGGESTION BUILDER SAVE LIST");
+
 setInterval(async () => {
     console.log("> STARTING SUGGESTION BUILDER SAVE LIST");
     await builder.saveList();

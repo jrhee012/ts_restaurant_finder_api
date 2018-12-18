@@ -2,6 +2,7 @@ import { find } from "lodash";
 import { Permissions, Roles } from "../models";
 import { PermissionsModel } from "../models/lib/Permissions";
 import { RolesModel } from "../models/lib/Roles";
+import logger from "./logger";
 
 const defaultPermissions: { name: string }[] = [
     {
@@ -43,7 +44,7 @@ export interface DBSeederModel extends Document, IDBSeeder {
 
 export default class DBSeeder {
     constructor() {
-        console.log("starting db initializer!");
+        logger.info("starting db initializer!");
     }
 
     help() {
@@ -56,7 +57,7 @@ export default class DBSeeder {
             const permissions = new Promise((resolve, reject) => {
                 Permissions.deleteMany({}, function (err) {
                     if (err) {
-                        console.log("mongodb REMOVE err!");
+                        logger.error("mongodb REMOVE err!");
                         // console.error(err);
                         reject(err);
                     }
@@ -67,7 +68,7 @@ export default class DBSeeder {
             const roles = new Promise((resolve, reject) => {
                 Roles.deleteMany({}, function (err) {
                     if (err) {
-                        console.log("mongodb REMOVE err!");
+                        logger.error("mongodb REMOVE err!");
                         // console.error(err);
                         reject(err);
                     }
@@ -76,12 +77,12 @@ export default class DBSeeder {
             });
 
             try {
-                console.log("starting remove all...");
+                logger.debug("starting remove all...");
                 await Promise.all([permissions, roles]);
-                console.log("remove all finished successfully");
+                logger.debug("remove all finished successfully");
             } catch (e) {
-                console.log("error remove all!");
-                console.error(e.message);
+                logger.error("error remove all!");
+                logger.error(e.message);
             }
 
             return;
@@ -91,7 +92,7 @@ export default class DBSeeder {
             if (modelName.toLowerCase() === "permissions") {
                 Permissions.deleteMany({}, function (err) {
                     if (err) {
-                        console.log("mongodb REMOVE err!");
+                        logger.error("mongodb REMOVE err!");
                         // console.error(err);
                         reject(err);
                     }
@@ -102,7 +103,7 @@ export default class DBSeeder {
             if (modelName.toLowerCase() === "roles") {
                 Roles.deleteMany({}, function (err) {
                     if (err) {
-                        console.log("mongodb REMOVE err!");
+                        logger.error("mongodb REMOVE err!");
                         // console.error(err);
                         reject(err);
                     }
@@ -116,10 +117,10 @@ export default class DBSeeder {
         let permissions: PermissionsModel[] = [];
         try {
             permissions = await Permissions.create(defaultPermissions);
-            console.log("all `PERMISSIONS` saved to db!");
+            logger.debug("all `PERMISSIONS` saved to db!");
         } catch (e) {
-            console.log("`PERMISSIONS` seeding ERROR!");
-            console.error(e.message);
+            logger.error("`PERMISSIONS` seeding ERROR!");
+            logger.error(e.message);
             return process.exit(1);
         }
         return permissions;
@@ -129,9 +130,9 @@ export default class DBSeeder {
         let roles: RolesModel[] = [];
         try {
             roles = await Roles.create(defaultRoles);
-            console.log("all `ROLES` saved to db!");
+            logger.debug("all `ROLES` saved to db!");
         } catch (e) {
-            console.log("`ROLES` seeding ERROR!");
+            logger.error("`ROLES` seeding ERROR!");
             console.error(e.message);
             return process.exit(1);
         }
@@ -150,8 +151,8 @@ export default class DBSeeder {
             permissions = await Permissions.find({});
             roles = await Roles.find({});
         } catch (e) {
-            console.log("FINDALL ERROR!");
-            console.error(e.message);
+            logger.error("FINDALL ERROR!");
+            logger.error(e.message);
             return process.exit(1);
         }
 
@@ -167,7 +168,7 @@ export default class DBSeeder {
             try {
                 await this.removeAll("permissions");
             } catch (e) {
-                console.error(e.message);
+                logger.error(e.message);
                 return process.exit(1);
             }
 
@@ -178,7 +179,7 @@ export default class DBSeeder {
             try {
                 await this.removeAll("roles");
             } catch (e) {
-                console.error(e.message);
+                logger.error(e.message);
                 return process.exit(1);
             }
 
@@ -222,7 +223,7 @@ export default class DBSeeder {
             await user.save();
         }
 
-        console.log("updated roles!");
+        logger.debug("updated roles!");
     }
 
     /**
@@ -230,8 +231,8 @@ export default class DBSeeder {
      * create entries if missing.
      */
     async start() {
-        console.log("initializing db seeds...");
+        logger.info("initializing db seeds...");
         await this.findAllAndUpdate();
-        console.log("db seed finished successfully!");
+        logger.info("db seed finished successfully!");
     }
 }

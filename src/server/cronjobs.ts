@@ -1,9 +1,10 @@
 import { CronJob } from "cron";
 import { model, Document, MongooseDocument } from "mongoose";
+import logger from "./config/logger";
 
 const Data = model("Data");
 
-console.log("Before job instantiation");
+logger.info("Before job instantiation");
 const job1 = new CronJob("* 0,30 * * * *", async function () {
     // const d = new Date();
     // console.log('At Ten Minutes:', d);
@@ -12,12 +13,12 @@ const job1 = new CronJob("* 0,30 * * * *", async function () {
         if (data.length < 1) {
             data = [];
         }
-        console.log(`[CRONJOB name=job1] Number of data entries: ${data.length}`);
+        logger.info(`[CRONJOB name=job1] Number of data entries: ${data.length}`);
         // console.log(`Number of data entries: ${data.length}`);
     } catch (e) {
-        console.log("[CRONJOB name=job1] ERROR");
-        console.error(e.message);
+        logger.error("[CRONJOB name=job1] ERROR");
+        logger.error(e.message);
     }
 });
-console.log("After job instantiation");
+logger.info("After job instantiation");
 job1.start();
