@@ -1,6 +1,7 @@
 import redis, { RedisClient } from "redis";
 import { promisify } from "util";
 import configs from "../../config";
+import logger from "../../config/logger";
 
 const cacheHost: string = configs.REDIS_URL;
 const cacheRetrySeconds: number = 1000;
@@ -16,17 +17,17 @@ class RedisCache {
     }
 
     noCacheMessage() {
-        console.log(`No cache at ${cacheHost}`);
+        logger.info(`No cache at ${cacheHost}`);
     }
 
     onConnect(): void {
         this.cacheExists = true;
-        console.log(`Redis connected on ${cacheHost}`);
+        logger.info(`Redis connected on ${cacheHost}`);
     }
 
     onError(error: Error): void {
-        console.log("ERROR redis cache");
-        console.error(error);
+        logger.error("ERROR redis cache");
+        logger.error(error);
         this.cacheExists = false;
         this.noCacheMessage();
     }
@@ -66,7 +67,7 @@ class RedisCache {
         }
 
         redis.set(key, attr, "EX", 60 * 60);
-        console.log(`> Cache set with key: ${key} for 60 mins`);
+        logger.debug(`> Cache set with key: ${key} for 60 mins`);
     }
 
     async get(key: string) {
@@ -82,10 +83,10 @@ class RedisCache {
         let result: any = undefined;
         try {
             result = await getAsync(key);
-            console.log(`> Cache retrieved with key: ${key}`);
+            logger.debug(`> Cache retrieved with key: ${key}`);
         } catch (e) {
-            console.log("ERROR redis cache get");
-            console.error(e.message);
+            logger.error("ERROR redis cache get");
+            logger.error(e.message);
         }
 
         if (result !== null) {

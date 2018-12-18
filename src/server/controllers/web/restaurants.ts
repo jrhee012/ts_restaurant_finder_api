@@ -98,7 +98,7 @@ export const getOne = async (req: Request, res: Response) => {
         like_link: `/likes/add?id=${rest_id}`,
     };
 
-    // console.log("info", info);
+    // logger.debug("info", info);
 
     return res.status(200).render("pages/restaurants/show", data);
 };

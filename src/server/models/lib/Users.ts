@@ -14,6 +14,7 @@ import { Roles, Admins, Validations, Likes } from "..";
 import { LikesModel } from "./Likes";
 // import { ValidationsModel } from "./Validations";
 // import { includes } from "lodash";
+import logger from "../../config/logger";
 
 export interface IUsers {
     local: {

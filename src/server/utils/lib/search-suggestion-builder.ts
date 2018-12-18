@@ -5,6 +5,7 @@ import path from "path";
 import { Restaurants, Data } from "../../models";
 import { RestaurantsModel } from "../../models/lib/Restaurants";
 import { __ROOT__ } from "../../app";
+import logger from "../../config/logger";
 
 export interface ISearchSuggestionBuilder {
     data?: RestaurantsModel[];
@@ -47,8 +48,8 @@ class SearchSuggestionBuilder {
         try {
             new_data = await Restaurants.find();
         } catch (e) {
-            console.log("ERROR search suggestion builder update data method");
-            console.error(e.message);
+            logger.error("ERROR search suggestion builder update data method");
+            logger.error(e.message);
             new_data = [];
         }
 
@@ -147,7 +148,7 @@ class SearchSuggestionBuilder {
         // TODO: save multiple files?
         this.file_location = `${fileDir}/data.json`;
 
-        // console.log(data);
+        // logger.debug(data);
         try {
             if (!existsSync(fileDir)) {
                 mkdirSync(fileDir, { recursive: true });
@@ -157,24 +158,24 @@ class SearchSuggestionBuilder {
                 JSON.stringify(data),
                 { flag: "w", encoding: "utf8" }
             );
-            console.log("File created!", data.length);
+            logger.info("File created!", data.length);
         } catch (e) {
-            console.log("ERROR - CANNOT CREATE FILE!");
-            console.error(e);
+            logger.error("ERROR - CANNOT CREATE FILE!");
+            logger.error(e);
         }
     }
 }
 
 const builder = new SearchSuggestionBuilder();
 
-console.log("> STARTING SUGGESTION BUILDER SAVE LIST");
+logger.info("> STARTING SUGGESTION BUILDER SAVE LIST");
 (async () => await builder.saveList())();
-console.log("> COMPLETED SUGGESTION BUILDER SAVE LIST");
+logger.info("> COMPLETED SUGGESTION BUILDER SAVE LIST");
 
 setInterval(async () => {
-    console.log("> STARTING SUGGESTION BUILDER SAVE LIST");
+    logger.info("> STARTING SUGGESTION BUILDER SAVE LIST");
     await builder.saveList();
-    console.log("> COMPLETED SUGGESTION BUILDER SAVE LIST");
+    logger.info("> COMPLETED SUGGESTION BUILDER SAVE LIST");
 }, 30 * 60 * 1000);
 
 export const suggestionBuilder  = builder;

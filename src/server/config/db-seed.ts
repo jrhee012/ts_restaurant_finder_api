@@ -58,7 +58,6 @@ export default class DBSeeder {
                 Permissions.deleteMany({}, function (err) {
                     if (err) {
                         logger.error("mongodb REMOVE err!");
-                        // console.error(err);
                         reject(err);
                     }
                     resolve();
@@ -69,7 +68,6 @@ export default class DBSeeder {
                 Roles.deleteMany({}, function (err) {
                     if (err) {
                         logger.error("mongodb REMOVE err!");
-                        // console.error(err);
                         reject(err);
                     }
                     resolve();
@@ -93,7 +91,6 @@ export default class DBSeeder {
                 Permissions.deleteMany({}, function (err) {
                     if (err) {
                         logger.error("mongodb REMOVE err!");
-                        // console.error(err);
                         reject(err);
                     }
                     resolve();
@@ -104,7 +101,6 @@ export default class DBSeeder {
                 Roles.deleteMany({}, function (err) {
                     if (err) {
                         logger.error("mongodb REMOVE err!");
-                        // console.error(err);
                         reject(err);
                     }
                     resolve();
@@ -133,7 +129,7 @@ export default class DBSeeder {
             logger.debug("all `ROLES` saved to db!");
         } catch (e) {
             logger.error("`ROLES` seeding ERROR!");
-            console.error(e.message);
+            logger.error(e.message);
             return process.exit(1);
         }
         return roles;

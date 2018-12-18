@@ -1,4 +1,5 @@
 import { UsersModel } from "../../models/lib/Users";
+import logger from "../../config/logger";
 
 export interface ILocalAccountParams {
     email: string;
@@ -34,8 +35,8 @@ export class UserHelper {
                 await user.save();
                 this.user = user;
             } catch (e) {
-                console.log("ERROR user helper update local");
-                console.error(e.message);
+                logger.error("ERROR user helper update local");
+                logger.error(e.message);
                 throw new Error(e.message);
             }
         } else {

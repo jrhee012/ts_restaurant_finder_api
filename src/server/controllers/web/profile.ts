@@ -60,7 +60,7 @@ export const getAuthenticationPage = async (req: Request, res: Response) => {
     //     }
     //     // url = validation.url;
     // } catch (e) {
-    //     console.error(e.message);
+    //     logger.error(e.message);
     //     return res.redirect("/profile");
     // }
     const alerts = setAlerts(req);

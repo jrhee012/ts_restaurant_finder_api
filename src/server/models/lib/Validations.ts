@@ -5,6 +5,7 @@ import {
     HookNextFunction
 } from "mongoose";
 import uuidv4 from "uuid/v4";
+import logger from "../../config/logger";
 
 export interface IValidations {
     user_id: string;
@@ -75,9 +76,9 @@ ValidationsSchema.methods.completeValidation = async function() {
         try {
             await this.save();
         } catch (e) {
-            console.log("ERROR validation model complete validation method");
-            console.log(`VALIDATION ENTRY: ${this}`);
-            console.error(e.message);
+            logger.error("ERROR validation model complete validation method");
+            logger.error(`VALIDATION ENTRY: ${this}`);
+            logger.error(e.message);
             throw new Error(e.message);
         }
     }
