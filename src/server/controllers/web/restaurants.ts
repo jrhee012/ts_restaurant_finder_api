@@ -3,6 +3,7 @@ import sortBy from "lodash/sortBy";
 import { Restaurants } from "../../models";
 import { RestaurantsModel } from "../../models/lib/Restaurants";
 import { redisClient, YelpApiClient, setAlerts, pagination } from "../../utils";
+import logger from "../../config/logger";
 
 const _redirectToRestaurants = (res: Response) => res.redirect("/restaurants");
 
@@ -16,8 +17,8 @@ export const getAll = async (req: Request, res: Response) => {
         });
         restaurants = sortBy(restaurants, ["name", "alias"]);
     } catch (e) {
-        console.log("ERROR restaurants get all controller");
-        console.error(e.message);
+        logger.error("ERROR restaurants get all controller");
+        logger.error(e.message);
         return res.redirect("/");
     }
 
@@ -75,8 +76,8 @@ export const getOne = async (req: Request, res: Response) => {
             info = await api_client.searchOneBusniness(ext_id);
         }
     } catch (e) {
-        console.log("ERROR restaurants get one controller");
-        console.error(e.message);
+        logger.error("ERROR restaurants get one controller");
+        logger.error(e.message);
         // TODO: REDIRECT TO 404 PAGE?
         req.flash("error", "Internal server error.");
         return res.redirect("/restaurants");
@@ -94,9 +95,10 @@ export const getOne = async (req: Request, res: Response) => {
         restaurant: info,
         alert: alerts.error,
         success: alerts.success,
+        like_link: `/likes/add?id=${rest_id}`,
     };
 
-    // console.log("info", info);
+    // logger.debug("info", info);
 
     return res.status(200).render("pages/restaurants/show", data);
 };

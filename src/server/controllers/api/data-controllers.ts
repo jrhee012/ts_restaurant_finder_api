@@ -4,14 +4,15 @@ import { Data } from "../../models";
 import { DataModel } from "../../models/lib/Data";
 import { responseBuilder } from "../../utils";
 import { YelpApiClient } from "../../utils";
+import logger from "../../config/logger";
 
 export const index = async (req: Request, res: Response) => {
     let data: DataModel[] = [];
     try {
         data = await Data.find();
     } catch (e) {
-        console.log("ERROR data index controller");
-        console.error(e.message);
+        logger.error("ERROR data index controller");
+        logger.error(e.message);
         return res.status(500).json(responseBuilder.internal_server_error());
     }
     return res.status(200).json(data);
@@ -24,8 +25,8 @@ export const show = async (req: Request, res: Response) => {
     try {
         data = await Data.findById(dataId);
     } catch (e) {
-        console.log("ERROR data show controller");
-        console.error(e.message);
+        logger.error("ERROR data show controller");
+        logger.error(e.message);
         return res.status(500).json(responseBuilder.internal_server_error());
     }
 
@@ -42,15 +43,15 @@ export const searchAndCreate = async (req: Request, res: Response) => {
         location: string,
     } = req.query;
 
-    console.log("query", query);
+    logger.debug("query", query);
 
     const yelp_client = new YelpApiClient();
     let result: any;
     try {
         result = await yelp_client.searchBusinesses(query);
     } catch (e) {
-        console.log("ERROR data search and create controller");
-        console.error(e.message);
+        logger.error("ERROR data search and create controller");
+        logger.error(e.message);
 
         return res.status(500).json(responseBuilder.internal_server_error());
     }

@@ -62,6 +62,3 @@ class Pagination {
 }
 
 export const pagination = new Pagination();
-
-// let a = pagination.getPage(200, 2, 10, 10);
-// console.log("aaa", a);

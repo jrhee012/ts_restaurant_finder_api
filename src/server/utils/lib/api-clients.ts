@@ -4,6 +4,7 @@ import puppeteer from "puppeteer";
 import $ from "cheerio";
 import configs from "../../config";
 import { Data, Restaurants } from "../../models";
+import logger from "../../config/logger";
 
 enum OpentableQueryKey {
     dataTime = "dataTime",
@@ -45,12 +46,10 @@ class ApiClient {
     constructor() { }
 
     async makeCall(httpOptions: OptionsWithUri) {
-        if (configs.NODE_ENV !== "production") {
-            console.log(`Calling: ${JSON.stringify(httpOptions.uri)}`);
-            console.log(`Headers: ${JSON.stringify(httpOptions.headers)}`);
-            console.log(`Body: ${JSON.stringify(httpOptions.body)}`);
-            console.log(`QS: ${JSON.stringify(httpOptions.qs)}`);
-        }
+        logger.debug(`Calling: ${JSON.stringify(httpOptions.uri)}`);
+        logger.debug(`Headers: ${JSON.stringify(httpOptions.headers)}`);
+        logger.debug(`Body: ${JSON.stringify(httpOptions.body)}`);
+        logger.debug(`QS: ${JSON.stringify(httpOptions.qs)}`);
 
         const isJson = httpOptions.json;
         if (isJson === null || isJson === undefined || !isJson) {
@@ -61,10 +60,8 @@ class ApiClient {
         try {
             result = await rp(httpOptions);
         } catch (e) {
-            console.log("ERROR ApiClient makeCall");
-            if (configs.NODE_ENV !== "production") {
-                console.error(e.message);
-            }
+            logger.error("ERROR ApiClient makeCall");
+            logger.error(e.message);
         }
         return result;
     }
@@ -137,10 +134,9 @@ export class YelpApiClient extends ApiClient {
             },
             function (err, doc) {
                 if (err) {
-                    console.error(err);
+                    logger.error(err.message);
                 }
 
-                // console.log("yelp data saved!", doc == undefined);
                 if (doc !== null) {
                     let name: string;
                     let coords = {};
@@ -179,9 +175,8 @@ export class YelpApiClient extends ApiClient {
                         },
                         function (err, doc) {
                             if (err) {
-                                console.error(err);
+                                logger.error(err.message);
                             }
-                            // console.log("restaurant data saved!");
                         }
                     );
                 }

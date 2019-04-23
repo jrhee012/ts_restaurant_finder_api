@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { UsersModel } from "../../models/lib/Users";
+import logger from "../../config/logger";
 
 export const checkAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
     const user: UsersModel = res.locals.user;
@@ -14,7 +15,7 @@ export const checkAuthenticated = async (req: Request, res: Response, next: Next
         }
         return next();
     } catch (e) {
-        console.error(e.message);
+        logger.error(e.message);
         req.flash("error", e.message);
         return res.redirect("/");
     }

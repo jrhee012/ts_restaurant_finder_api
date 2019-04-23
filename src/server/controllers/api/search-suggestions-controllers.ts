@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { readFileSync } from "fs";
 import { responseBuilder, suggestionBuilder } from "../../utils";
 import { ISearchSuggestionBuilder } from "../../utils/lib/search-suggestion-builder";
+import logger from "../../config/logger";
 
 export const downloadSuggestions = (req: Request, res: Response) => {
     let suggestions: ISearchSuggestionBuilder["transformed"] = suggestionBuilder.transformed;
@@ -17,7 +18,7 @@ export const downloadSuggestions = (req: Request, res: Response) => {
             suggestions = JSON.parse(fileData);
         }
     } catch (e) {
-        console.error(e.message);
+        logger.error(e.message);
         return res.status(500).json(responseBuilder.internal_server_error());
     }
 

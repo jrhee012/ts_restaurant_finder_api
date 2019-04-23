@@ -11,6 +11,7 @@ import routes from "./routes";
 // import { tokenValidation } from "./middlewares";
 import passportMiddleware from "./config/passport";
 // import { UsersModel } from "./models/lib/Users";
+import logger from "./config/logger";
 
 export const __ROOT__: string = __dirname;
 
@@ -18,15 +19,11 @@ try {
     mongoose.Promise = global.Promise;
     mongoose.connect(configs.MONGODB_URI, { useNewUrlParser: true });
 
-    console.log(`mongodb connected on: ${configs.MONGODB_URI}`);
-
-    if (process.env.NODE_ENV !== "production") {
-        // mongoose.set("debug", true);
-        console.log("mongoose `debug` set `true`");
-    }
+    logger.info(`mongodb connected on: ${configs.MONGODB_URI}`);
+    logger.debug("mongoose `debug` set `true`");
 } catch (e) {
-    console.log(`cannot connect to mongodb on ${configs.MONGODB_URI}!`);
-    console.error(e.message);
+    logger.error(`cannot connect to mongodb on ${configs.MONGODB_URI}!`);
+    logger.error(e.message);
     process.exit(1);
 }
 

@@ -3,6 +3,7 @@ import { Likes } from "../../models";
 import { UsersModel } from "../../models/lib/Users";
 import { redisClient, setAlerts, pagination } from "../../utils";
 import { LikesModel } from "../../models/lib/Likes";
+import logger from "../../config/logger";
 
 export const getAll = async (req: Request, res: Response) => {
     const user: UsersModel = res.locals.user;
@@ -23,7 +24,7 @@ export const getAll = async (req: Request, res: Response) => {
             ]);
         }
     } catch (e) {
-        console.error(e.message);
+        logger.error(e.message);
         req.flash("error", "Internal server error.");
         return res.redirect("/");
     }
@@ -40,4 +41,8 @@ export const getAll = async (req: Request, res: Response) => {
     };
 
     return res.status(200).render("pages/likes/index", data);
+};
+
+export const addLike = async (req: Request, res: Response) => {
+    logger.debug("Req path: ", req.originalUrl);
 };

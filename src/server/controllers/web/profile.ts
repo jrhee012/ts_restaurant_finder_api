@@ -4,6 +4,7 @@ import { ValidationsModel } from "../../models/lib/Validations";
 import { Validations } from "../../models";
 import { UsersModel } from "../../models/lib/Users";
 import { setAlerts } from "../../utils";
+import logger from "../../config/logger";
 
 const _returnToForm = (res: Response, data: any) => {
     return res.status(400)
@@ -26,7 +27,7 @@ export const getProfile = async (req: Request, res: Response) => {
         }
         // url = validation.url;
     } catch (e) {
-        console.error(e.message);
+        logger.error(e.message);
         req.flash("error", e.message);
         return res.redirect("/profile");
     }
@@ -59,7 +60,7 @@ export const getAuthenticationPage = async (req: Request, res: Response) => {
     //     }
     //     // url = validation.url;
     // } catch (e) {
-    //     console.error(e.message);
+    //     logger.error(e.message);
     //     return res.redirect("/profile");
     // }
     const alerts = setAlerts(req);
@@ -104,8 +105,8 @@ export const postAuthenticationPage = async (req: Request, res: Response) => {
         // user.completeValidation();
         await user.save();
     } catch (e) {
-        console.log("ERROR post authenticate user profile controller");
-        console.error(e.message);
+        logger.error("ERROR post authenticate user profile controller");
+        logger.error(e.message);
     }
     return res.redirect("/profile");
 };
@@ -124,8 +125,8 @@ export const finishValidation = async (req: Request, res: Response) => {
 
         validation.completeValidation();
     } catch (e) {
-        console.log("ERROR finish validation profile controller");
-        console.error(e.message);
+        logger.error("ERROR finish validation profile controller");
+        logger.error(e.message);
         return res.redirect("/");
     }
 

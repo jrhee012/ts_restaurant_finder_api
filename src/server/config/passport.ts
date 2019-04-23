@@ -6,6 +6,7 @@ import _ from "lodash";
 import { Request, Response, NextFunction } from "express";
 import { Users } from "../models";
 import configs from "../config";
+import logger from "./logger";
 
 const LocalStrategy = passportLocal.Strategy;
 const FacebookStrategy = passportFacebook.Strategy;
@@ -43,7 +44,7 @@ export default (passport: PassportStatic) => {
                 await user.save();
                 return done(undefined, user);
             } catch (e) {
-                console.error(e.message);
+                logger.error(e.message);
                 return done(undefined, false, req.flash("error", e.message));
             }
         }
@@ -73,7 +74,7 @@ export default (passport: PassportStatic) => {
 
                 return done(undefined, user);
             } catch (e) {
-                console.error(e.message);
+                logger.error(e.message);
                 return done(undefined, false, req.flash("error", e.message));
             }
         })
@@ -113,8 +114,8 @@ export default (passport: PassportStatic) => {
                 await user.save();
                 return done(undefined, user, req.flash("success", "Log in successful!"));
             } catch (e) {
-                console.log("google login error");
-                console.error(e.message);
+                logger.error("google login error");
+                logger.error(e.message);
                 return done(undefined, false, req.flash("error", e.message));
             }
         }
@@ -158,8 +159,8 @@ export default (passport: PassportStatic) => {
                 await user.save();
                 return done(undefined, user, req.flash("success", "Log in successful!"));
             } catch (e) {
-                console.log("facebook login error");
-                console.error(e.message);
+                logger.error("facebook login error");
+                logger.error(e.message);
                 return done(undefined, false, req.flash("error", e.message));
             }
         }
