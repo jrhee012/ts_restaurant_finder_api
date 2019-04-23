@@ -171,7 +171,7 @@ UsersSchema.pre("save", async function(next: HookNextFunction) {
             doc.roles = roles;
         }
     } catch (e) {
-        console.error(e.message);
+        logger.error(e.message);
         // return next(e);
         throw new Error(e.message);
     }
@@ -186,8 +186,8 @@ UsersSchema.pre("save", async function(next: HookNextFunction) {
             const userProfileValidation = new Validations();
             await userProfileValidation.createNew(doc._id);
         } catch (e) {
-            console.log("ERROR create new validation for user");
-            console.error(e.message);
+            logger.error("ERROR create new validation for user");
+            logger.error(e.message);
             throw new Error(e.message);
         }
     }
@@ -255,14 +255,14 @@ UsersSchema.methods.completeValidation = async function() {
             try {
                 await this.save();
             } catch (e) {
-                console.log("ERROR validation model complete validation method");
-                console.log(`VALIDATION ENTRY: ${this}`);
-                console.error(e.message);
+                logger.error("ERROR validation model complete validation method");
+                logger.log(`VALIDATION ENTRY: ${this}`);
+                logger.error(e.message);
                 throw new Error(e.message);
             }
         }
     } else {
-        console.log(`ERROR no validtion for user id: ${this._id}`);
+        logger.error(`ERROR no validtion for user id: ${this._id}`);
         throw new Error("Internal Server Error: UsersSchema.completeValidation");
     }
 
@@ -277,8 +277,8 @@ UsersSchema.methods.checkValidation = async function() {
         }
         return validation.validated;
     } catch (e) {
-        console.log("ERROR UsersSchema.checkValidation");
-        console.error(e.message);
+        logger.error("ERROR UsersSchema.checkValidation");
+        logger.error(e.message);
         throw new Error(e.message);
     }
 };
@@ -295,7 +295,7 @@ UsersSchema.methods.getRoles = async function() {
         });
         return roles;
     } catch (e) {
-        console.error(e.message);
+        logger.error(e.message);
         throw new Error(e.message);
     }
 };
@@ -305,7 +305,7 @@ UsersSchema.methods.getAllLikes = async function () {
         const likes = await Likes.find({ user_id: this._id });
         return likes;
     } catch (e) {
-        console.error(e.message);
+        logger.error(e.message);
         throw new Error(e.message);
     }
 };
